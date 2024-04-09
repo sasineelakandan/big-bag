@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+        integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+        integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <h1>Product Management</h1>
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true"></a>
+                    </li>
+                </ul>
+                <form action="/adminlogout" method="post">
+                    <button class="btn btn-danger btn-lg px-5" type="submit">Logout</button>
+                </form>
+
+            </div>
+        </div>
+    </nav>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="addcat">
+                <div>
+
+                    <div class="form-outline mb-4" style="margin-top: 10px;">
+                        <input type="text" placeholder="Category" name="category" id="category"
+                            class="form-control" />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="text" placeholder="Category Description" name="categorydes"
+                            id="categorydes" class="form-control pb-5" />
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save
+                            changes</button>
+                    </div>
+                </div>    
+                </form>
+            </div>
+        </div>
+    </div>
+    <a href="/addproduct" type="button" class="btn btn-primary"  data-bs-target="">
+     Add Product 
+    </a>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            
+        </div>
+    </nav>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Product Name</th>
+                <th scope="col">Parent Category</th>
+                <th scope="col">image 1</th>
+                
+                <th scope="col">price INR</th>
+                <th scope="col">in stock</th>
+                <th scope="col">list/unlist</th>
+                <th scope="col">action</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+
+            <% for(let i=0;i<productDet.length;i++){ %>
+                <tr>
+                    <th scope="row">
+                        <%= productDet[i].productName %>
+                    </th>
+                    <td>
+                        <%= productDet[i].parentCategory.categoryname%>
+                    </td>
+                    <td>
+                        <% for(let j=0;j<productDet[i].productImage.length;j++){ %>
+
+                            <img src="assets/uploads/<%=productDet[i].productImage[j]%>"
+                                style="height: 60px; width: 60px; border-radius: 0;">
+
+                            <% } %>
+                    </td>
+                    <td>
+                        <%= productDet[i].productPrice %>
+                    </td>
+                    <td>
+                        <%= productDet[i].productStock %>
+                    </td>
+                    <% if(productDet[i].isListed){ %>
+                        <td><button id="unblock<%i%>" onclick="fnlist('<%=productDet[i]._id %>','list')"
+                                type="button" class="btn btn-danger">Unlist</button> </td>
+                        <% }else{ %>
+                            <td><button id="block<%i%>" onclick="fnlist('<%=productDet[i]._id %>','UnList')"
+                                    type="button" class="btn btn-success">List</button> </td>
+                            <% } %>
+                            <td>
+                                <a href="/productedit?pid=<%= productDet[i]._id %>&cid=<%= productDet[i].parentCategory._id %>">
+                                    <button id="unblock<%i%>" data-target="#categoryModal<%=i%>"
+                                        data-toggle="modal" type="button" class="btn btn-info">Edit</button>
+                                </a>
+                            </td>  
+                </tr>
+                <% } %>
+                
+       
+       </tbody>
+    </table>
+    <script>
+         
+            async function fnlist(productId, action) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes!"
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        let response = await fetch(`/productlist?id=${productId}&action=${action}`, {
+                            method: 'GET',
+                        })
+                        let result = await response.json()
+                        if (result.list) {
+                            await Swal.fire({
+                                icon: "success",
+                                title: "Product Listed",
+                            });
+                        } else {
+                            await Swal.fire({
+                                icon: "success",
+                                title: "Product Unlisted",
+                                confirmButtonText: "OK",
+                            });
+                        }
+                    }
+                    window.location.reload()
+                });
+            }
+        
+
+        
+    </script>
+    <script>
+  
+
+    </script>
+</body>
+
+</html>
