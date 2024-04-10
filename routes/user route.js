@@ -13,6 +13,7 @@ router.post('/resendotp',userconroller.resendotp)
 router.get('/sendotp',userconroller.otppage)
 router.post('/register',userconroller.register)
 router.get('/shop',userconroller.shoppage)
+router.get('/singleProduct',userconroller.singleProduct)
 
 
 module.exports=router

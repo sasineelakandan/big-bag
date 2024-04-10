@@ -1,14 +1,28 @@
 const usercollection = require('../model/usermodel')
 const otpcollections = require('../model/otpmodel')
+const categorycollection=require('../model/categorymodel')
+const productcollection=require("../model/productmodel")
 const sendotp = require("../services/sendotp")
 const bcrypt = require('bcryptjs')
 
 
 
-const home = (req, res) => {
-
-    res.render('home')
+const home = async(req, res) => {
+    try{
+     const productDetails=await productcollection.find()
+    if (req.session.logged) {
+        
+        res.render('home', { userLogged: req.session.logged, productDetails })
+    } else {
+        res.render('home', { userLogged: null, productDetails })
+    }
+} catch (err) {
+    console.log(err);
 }
+
+}
+
+
 const otppage = (req, res) => {
     try {
         if (req.session.user) {
@@ -25,8 +39,9 @@ const otppage = (req, res) => {
 
 
 const loginget = async (req, res) => {
-
-    if (req.session.user) {
+      console.log(req.body)
+    if (req.session.logged) {
+        
         
         
         res.redirect('/')
@@ -84,6 +99,15 @@ const register = async (req, res) => {
     }
 }
 
+const singleProduct = async (req, res) => {
+    try {
+        const productDetails = await productcollection.findOne({ _id: req.query.id })
+        const categoryDetails = await categorycollection.findOne({ _id: req.query.id })
+        res.render('singleProduct', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 const userRegister = async (req, res) => {
 
@@ -129,11 +153,17 @@ const logionverify = async (req, res) => {
 
     try {
         const user = await usercollection.findOne({ email: req.body.email })
-        if(user.isBlocked){
+        
+        if(user?.isBlocked){
             req.session.logged=false
             res.send({blocked:true})
         }
-        if (user) {
+        if(user==null || user==undefined){
+            //user not found
+                res.send({ invalid: true })
+        }
+        else{
+            //validate pwd using bcrypt
             const passwordMatch = await bcrypt.compare(req.body.password, user.password)
             if (passwordMatch) {
                 req.session.logged = user
@@ -141,9 +171,9 @@ const logionverify = async (req, res) => {
             } else {
                 res.send({ invalid: true })
             }
-        } else {
-            res.send({ invalid: true })
         }
+    
+        
     } catch (err) {
         console.log(err);
     }
@@ -166,15 +196,27 @@ const resendotp = async (req, res) => {
     }
 }
 const shoppage=async(req,res)=>{
+    
     try{
-        res.sender('shoppage')
+        const categoryDetails = await categorycollection.find({ isListed: true })
+        let query = { isListed: true };
+       if (req.query.id) {
+        query.parentCategory = req.query.id;
+       }
+        const productDetails=await productcollection.find(query)
+        res.render('shoppage',{userLogged:req.session.logged,productDet:productDetails,categoryDet:categoryDetails})
+
+    
     }
+
     catch(err){
         console.log(err)
     }
+
 }
 
 
 
-
-module.exports = { home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register ,shoppage}
+module.exports = { home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register ,shoppage,
+    singleProduct
+}

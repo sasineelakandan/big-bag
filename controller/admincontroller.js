@@ -123,7 +123,7 @@ const categorylist = async (req, res) => {
         } else {
             catList = false
         }
-        // await productCollection.updateMany({ parentCategory: req.query.id }, { $set: { isListed: catList } })
+        await productCollection.updateMany({ parentCategory: req.query.id }, { $set: { isListed: catList } })
         await categorycollection.updateOne({ _id: req.query.id }, { $set: { isListed: catList } })
         res.send({ list: catList })
     } catch (err) {
