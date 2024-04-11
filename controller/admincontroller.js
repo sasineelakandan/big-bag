@@ -7,9 +7,9 @@ const productCollection=require('../model/productmodel')
 const loginpage = async (req, res) => {
     try {
         if (req.session.admin) {
-            res.render('adminhome')
+            res.render('adminpages/adminhome')
         } else {
-            res.render('adminlogin')
+            res.render('adminpages/adminlogin')
         }
 
     } catch (err) {
@@ -51,7 +51,7 @@ const usermanagement = async (req, res) => {
         } else {
             userdetail = await usercollection.find()
         }
-        res.render('usermanagement', { userdet: userdetail })
+        res.render('adminpages/usermanagement', { userdet: userdetail })
     } catch (err) {
         console.log(err);
     }
@@ -87,7 +87,7 @@ const usersearch = async (req, res) => {
 const categorymanagement = async (req, res) => {
     try {
         const category = await categorycollection.find()
-        res.render('category', { categorydet: category })
+        res.render('adminpages/category', { categorydet: category })
     }
     catch (error) {
         console.log(error)
@@ -134,7 +134,7 @@ const editcategory = async (req, res) => {
 
     try {
         let categorydetail = await categorycollection.findById({ _id: req.params.id })
-        res.render('adminedit', { categorydetail })
+        res.render('adminpages/adminedit', { categorydetail })
     }
     catch (error) {
         console.log(error)
@@ -168,7 +168,7 @@ const product=async(req,res)=>{
     try{
         const productDetails = await productCollection.find().populate('parentCategory').sort({ _id: -1 })
         console.log(productDetails)
-        res.render('product',{productDet:productDetails})
+        res.render('adminpages/product',{productDet:productDetails})
     }
     catch(error){
         console.log(error)
@@ -178,7 +178,7 @@ const addproduct=async(req,res)=>{
     try{
         
         const categoryDetails = await categorycollection.find()
-        res.render('addproduct',{categorydet:categoryDetails})
+        res.render('adminpages/addproduct',{categorydet:categoryDetails})
     }
     catch(error){
         console.log(error)
@@ -235,7 +235,7 @@ const productedit=async(req,res)=>{
         const categoryDet = await categorycollection.findOne({ _id: req.query.cid })
         const productDet = await productCollection.findOne({ _id: req.query.pid })
         
-        res.render('productedit', { categoryDet, productDet, categoryDetail })
+        res.render('adminpages/productedit', { categoryDet, productDet, categoryDetail })
     } catch (err) {
         console.log(err);
     }

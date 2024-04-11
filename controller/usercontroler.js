@@ -12,9 +12,9 @@ const home = async(req, res) => {
      const productDetails=await productcollection.find()
     if (req.session.logged) {
         
-        res.render('home', { userLogged: req.session.logged, productDetails })
+        res.render('userpages/home', { userLogged: req.session.logged, productDetails })
     } else {
-        res.render('home', { userLogged: null, productDetails })
+        res.render('userpages/home', { userLogged: null, productDetails })
     }
 } catch (err) {
     console.log(err);
@@ -28,7 +28,7 @@ const otppage = (req, res) => {
         if (req.session.user) {
             res.redirect('/')
         } else {
-            res.render('otppage')
+            res.render('userpages/otppage')
         }
 
     } catch (err) {
@@ -47,7 +47,7 @@ const loginget = async (req, res) => {
         
         res.redirect('/')
     } else {
-        res.render('login')
+        res.render('userpages/login')
     }
 }
 
@@ -56,7 +56,7 @@ const signupget = (req, res) => {
         if (req.session.logged) {
             res.redirect('/')
         } else {
-            res.render('signup')
+            res.render('userpages/signup')
         }
     } catch (err) {
         console.log(err);
@@ -114,7 +114,7 @@ const singleProduct = async (req, res) => {
     try {
         const productDetails = await productcollection.findOne({ _id: req.query.id })
         const categoryDetails = await categorycollection.findOne({ _id: req.query.id })
-        res.render('singleProduct', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
+        res.render('userpages/singleProduct', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
     } catch (err) {
         console.log(err);
     }
@@ -150,6 +150,7 @@ const userRegister = async (req, res) => {
                 expiryDate: new Date(Date.now() + 60000).toISOString()
             })
             await userotp.save()
+           
 
 
         }
@@ -215,7 +216,7 @@ const shoppage=async(req,res)=>{
         query.parentCategory = req.query.id;
        }
         const productDetails=await productcollection.find(query)
-        res.render('shoppage',{userLogged:req.session.logged,productDet:productDetails,categoryDet:categoryDetails})
+        res.render('userpages/shoppage',{userLogged:req.session.logged,productDet:productDetails,categoryDet:categoryDetails})
 
     
     }
