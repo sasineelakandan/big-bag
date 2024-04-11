@@ -39,7 +39,8 @@ const otppage = (req, res) => {
 
 
 const loginget = async (req, res) => {
-      console.log(req.body)
+    
+
     if (req.session.logged) {
         
         
@@ -51,8 +52,18 @@ const loginget = async (req, res) => {
 }
 
 const signupget = (req, res) => {
-    res.render('signup')
+    try {
+        if (req.session.logged) {
+            res.redirect('/')
+        } else {
+            res.render('signup')
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
 }
+
 const verifyotp = async (req, res) => {
 
 
@@ -214,9 +225,13 @@ const shoppage=async(req,res)=>{
     }
 
 }
+const logout=async(req,res)=>{
+    req.session.logged=false
+    res.redirect('/login')
+}
 
 
 
 module.exports = { home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register ,shoppage,
-    singleProduct
+    singleProduct,logout
 }

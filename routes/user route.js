@@ -1,10 +1,10 @@
 const express=require('express')
 const userconroller=require('../controller/usercontroler')
 const router=express.Router()
-
+const userver=require('../middlewere/userver')
 
 router.get('/',userconroller.home)
-router.get('/login',userconroller.loginget)
+router.get('/login',userver,userconroller.loginget)
 router.post('/login',userconroller.logionverify)
 router.get('/signup',userconroller.signupget)
 router.post('/verifyotp',userconroller.verifyotp)
@@ -14,6 +14,7 @@ router.get('/sendotp',userconroller.otppage)
 router.post('/register',userconroller.register)
 router.get('/shop',userconroller.shoppage)
 router.get('/singleProduct',userconroller.singleProduct)
+router.get('/logout',userconroller.logout)
 
 
 module.exports=router
