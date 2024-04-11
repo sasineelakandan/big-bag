@@ -1,6 +1,7 @@
 const express=require('express')
 const adminconroller=require('../controller/admincontroller')
 const upload = require('../services/multer')
+const adminauth=require('../middlewere/adminver')
 const router=express.Router()
 
 

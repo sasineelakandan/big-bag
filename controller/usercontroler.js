@@ -10,6 +10,7 @@ const bcrypt = require('bcryptjs')
 const home = async(req, res) => {
     try{
      const productDetails=await productcollection.find()
+     
     if (req.session.logged) {
         
         res.render('userpages/home', { userLogged: req.session.logged, productDetails })
