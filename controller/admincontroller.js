@@ -73,7 +73,7 @@ const userblock = async (req, res) => {
     }
 }
 const usersearch = async (req, res) => {
-    console.log(req.body.search)
+    
 
     try {
         const searchuser = await usercollection.find({ name: { $regex: req.body.search, $options: 'i' } })
@@ -144,7 +144,7 @@ const editcategory = async (req, res) => {
 }
 const updatecategory = async (req, res) => {
     try {
-        console.log("Its coming inside the updateCategory");
+       
         const { category, categorydes } = req.body
        
         const prodet=await categorycollection.findOne({_id:req.params.id})
@@ -167,7 +167,7 @@ const updatecategory = async (req, res) => {
 const product=async(req,res)=>{
     try{
         const productDetails = await productCollection.find().populate('parentCategory').sort({ _id: -1 })
-        console.log(productDetails)
+      
         res.render('adminpages/product',{productDet:productDetails})
     }
     catch(error){
@@ -185,7 +185,7 @@ const addproduct=async(req,res)=>{
     }
 }
 const addproduct2=async(req,res)=>{
-    // console.log(req.files)
+    
     try {
         let imgFiles = []
         for (let i = 0; i < req.files.length; i++) {
@@ -241,7 +241,7 @@ const productedit=async(req,res)=>{
     }
 }
 const productupdate=async(req,res)=>{
-    console.log(req.body)
+   
     try {
         if (req.files.length === 0) {
             const existingProduct = await productCollection.findOne({ _id: req.params.id });
