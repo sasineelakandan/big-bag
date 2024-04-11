@@ -227,7 +227,7 @@ const shoppage=async(req,res)=>{
 }
 const logout=async(req,res)=>{
     req.session.logged=false
-    res.redirect('/login')
+    res.redirect('/')
 }
 
 

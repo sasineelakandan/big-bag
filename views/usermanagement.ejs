@@ -122,11 +122,11 @@
                     </td>
                     <td>
                         <% if(userdet[i].isBlocked){ %>
-                            <td><button id="unblock<%i%>" onclick="toggleBlock('<%=userdet[i]._id %>','unblock')"
-                                    type="button" class="btn btn-success">unblock</button> </td>
+                            <button id="unblock<%i%>" onclick="toggleBlock('<%=userdet[i]._id %>','unblock')"
+                                    type="button" class="btn btn-success">unblock</button>
                             <% }else{ %>
-                                <td><button id="block<%i%>" onclick="toggleBlock('<%=userdet[i]._id %>','block')"
-                                        type="button" class="btn btn-danger">Block</button> </td>
+                                <button id="block<%i%>" onclick="toggleBlock('<%=userdet[i]._id %>','block')"
+                                        type="button" class="btn btn-danger">Block</button>
                                 <% } %>
                         
 
