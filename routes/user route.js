@@ -1,22 +1,22 @@
 const express=require('express')
-const userconroller=require('../controller/usercontroler')
-const router=express.Router()
+const userConroller=require('../controller/usercontroler')
+const Router=express.Router()
 const userVer=require('../middlewere/userver')
-const blockeduser=require('../middlewere/userblock')
+const blockedUser=require('../middlewere/userblock')
 
-router.get('/login',blockeduser,userconroller.loginget)
-router.get('/',blockeduser,userVer,userconroller.home)
+Router.get('/login',blockedUser,userConroller.loginget)
+Router.get('/',blockedUser,userConroller.home)
 
-router.post('/login',userconroller.logionverify)
-router.get('/signup',userconroller.signupget)
-router.post('/verifyotp',userconroller.verifyotp)
-router.post('/signup',userconroller.userRegister)
-router.post('/resendotp',userconroller.resendotp)
-router.get('/sendotp',userconroller.otppage)
-router.post('/register',userconroller.register)
-router.get('/shop',userconroller.shoppage)
-router.get('/singleProduct',userconroller.singleProduct)
-router.get('/logout',userconroller.logout)
+Router.post('/login',userVer,userConroller.logionverify)
+Router.get('/signup',userConroller.signupget)
+Router.post('/verifyotp',userConroller.verifyotp)
+Router.post('/signup',userConroller.userRegister)
+Router.post('/resendotp',userConroller.resendotp)
+Router.get('/sendotp',userConroller.otppage)
+Router.post('/register',userConroller.register)
+Router.get('/shop',userConroller.shoppage)
+Router.get('/singleProduct',userConroller.singleProduct)
+Router.get('/logout',userConroller.logout)
 
 
-module.exports=router
+module.exports=Router
