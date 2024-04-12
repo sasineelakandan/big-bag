@@ -47,7 +47,7 @@
                         <a class="nav-link disabled" aria-disabled="true"></a>
                     </li>
                 </ul>
-                <form action="/logout" method="post">
+                <form action="/adminlogout" method="post">
                     <button class="btn btn-danger btn-lg px-5" type="submit">Logout</button>
                 </form>
 
@@ -183,7 +183,7 @@
 
                         });
                         window.location.reload();
-                    } else {
+                    } if(result.catexists){
                         await Swal.fire({
                             icon: "error",
                             title: "Category Already Exists"

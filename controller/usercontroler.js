@@ -171,18 +171,18 @@ const logionverify = async (req, res) => {
             req.session.logged=false
             res.send({blocked:true})
         }
-        if(user==null || user==undefined){
-            //user not found
-                res.send({ invalid: true })
+        else if(user==null || user==undefined){
+            
+                res.send({ blocked: true })
         }
         else{
-            //validate pwd using bcrypt
+            
             const passwordMatch = await bcrypt.compare(req.body.password, user.password)
             if (passwordMatch) {
                 req.session.logged = user
-                res.send({ login: true })
+                res.send({success:true})
             } else {
-                res.send({ invalid: true })
+                res.send({ invalidPass: true })
             }
         }
     

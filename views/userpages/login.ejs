@@ -747,7 +747,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                 <h3>log in</h3>
               </div>
               <div class="panel-body">
-                <form id="login">
+                <form id="login" action="" method="">
                   <div class="form-group">
                     <label for="">Enter Email</label>
                     <input type="email" class="form-control"  name="email" id="email">
@@ -798,7 +798,51 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         </div>
       </div>
     </section>
+     <script>
 
+$('#login').validate({
+        rules: {
+          email: {
+            pattern: /^[a-z0-9]+(?:[._%+-][a-z0-9]+)*@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,}$/,
+            required: true
+          },
+          password: {
+            pattern: /^.{6,30}$/,
+            required: true
+          }
+        },
+        submitHandler: async (form, event) => {
+          event.preventDefault()
+          let logindata = {
+            email: form.email.value,
+            password: form.password.value
+          }
+          let response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(logindata)
+          })
+          let result = await response.json()
+
+          if(result.success){
+            window.location.href = '/'
+          }if(result.invalidPass){
+            await Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Invalid Email/Password!",
+            });
+          }else if(result.blocked){
+            await swal.fire({
+              icon: "error",
+                title: "Oops...",
+                text: "you are in blocked!"
+            })
+          }
+        }
+      })
+
+     </script>
 
     <!-- FOOTER -->
     <%- include('../userpart/footer') %>
