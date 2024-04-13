@@ -121,4 +121,37 @@ const addProduct2=async(req,res)=>{
         console.log(err);
     }
 }
-module.exports={addProduct2,addProduct,Product,productList,productEdit,productUpdate}
+const deleteImage = async (req, res) => {
+    try {
+    
+      const updatedProduct = await productCollection.findOne({
+        _id: req.body.productId,
+      });
+      if (!updatedProduct) {
+        return res.status(404).json({ error: "Product not found" }); // Remove the first element
+      }
+      if (
+        req.body.index >= 0 &&
+        req.body.index < updatedProduct.productImage.length
+      ) {
+        updatedProduct.productImage[req.body.index] = null;
+        await updatedProduct.save();
+        res.status(200).json({
+          message: "Image deleted successfully",
+          product: updatedProduct,
+        });
+      } else {
+        res.status(400).json({ error: "Invalid image index" })
+      }
+    } catch (error) {
+      console.log(
+        "Error in deleteing the Image through the Edit product delete button " +
+          error
+      );
+    }
+  };
+  productSearch=async(req,res)=>{
+    
+  }
+
+module.exports={addProduct2,addProduct,Product,productList,productEdit,productUpdate,deleteImage}

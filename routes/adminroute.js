@@ -37,5 +37,6 @@ Router.post('/addproduct2',upload.any(),productConroller.addProduct2)
 Router.get('/productlist',productConroller.productList)
 Router.get('/productedit',productConroller.productEdit)
 Router.post('/productupdate/:id',upload.any(),productConroller.productUpdate)
+Router.post("/delete-image", productConroller.deleteImage);
 
 module.exports=Router
