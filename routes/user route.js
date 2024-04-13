@@ -1,5 +1,7 @@
 const express=require('express')
 const userConroller=require('../controller/usercontroler')
+
+
 const Router=express.Router()
 const userVer=require('../middlewere/userver')
 const blockedUser=require('../middlewere/userblock')
@@ -14,7 +16,7 @@ Router.post('/signup',userConroller.userRegister)
 Router.post('/resendotp',userConroller.resendotp)
 Router.get('/sendotp',userConroller.otppage)
 Router.post('/register',userConroller.register)
-Router.get('/shop',userConroller.shoppage)
+Router.get('/shop',userConroller.shopPage)
 Router.get('/singleProduct',userConroller.singleProduct)
 Router.get('/logout',userConroller.logout)
 

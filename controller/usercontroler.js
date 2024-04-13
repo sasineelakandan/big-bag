@@ -208,7 +208,7 @@ const resendotp = async (req, res) => {
         console.log(err);
     }
 }
-const shoppage=async(req,res)=>{
+const shopPage=async(req,res)=>{
     
     try{
         const categoryDetails = await categorycollection.find({ isListed: true })
@@ -234,6 +234,6 @@ const logout=async(req,res)=>{
 
 
 
-module.exports = { home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register ,shoppage,
+module.exports = { home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register ,shopPage,
     singleProduct,logout
 }

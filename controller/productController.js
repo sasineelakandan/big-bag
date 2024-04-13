@@ -1,4 +1,10 @@
 const productCollection=require('../model/productmodel')
+const categorycollection=require('../model/categorymodel')
+
+
+
+
+
 const productUpdate=async(req,res)=>{
    
     try {
@@ -68,7 +74,7 @@ const productList = async (req, res) => {
 const Product=async(req,res)=>{
     try{
         const productDetails = await productCollection.find().populate('parentCategory').sort({ _id: -1 })
-      
+        
         res.render('adminpages/product',{productDet:productDetails})
     }
     catch(error){

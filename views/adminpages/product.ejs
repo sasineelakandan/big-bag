@@ -112,7 +112,7 @@
                         <%= productDet[i].productName %>
                     </th>
                     <td>
-                        <%= productDet[i].parentCategory.categoryname%>
+                        <%= productDet[i]?.parentCategory?.categoryname%>
                     </td>
                     <td>
                         <% for(let j=0;j<productDet[i].productImage.length;j++){ %>
@@ -136,7 +136,7 @@
                                     type="button" class="btn btn-success">List</button> </td>
                             <% } %>
                             <td>
-                                <a href="/productedit?pid=<%= productDet[i]._id %>&cid=<%= productDet[i].parentCategory._id %>">
+                                <a href="productedit?pid=<%= productDet[i]?._id %>&cid=<%= productDet[i]?.parentCategory?._id %>">
                                     <button id="unblock<%i%>" data-target="#categoryModal<%=i%>"
                                         data-toggle="modal" type="button" class="btn btn-info">Edit</button>
                                 </a>

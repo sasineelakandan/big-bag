@@ -1,7 +1,8 @@
-const crtegoryCollection=require('../model/categorymodel')
+const categoryCollection=require('../model/categorymodel')
+const productCollection=require('../model/productmodel')
 const categoryManagement = async (req, res) => {
     try {
-        const category = await categorycollection.find()
+        const category = await categoryCollection.find()
         res.render('adminpages/category', { categorydet: category })
     }
     catch (error) {
@@ -10,16 +11,19 @@ const categoryManagement = async (req, res) => {
 }
 const addCategory = async (req, res) => {
     try {
-        const newcategory = new categorycollection({
+        const newcategory = new categoryCollection({
             categoryname: req.body.categoryname,
             categorydescription: req.body.categorydes
         })
 
-        const catExists = await categorycollection.findOne({
+        const catExists = await categoryCollection.findOne({
             categoryname: { $regex: new RegExp('^' + req.body.categoryname + '$', 'i') }
         });
+         
+          
 
         if (catExists) {
+            console.log(catExists)
             res.send({ invalid: true })
         } else {
             newcategory.save()
@@ -39,7 +43,7 @@ const categoryList = async (req, res) => {
             catList = false
         }
         await productCollection.updateMany({ parentCategory: req.query.id }, { $set: { isListed: catList } })
-        await categorycollection.updateOne({ _id: req.query.id }, { $set: { isListed: catList } })
+        await categoryCollection.updateOne({ _id: req.query.id }, { $set: { isListed: catList } })
         res.send({ list: catList })
     } catch (err) {
         console.log(err);
@@ -48,7 +52,7 @@ const categoryList = async (req, res) => {
 const editCategory = async (req, res) => {
 
     try {
-        let categorydetail = await categorycollection.findById({ _id: req.params.id })
+        let categorydetail = await categoryCollection.findById({ _id: req.params.id })
         res.render('adminpages/adminedit', { categorydetail })
     }
     catch (error) {
@@ -62,7 +66,7 @@ const updateCategory = async (req, res) => {
        
         const { category, categorydes } = req.body
        
-        const prodet=await categorycollection.findOne({_id:req.params.id})
+        const prodet=await categoryCollection.findOne({_id:req.params.id})
         if(category==prodet.categoryname&&categorydes==prodet.categorydescription){
             
             res.send({ catexists: true })
@@ -70,7 +74,7 @@ const updateCategory = async (req, res) => {
         } else {
         
             
-            let cat = await categorycollection.findByIdAndUpdate({ _id: req.params.id }, { $set: { categoryname: category, categorydescription:categorydes } })
+            let cat = await categoryCollection.findByIdAndUpdate({ _id: req.params.id }, { $set: { categoryname: category, categorydescription:categorydes } })
             
             res.send({ success: true })
         }
@@ -79,5 +83,24 @@ const updateCategory = async (req, res) => {
         console.log("This is the error edit submit" + error)
     }
 }
+const shopPage=async(req,res)=>{
+    
+    try{
+        const categoryDetails = await categoryCollection.find({ isListed: true })
+        let query = { isListed: true };
+       if (req.query.id) {
+        query.parentCategory = req.query.id;
+       }
+        const productDetails=await productCollection.find(query)
+        res.render('userpages/shoppage',{userLogged:req.session.logged,productDet:productDetails,categoryDet:categoryDetails})
 
-module.exports={updateCategory,editCategory,categoryList,addCategory,categoryManagement }
+    
+    }
+
+    catch(err){
+        console.log(err)
+    }
+
+}
+
+module.exports={updateCategory,editCategory,categoryList,addCategory,categoryManagement,shopPage}

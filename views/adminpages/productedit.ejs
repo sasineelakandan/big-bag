@@ -102,6 +102,17 @@
           <input type="file" name="images" value="productDet.productImages[i]" class="form-control-file" id="images"
             multiple>
       </div>
+      <div class="form-group">
+        <label for="images">Add image</label>    
+          <input type="file" name="images" value="productDet.productImages[i]" class="form-control-file" id="images"
+            multiple>
+      </div>
+      <div class="form-group">
+        <label for="images">Add image</label>    
+          <input type="file" name="images" value="productDet.productImages[i]" class="form-control-file" id="images"
+            multiple>
+      </div>
+
 
         <br>
         <div class="form-group">
@@ -128,11 +139,11 @@
         },
         productPrice: {
           required: true,
-          pattern: "[1-9]+"
+          pattern: "[0-9]+"
         },
         productStock: {
           required: true,
-          pattern: "[1-9]+"
+          pattern: "[0-9]+"
         }
       },
       submitHandler: async (form, event) => {

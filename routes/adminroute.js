@@ -1,7 +1,8 @@
 const express=require('express')
-const adminconroller=require('../controller/admincontroller')
+const adminConroller=require('../controller/admincontroller')
 const productConroller=require('../controller/productController')
 const categoryConroller=require('../controller/categoryConroller')
+
 const upload = require('../services/multer')
 const adminauth=require('../middlewere/adminver')
 const Router=express.Router()
@@ -11,12 +12,12 @@ const Router=express.Router()
 
 
 // ADMIN CONTROLLER
-Router.get('/admin',adminconroller.loginpage)
-Router.post('/adminlogin',adminconroller.adminlogin)
-Router.post('/adminlogout',adminconroller.adminlogout)
-Router.get('/usermanagement',adminconroller.usermanagement)
-Router.get('/userblock',adminconroller.userblock)
-Router.post('/adminsearch',adminconroller.usersearch)
+Router.get('/admin',adminConroller.loginpage)
+Router.post('/adminlogin',adminConroller.adminlogin)
+Router.post('/adminlogout',adminConroller.adminlogout)
+Router.get('/usermanagement',adminConroller.usermanagement)
+Router.get('/userblock',adminConroller.userblock)
+Router.post('/adminsearch',adminConroller.usersearch)
 
 
 
