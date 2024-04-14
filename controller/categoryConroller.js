@@ -91,6 +91,7 @@ const shopPage=async(req,res)=>{
        if (req.query.id) {
         query.parentCategory = req.query.id;
        }
+     
         const productDetails=await productCollection.find(query)
         res.render('userpages/shoppage',{userLogged:req.session.logged,productDet:productDetails,categoryDet:categoryDetails})
 
