@@ -19,6 +19,9 @@ Router.post('/register',userConroller.register)
 Router.get('/shop',userConroller.shopPage)
 Router.get('/singleProduct',userConroller.singleProduct)
 Router.get('/logout',userConroller.logout)
-
-
+Router.get('/productsearch',userConroller.prodeuctsearch)
+Router.get('/price',userConroller.priceRange)
+Router.get('/namesort',userConroller.nameSort)
+Router.get('/pricesort',userConroller.priceSort)
+Router.get('/parent',userConroller.Parent)
 module.exports=Router

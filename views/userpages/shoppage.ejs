@@ -1033,10 +1033,10 @@
                           <div class="collapse navbar-collapse navbar-ex1-collapse navbar-side-collapse">
                             <ul class="nav navbar-nav side-nav" id="accordion2" role="tablist" aria-multiselectable="true">
                               <li>
-                                <div class="" role="tab" id="heading1">
-                                  <a href="javascript:void(0)" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#women" aria-controls="women">Traveler Bag <i
+                                <!-- <div class="" role="tab" id="heading1">
+                                  <a href="/parentcategory?value=travelerbag" data-bs-target="#women" aria-controls="women">Traveler Bag <i
                                       class="fa fa-plus"></i></a>
-                                </div>
+                                </div> -->
                                 
                                 <!-- <ul id="women" class="collapse collapseItem show" role="tabpanel" aria-labelledby="heading1" data-bs-parent="#accordion2">
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Accessories <span>(6)</span></a></li>
@@ -1049,11 +1049,14 @@
                               </li>
         
                               <li>
+                              <% for(let i=0;i<productDet.length;i++){%>
+
+                              
                                 <div class="" role="tab" id="heading2">
-                                  <a href="javascript:void(0)" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#men" aria-controls="men"> Gym Bags<i
+                                  <a href="/parent?id=productDet[i].parentCategory" aria-expanded="false" aria-controls="men">ca<i
                                       class="fa fa-plus"></i></a>
                                 </div>
-                                
+                              <%}%>
                                 <!-- <ul id="men" class="collapse collapseItem" role="tabpanel" aria-labelledby="heading2" data-bs-parent="#accordion2">
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Accessories <span>(6)</span></a></li>
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Bag <span>(6)</span></a></li>
@@ -1065,10 +1068,10 @@
                               </li>
         
                               <li>
-                                <div class="" role="tab" id="heading3">
+                                <!-- <div class="" role="tab" id="heading3">
                                   <a href="javascript:void(0)" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#kids" aria-controls="kids">Laptop Bag<i
                                       class="fa fa-plus"></i></a>
-                                </div>
+                                </div> -->
 <!--         
                                 <ul id="kids" class="collapse collapseItem" role="tabpanel" aria-labelledby="heading3" data-bs-parent="#accordion2">
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Accessories <span>(6)</span></a></li>
@@ -1117,26 +1120,26 @@
                       </div> -->
         
                       <div class="panel panel-default filterNormal">
-                        <div class="panel-heading">filter by Color</div>
+                        <div class="panel-heading">Filter by Price</div>
                         <div class="panel-body">
                           <ul class="list-unstyled">
-                            <li><a href="javascript:void(0)">Black<span>(15)</span></a></li>
-                            <li><a href="javascript:void(0)">White<span>(10)</span></a></li>
-                            <li><a href="javascript:void(0)">Red<span>(7)</span></a></li>
-                            <li><a href="javascript:void(0)">Blue<span>(12)</span></a></li>
-                            <li><a href="javascript:void(0)">Orange<span>(12)</span></a></li>
+                            <li><a href="/price?range=1">500-1000<span></span></a></li></button>
+                            <li><a href="/price?range=2">1000-1500<span></span></a></li></button>
+                            <li><a href="/price?range=3"> 1500-2000<span></span></a></li></button>
+                            <!-- <li><a href="javascript:void(0)">Blue<span>(12)</span></a></li>
+                            <li><a href="javascript:void(0)">Orange<span>(12)</span></a></li> -->
                           </ul>
                         </div>
                       </div>
         
                       <div class="panel panel-default filterNormal">
-                        <div class="panel-heading">filter by Size</div>
+                        <div class="panel-heading">filter by product</div>
                         <div class="panel-body">
                           <ul class="list-unstyled clearfix">
-                            <li><a href="javascript:void(0)">Small<span>(15)</span></a></li>
-                            <li><a href="javascript:void(0)">Medium<span>(10)</span></a></li>
-                            <li><a href="javascript:void(0)">Large<span>(7)</span></a></li>
-                            <li><a href="javascript:void(0)">Extra Large<span>(12)</span></a></li>
+                            <li><a href="/namesort?sort=true">Name assending<span></span></a></li>
+                            <li><a href="/namesort?sort=false">Name desending<span></span></a></li>
+                            <li><a href="/pricesort?price=true">price asending<span></span></a></li>
+                            <li><a href="/pricesort?price=false">price desending<span></span></a></li>
                           </ul>
                         </div>
                       </div>
@@ -1145,17 +1148,14 @@
                 </div>
               </div>
             </div>
-
+             
             <div class="col-lg-9 col-md-8">
               <div class="row filterArea">
                 <div class="col-6">
-                  <select name="guiest_id1" id="guiest_id1" class="select-drop">
-                    <option value="0">Default sorting</option>
-                    <option value="1">Sort by popularity</option>
-                    <option value="2">Sort by rating</option>
-                    <option value="3">Sort by newness</option>
-                    <option value="3">Sort by price</option>
-                  </select>
+              
+                <form action="/productsearch" method="get">
+                 <input class="px-4 py-2" style="margin-left: 25px;" type="search" placeholder="search" name="search" ><button class="btn bg-info py-0" type="submit">search</button>
+                </form>
                 </div>
 
                 <div class="col-6">

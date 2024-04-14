@@ -1,25 +1,25 @@
 const usercollection = require('../model/usermodel')
 const otpcollections = require('../model/otpmodel')
-const categorycollection=require('../model/categorymodel')
-const productcollection=require("../model/productmodel")
+const categorycollection = require('../model/categorymodel')
+const productcollection = require("../model/productmodel")
 const sendotp = require("../services/sendotp")
 const bcrypt = require('bcryptjs')
 
 
 
-const home = async(req, res) => {
-    try{
-     const productDetails=await productcollection.find()
-     
-    if (req.session.logged) {
-        
-        res.render('userpages/home', { userLogged: req.session.logged, productDetails })
-    } else {
-        res.render('userpages/home', { userLogged: null, productDetails })
+const home = async (req, res) => {
+    try {
+        const productDetails = await productcollection.find()
+
+        if (req.session.logged) {
+
+            res.render('userpages/home', { userLogged: req.session.logged, productDetails })
+        } else {
+            res.render('userpages/home', { userLogged: null, productDetails })
+        }
+    } catch (err) {
+        console.log(err);
     }
-} catch (err) {
-    console.log(err);
-}
 
 }
 
@@ -40,12 +40,12 @@ const otppage = (req, res) => {
 
 
 const loginget = async (req, res) => {
-    
+
 
     if (req.session.logged) {
-        
-        
-        
+
+
+
         res.redirect('/')
     } else {
         res.render('userpages/login')
@@ -82,7 +82,7 @@ const verifyotp = async (req, res) => {
         if (otpmatch && notExpired) {
 
             await usercollection.updateOne({ _id: req.session.logged._id }, { $set: { isVerified: true } })
-            req.session.user= true
+            req.session.user = true
 
             res.status(200).send({ otpverified: true })
         } else {
@@ -151,7 +151,7 @@ const userRegister = async (req, res) => {
                 expiryDate: new Date(Date.now() + 60000).toISOString()
             })
             await userotp.save()
-           
+
 
 
         }
@@ -166,33 +166,33 @@ const logionverify = async (req, res) => {
 
     try {
         const user = await usercollection.findOne({ email: req.body.email })
-        
-        if(user?.isBlocked){
-            req.session.logged=false
-            res.send({blocked:true})
+
+        if (user?.isBlocked) {
+            req.session.logged = false
+            res.send({ blocked: true })
         }
-        else if(user==null || user==undefined){
-            
-                res.send({ blocked: true })
+        else if (user == null || user == undefined) {
+
+            res.send({ blocked: true })
         }
-        else{
-            
+        else {
+
             const passwordMatch = await bcrypt.compare(req.body.password, user.password)
             if (passwordMatch) {
                 req.session.logged = user
-                res.send({success:true})
+                res.send({ success: true })
             } else {
                 res.send({ invalidPass: true })
             }
         }
-    
-        
+
+
     } catch (err) {
         console.log(err);
     }
 }
 
-    
+
 
 
 const resendotp = async (req, res) => {
@@ -208,32 +208,137 @@ const resendotp = async (req, res) => {
         console.log(err);
     }
 }
-const shopPage=async(req,res)=>{
-    
-    try{
+const shopPage = async (req, res) => {
+
+    try {
+
         const categoryDetails = await categorycollection.find({ isListed: true })
         let query = { isListed: true };
-       if (req.query.id) {
-        query.parentCategory = req.query.id;
-       }
-        const productDetails=await productcollection.find(query)
-        res.render('userpages/shoppage',{userLogged:req.session.logged,productDet:productDetails,categoryDet:categoryDetails})
+        if (req.query.id) {
+            query.parentCategory = req.query.id;
+        }
+        if (req.session.search) {
 
-    
+            let productDetails = req.session.search
+            req.session.search = null
+            req.session.save()
+          return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails })
+        }
+        if(req.session.range){
+            let productDetails=req.session.range
+            req.session.range=null
+            req.session.save()
+            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails })
+        }
+        if(req.session.sort){
+            let productDetails=req.session.sort
+            req.session.sort=null
+            req.session.save()
+            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails })
+        }
+        if(req.session.price){
+            let productDetails=req.session.price
+            req.session.price=null
+            req.session.save()
+            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails })
+        }
+        if(req.session.parent){
+            console.log(req.session.parent)
+            const productDetails=req.session.parent
+            req.session.price=null
+            req.session.save()
+            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails })
+        }
+
+        const productDetails = await productcollection.find(query)
+        return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
+
+
     }
 
-    catch(err){
+    catch (err) {
         console.log(err)
     }
 
 }
-const logout=async(req,res)=>{
-    req.session.logged=false
+const logout = async (req, res) => {
+    req.session.logged = false
     res.redirect('/')
 }
+const prodeuctsearch = async (req, res) => {
+    try {
+        if (req.query.search) {
+            const searchproduct = await productcollection.find({ productName: { $regex: req.query.search, $options: 'i' } })
 
+            req.session.search = searchproduct
+            res.redirect('/shop')
+        }
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
+const priceRange=async(req,res)=>{
+    
+    if(req.query.range=='1'){
+      
+       const rangeproducts = await productcollection.find({ productPrice: { $gte: 500, $lte: 1001 } })
+       req.session.range=rangeproducts
+       return res.redirect('/shop')
+       
+    }
+    if(req.query.range=='2'){
+      
+        const rangeproducts = await productcollection.find({ productPrice: { $gte: 1000, $lte: 1500 } })
+        req.session.range=rangeproducts
+        return res.redirect('/shop')
+        
+     }
+     if(req.query.range=='3'){
+      
+        const rangeproducts = await productcollection.find({ productPrice: { $gte: 1500, $lte: 2000 } })
+        req.session.range=rangeproducts
+        return res.redirect('/shop')
+        
+     }
+}
+const nameSort=async(req,res)=>{
+    if(req.query.sort=='true'){
+        
+        const sortname=await productcollection.find().sort({productName:1})
+        console.log(sortname)
+        req.session.sort=sortname
+        
+        return res.redirect('/shop')
+    }else{
+        const sortname=await productcollection.find().sort({productName:-1})
+        
+        req.session.sort=sortname
+        
+        return res.redirect('/shop')
+    }
+}
+const priceSort=async(req,res)=>{
+if(req.query.price==='true'){
+    console.log('price if');
+   const sortprice=await productcollection.find().sort({productPrice:1})
+   req.session.price=sortprice
+   return res.redirect('/shop')
+}else{
+    
+    const sortprice=await productcollection.find().sort({productPrice:-1})
+    req.session.price=sortprice
+    
+    return res.redirect('/shop')
+}
+}
+const Parent=(req,res)=>{
+  if(req.query._id){
+    console.log(req.query._id)
+  }
+}
 
-
-module.exports = { home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register ,shopPage,
-    singleProduct,logout
+module.exports = {
+    home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register, shopPage,
+    singleProduct, logout, prodeuctsearch,priceRange,nameSort,priceSort,Parent
 }

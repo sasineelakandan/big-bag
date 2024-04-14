@@ -150,8 +150,8 @@ const deleteImage = async (req, res) => {
       );
     }
   };
-  productSearch=async(req,res)=>{
+  
     
-  }
+  
 
 module.exports={addProduct2,addProduct,Product,productList,productEdit,productUpdate,deleteImage}
