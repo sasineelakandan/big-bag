@@ -243,9 +243,10 @@ const shopPage = async (req, res) => {
             return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails })
         }
         if(req.session.parent){
-            console.log(req.session.parent)
+            
             const productDetails=req.session.parent
-            req.session.price=null
+            console.log(productDetails)
+            req.session.parent=null
             req.session.save()
             return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails })
         }
@@ -332,9 +333,12 @@ if(req.query.price==='true'){
     return res.redirect('/shop')
 }
 }
-const Parent=(req,res)=>{
-  if(req.query._id){
-    console.log(req.query._id)
+const Parent=async(req,res)=>{
+  if(req.query.id){
+    
+    const parent=await productcollection.find({parentCategory:req.query.id})
+    req.session.parent=parent
+    res.redirect('/shop')
   }
 }
 
