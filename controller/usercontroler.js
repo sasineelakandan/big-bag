@@ -4,6 +4,7 @@ const categorycollection = require('../model/categorymodel')
 const productcollection = require("../model/productmodel")
 const sendotp = require("../services/sendotp")
 const bcrypt = require('bcryptjs')
+const { productList } = require('./productController')
 
 
 
@@ -245,13 +246,15 @@ const shopPage = async (req, res) => {
         if(req.session.parent){
             
             const productDetails=req.session.parent
-            console.log(productDetails)
+            
             req.session.parent=null
             req.session.save()
+        
             return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails })
         }
+       
 
-        const productDetails = await productcollection.find(query)
+        const productDetails = await productcollection.find(query).limit(3)
         return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
 
 
@@ -281,21 +284,21 @@ const prodeuctsearch = async (req, res) => {
 }
 const priceRange=async(req,res)=>{
     
-    if(req.query.range=='1'){
+    if(req.query.range=='500-1000'){
       
        const rangeproducts = await productcollection.find({ productPrice: { $gte: 500, $lte: 1001 } })
        req.session.range=rangeproducts
        return res.redirect('/shop')
        
     }
-    if(req.query.range=='2'){
+    if(req.query.range=='1000-1500'){
       
         const rangeproducts = await productcollection.find({ productPrice: { $gte: 1000, $lte: 1500 } })
         req.session.range=rangeproducts
         return res.redirect('/shop')
         
      }
-     if(req.query.range=='3'){
+     if(req.query.range=='1500-2000'){
       
         const rangeproducts = await productcollection.find({ productPrice: { $gte: 1500, $lte: 2000 } })
         req.session.range=rangeproducts
@@ -307,7 +310,7 @@ const nameSort=async(req,res)=>{
     if(req.query.sort=='true'){
         
         const sortname=await productcollection.find().sort({productName:1})
-        console.log(sortname)
+        
         req.session.sort=sortname
         
         return res.redirect('/shop')
@@ -321,7 +324,7 @@ const nameSort=async(req,res)=>{
 }
 const priceSort=async(req,res)=>{
 if(req.query.price==='true'){
-    console.log('price if');
+
    const sortprice=await productcollection.find().sort({productPrice:1})
    req.session.price=sortprice
    return res.redirect('/shop')
@@ -336,13 +339,45 @@ if(req.query.price==='true'){
 const Parent=async(req,res)=>{
   if(req.query.id){
     
+    
+    
     const parent=await productcollection.find({parentCategory:req.query.id})
+    
     req.session.parent=parent
     res.redirect('/shop')
   }
 }
-
+const ProductListPage = async (req, res) => {
+    try {
+      let products;
+      let count;
+      let page = Number(req.query.page) || 1;
+      
+      let limit = 3;
+      let skip = (page - 1) * limit;
+      
+      count = await productcollection.find().estimatedDocumentCount();
+      const categoryDetails=await categorycollection.find() 
+     
+      products = await productcollection.find()
+        .skip(skip)
+        .limit(limit)
+        
+      req.session.page=products
+      if(req.session.page){
+           
+          
+        const productDetails=req.session.page
+        req.session.page=null
+        req.session.save()
+        return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails })
+    }
+      
+    } catch (error) {
+      console.log("error in getting products in adminpanel ", error);
+    }
+  };
 module.exports = {
     home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register, shopPage,
-    singleProduct, logout, prodeuctsearch,priceRange,nameSort,priceSort,Parent
+    singleProduct, logout, prodeuctsearch,priceRange,nameSort,priceSort,Parent,ProductListPage
 }

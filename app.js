@@ -31,6 +31,6 @@ app.use((req, res, next) => {
 app.use(adminerout)
 app.use(userrouter)
     
-app.listen(8000,()=>{
+app.listen(8001,()=>{
     console.log('portstarted')
 })

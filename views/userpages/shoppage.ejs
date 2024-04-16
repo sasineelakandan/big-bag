@@ -1049,14 +1049,15 @@
                               </li>
         
                               <li>
-                              <% for(let i=0;i<productDet.length;i++){%>
-
-                              
-                                <div class="" role="tab" id="heading2">
-                                  <a href="/parent?id=<%=productDet[i].parentCategory%>" aria-expanded="false" aria-controls="men"><%=categoryDet[i].categoryname%><i
-                                      class="fa fa-plus"></i></a>
-                                </div>
-                              <%}%>
+                                <% for(let i=0;i<categoryDet.length;i++){%>
+                                  <div class="" role="tab" id="heading2">
+                                    <a href="/parent?id=<%=categoryDet[i]?._id%>" aria-controls="">
+                                       
+                                       <%=categoryDet[i]?.categoryname%>
+                                    </a>
+                                  </div>
+                            
+                                <%}%>
                                 <!-- <ul id="men" class="collapse collapseItem" role="tabpanel" aria-labelledby="heading2" data-bs-parent="#accordion2">
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Accessories <span>(6)</span></a></li>
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Bag <span>(6)</span></a></li>
@@ -1123,15 +1124,31 @@
                         <div class="panel-heading">Filter by Price</div>
                         <div class="panel-body">
                           <ul class="list-unstyled">
-                            <li><a href="/price?range=1">500-1000<span></span></a></li></button>
-                            <li><a href="/price?range=2">1000-1500<span></span></a></li></button>
-                            <li><a href="/price?range=3"> 1500-2000<span></span></a></li></button>
+                            <form action="/price" method="get">
+                              <ul>
+                                <li>
+                                  <input type="radio" name="range" value="500-1000" />
+                                  <label for="range-500-1000">500-1000</label>
+                                </li>
+                                <li>
+                                  <input type="radio" name="range" value="1000-1500" />
+                                  <label for="range-1000-1500">1000-1500</label>
+                                </li>
+                                <li>
+                                  <input type="radio" name="range" value="1500-2000" />
+                                  <label for="range-1500-2000">1500-2000</label>
+                                </li>
+                              </ul>
+                              <button type="submit"  class="btn btn-primary">Apply filter</button>
+                            </form>
                             <!-- <li><a href="javascript:void(0)">Blue<span>(12)</span></a></li>
                             <li><a href="javascript:void(0)">Orange<span>(12)</span></a></li> -->
                           </ul>
                         </div>
                       </div>
-        
+                      
+ 
+                      </script>
                       <div class="panel panel-default filterNormal">
                         <div class="panel-heading">filter by product</div>
                         <div class="panel-body">
@@ -1190,18 +1207,40 @@
               <% } %>
 
           </div>
+
+          <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+
+              <li class="page-item"><a class="page-link" href="/pagelist?page=1">1</a></li>
+              <li class="page-item"><a class="page-link" href="/pagelist?page=2">2</a></li>
+              <li class="page-item"><a class="page-link" href="/pagelist?page=3">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+
         </div>
       </div>
     </div>
-
+    
+ 
+<!-- 
     <div class="row">
       <% for(let i=0; i<productDet.length; i++){ %>
         <div class="col-md-6 col-lg-4">
           <div class="productBox">
             <div class="productImage clearfix">
-              <a href="/singleProduct?id=<%= productDet[i]._id %>">
+              <!-- <a href="/singleProduct?id=<%= productDet[i]._id %>">
                 <!-- <img src="assets/img/uploads/<%=productDet[i].productImage[0]%>" alt="products-img"> -->
-              </a>
+              <!-- </a>
 
             </div>
             <div class="productCaption clearfix">
@@ -1215,12 +1254,12 @@
             </div>
           </div>
         </div>
-        <% } %>
+        <% } %> -->
 
-    </div>
+    <!-- </div>
   </div>
 </div>
-</div>
+</div> --> --> -->
 </section> 
    
 
@@ -1558,7 +1597,6 @@
           </div>
         </div>
       </section>
-
 
       <!-- PORDUCT QUICK VIEW MODAL -->
       <div class="modal fade quick-view" tabindex="-1" role="dialog">

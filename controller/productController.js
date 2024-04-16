@@ -150,7 +150,7 @@ const deleteImage = async (req, res) => {
       );
     }
   };
-  
+ 
     
   
 

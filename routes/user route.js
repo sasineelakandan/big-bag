@@ -24,4 +24,5 @@ Router.get('/price',userConroller.priceRange)
 Router.get('/namesort',userConroller.nameSort)
 Router.get('/pricesort',userConroller.priceSort)
 Router.get('/parent',userConroller.Parent)
+Router.get('/pagelist',userConroller.ProductListPage)
 module.exports=Router
