@@ -1215,10 +1215,9 @@
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-
-              <li class="page-item"><a class="page-link" href="/pagelist?page=1">1</a></li>
-              <li class="page-item"><a class="page-link" href="/pagelist?page=2">2</a></li>
-              <li class="page-item"><a class="page-link" href="/pagelist?page=3">3</a></li>
+             <%for(i=0;i<page;i++){%>
+              <li class="page-item"><a class="page-link" href="/shop?pages=<%=i+1%>"><%=i+1%></a></li>
+                     <%}%>
               <li class="page-item">
                 <a class="page-link" href="#" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>

@@ -83,25 +83,6 @@ const updateCategory = async (req, res) => {
         console.log("This is the error edit submit" + error)
     }
 }
-const shopPage=async(req,res)=>{
-    
-    try{
-        const categoryDetails = await categoryCollection.find({ isListed: true })
-        let query = { isListed: true };
-       if (req.query.id) {
-        query.parentCategory = req.query.id;
-       }
-     
-        const productDetails=await productCollection.find(query)
-        res.render('userpages/shoppage',{userLogged:req.session.logged,productDet:productDetails,categoryDet:categoryDetails})
 
-    
-    }
 
-    catch(err){
-        console.log(err)
-    }
-
-}
-
-module.exports={updateCategory,editCategory,categoryList,addCategory,categoryManagement,shopPage}
+module.exports={updateCategory,editCategory,categoryList,addCategory,categoryManagement}
