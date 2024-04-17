@@ -104,7 +104,8 @@ const addProduct2=async(req,res)=>{
             parentCategory: req.body.parentCategory,
             productImage: imgFiles,
             productPrice: req.body.productPrice,
-            productStock: req.body.productStock
+            productStock: req.body.productStock,
+            productDiscription:req.body.productdes
         })
         const productDetails = await productCollection.find({ productName: { $regex: new RegExp('^' + req.body.productName.toLowerCase() + '$', 'i') } })
         if (/^\s*$/.test(req.body.productName) || /^\s*$/.test(req.body.productPrice) || /^\s*$/.test(req.body.productStock)) {

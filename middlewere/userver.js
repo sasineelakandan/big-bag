@@ -3,7 +3,7 @@ module.exports=function(req,res,next){
       if(req.session.logged){
          next()
       }else{
-        res.render('userpages/login')
+        res.redirect('/login')
       }
     }catch(err){
         console.log(err)
