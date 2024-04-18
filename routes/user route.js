@@ -1,6 +1,6 @@
 const express=require('express')
 const userConroller=require('../controller/usercontroler')
-
+const addressController=require('../controller/addressController')
 
 const Router=express.Router()
 const userVer=require('../middlewere/userver')
@@ -24,4 +24,8 @@ Router.get('/price',userConroller.priceRange)
 Router.get('/namesort',userConroller.nameSort)
 Router.get('/pricesort',userConroller.priceSort)
 Router.get('/parent',userConroller.Parent)
+
+// addressController
+Router.get('/account',addressController.account)
+Router.get('/addaddress',addressController.addaddress)
 module.exports=Router

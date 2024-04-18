@@ -52,6 +52,7 @@ const categoryList = async (req, res) => {
 const editCategory = async (req, res) => {
 
     try {
+        console.log(req.params.id)
         let categorydetail = await categoryCollection.findById({ _id: req.params.id })
         res.render('adminpages/adminedit', { categorydetail })
     }
@@ -61,28 +62,45 @@ const editCategory = async (req, res) => {
 
     }
 }
+
+
 const updateCategory = async (req, res) => {
     try {
-       
-        const { category, categorydes } = req.body
-       
-        const prodet=await categoryCollection.findOne({_id:req.params.id})
-        if(category==prodet.categoryname&&categorydes==prodet.categorydescription){
-            
-            res.send({ catexists: true })
-            
-        } else {
+       console.log(req.body)
         
-            
-            let cat = await categoryCollection.findByIdAndUpdate({ _id: req.params.id }, { $set: { categoryname: category, categorydescription:categorydes } })
-            
-            res.send({ success: true })
+        const catDetails = await categoryCollection.findOne({
+          categoryname: {
+            $regex: new RegExp(
+              "^" + req.body.categoryName.toLowerCase() + "$",
+              "i"
+            ),
+          },
+        });
+        console.log(catDetails)
+        if (
+          /^\s*$/.test(req.body.categoryName) ||
+          /^\s*$/.test(req.body.categoryDes)
+        ) {
+          res.send({ noValue: true });
+          
+        } else if (catDetails && (catDetails._id != req.body.categoryId)) {
+          res.send({ exists: true });
+        } else {
+          await categoryCollection.updateOne(
+            { _id: req.body.categoryId },
+            {
+              $set: {
+                categoryname: req.body.categoryName,
+                categorydescription: req.body.categoryDes,
+              },
+            }
+          );
+          res.send({ success: true });
         }
-    }
-    catch (error) {
-        console.log("This is the error edit submit" + error)
-    }
-}
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
 
-module.exports={updateCategory,editCategory,categoryList,addCategory,categoryManagement}
+module.exports={editCategory,categoryList,addCategory,categoryManagement,updateCategory}

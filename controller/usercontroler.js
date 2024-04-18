@@ -264,10 +264,10 @@ const shopPage = async (req, res) => {
         var limit = 3;
         let skip = (page - 1) * limit;
         
-        count = await productcollection.find({isListed:true}).countDocuments()
+        count = await productcollection.find({isListed:true,isDelete:false}).countDocuments()
        
        
-        products = await productcollection.find({isListed:true})
+        products = await productcollection.find({isListed:true,isDelete:false})
           .skip(skip)
           .limit(limit)
         
@@ -284,7 +284,7 @@ const shopPage = async (req, res) => {
         }
       
 
-        const productDetails = await productcollection.find({isListed:true}).limit(3)
+        const productDetails = await productcollection.find({isListed:true,isDelete:false}).limit(3)
         
         return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages})
         
@@ -317,21 +317,21 @@ const priceRange=async(req,res)=>{
     
     if(req.query.range=='500-1000'){
       
-       const rangeproducts = await productcollection.find({ productPrice: { $gte: 500, $lte: 1000 },isListed:true })
+       const rangeproducts = await productcollection.find({ productPrice: { $gte: 500, $lte: 1000 },isListed:true,isDelete:false })
        req.session.range=rangeproducts
        return res.redirect('/shop')
        
     }
     if(req.query.range=='1000-1500'){
       
-        const rangeproducts = await productcollection.find({ productPrice: { $gte: 1000, $lte: 1500 },isListed:true })
+        const rangeproducts = await productcollection.find({ productPrice: { $gte: 1000, $lte: 1500 },isListed:true,isDelete:false })
         req.session.range=rangeproducts
         return res.redirect('/shop')
         
      }
      if(req.query.range=='1500-2000'){
       
-        const rangeproducts = await productcollection.find({ productPrice: { $gte: 1500, $lte: 2000 },isListed:true })
+        const rangeproducts = await productcollection.find({ productPrice: { $gte: 1500, $lte: 2000 },isListed:true,isDelete:false })
         req.session.range=rangeproducts
         return res.redirect('/shop')
         
@@ -340,13 +340,13 @@ const priceRange=async(req,res)=>{
 const nameSort=async(req,res)=>{
     if(req.query.sort=='true'){
         
-        const sortname=await productcollection.find({isListed:true}).sort({productName:1})
+        const sortname=await productcollection.find({isListed:true,isDelete:false}).sort({productName:1})
         
         req.session.sort=sortname
         
         return res.redirect('/shop')
     }else{
-        const sortname=await productcollection.find({isListed:true}).sort({productName:-1})
+        const sortname=await productcollection.find({isListed:true,isDelete:false}).sort({productName:-1})
         
         req.session.sort=sortname
         
@@ -356,12 +356,12 @@ const nameSort=async(req,res)=>{
 const priceSort=async(req,res)=>{
 if(req.query.price==='true'){
 
-   const sortprice=await productcollection.find({isListed:true}).sort({productPrice:1})
+   const sortprice=await productcollection.find({isListed:true,isDelete:false}).sort({productPrice:1})
    req.session.price=sortprice
    return res.redirect('/shop')
 }else{
     
-    const sortprice=await productcollection.find({isListed:true}).sort({productPrice:-1})
+    const sortprice=await productcollection.find({isListed:true,isDelete:false}).sort({productPrice:-1})
     req.session.price=sortprice
     
     return res.redirect('/shop')
@@ -372,7 +372,7 @@ const Parent=async(req,res)=>{
     
     
     
-    const parent=await productcollection.find({parentCategory:req.query.id,isListed:true})
+    const parent=await productcollection.find({parentCategory:req.query.id,isListed:true,isDelete:false})
     
     req.session.parent=parent
     res.redirect('/shop')

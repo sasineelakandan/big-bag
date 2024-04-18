@@ -1,0 +1,988 @@
+
+<%- include('../userpart/header') %>
+
+        <!-- ====================================
+          ——— LEFT SIDEBAR WITH OUT FOOTER
+        ===================================== -->
+        <aside class="left-sidebar sidebar-dark" id="left-sidebar">
+          <div id="sidebar" class="sidebar sidebar-with-footer">
+            <!-- Aplication Brand -->
+            <div class="app-brand">
+              <a href='index.html'>
+                <!-- <img src="assets/img/logo.png" alt="Logo"> -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  width="166px" height="31px">
+                <path class="logo-pl" fill-rule="evenodd"  fill="rgb(71, 186, 193)"
+                  d="M157.432,17.855 L157.573,15.904 L166.011,15.904 L166.011,27.436 C164.581,28.174 163.195,28.687 161.853,28.974 C160.511,29.261 158.921,29.404 157.081,29.404 C155.487,29.404 154.019,29.179 152.678,28.728 C151.336,28.277 150.178,27.646 149.206,26.838 C148.233,26.029 147.410,25.066 146.736,23.946 C146.062,22.827 145.558,21.597 145.224,20.255 C144.890,18.913 144.723,17.492 144.723,15.992 C144.723,13.355 145.216,11.021 146.200,8.987 C147.184,6.954 148.652,5.346 150.603,4.162 C152.554,2.979 154.866,2.387 157.538,2.387 C160.467,2.387 163.069,3.061 165.343,4.408 L164.341,6.219 C163.380,5.633 162.293,5.161 161.080,4.804 C159.867,4.446 158.692,4.268 157.555,4.268 C155.844,4.268 154.318,4.572 152.976,5.182 C151.634,5.791 150.548,6.632 149.716,7.704 C148.883,8.776 148.254,10.010 147.826,11.404 C147.398,12.799 147.184,14.316 147.184,15.957 C147.184,17.703 147.401,19.279 147.835,20.686 C148.268,22.092 148.919,23.308 149.786,24.333 C150.653,25.359 151.766,26.150 153.126,26.706 C154.485,27.263 156.055,27.541 157.837,27.541 C159.676,27.541 161.704,27.102 163.919,26.223 L163.919,17.855 L157.432,17.855 ZM137.244,20.123 L126.398,20.123 L122.917,29.000 L120.685,29.000 L130.898,2.844 L133.060,2.844 L142.904,29.000 L140.583,29.000 L137.244,20.123 ZM131.953,5.111 C131.812,5.627 131.349,6.998 130.564,9.225 C129.779,11.451 129.029,13.549 128.314,15.518 L127.259,18.471 L136.435,18.471 C133.798,10.901 132.304,6.447 131.953,5.111 ZM118.250,17.398 C119.223,18.594 119.709,20.006 119.709,21.635 C119.709,23.944 118.977,25.748 117.512,27.049 C116.047,28.350 113.797,29.000 110.762,29.000 L101.902,29.000 L101.902,2.844 L109.039,2.844 C112.285,2.844 114.655,3.383 116.149,4.461 C117.644,5.539 118.391,7.180 118.391,9.383 C118.391,9.641 118.388,9.834 118.382,9.963 C118.376,10.092 118.350,10.347 118.303,10.728 C118.256,11.108 118.183,11.428 118.083,11.686 C117.983,11.943 117.828,12.263 117.617,12.644 C117.406,13.025 117.151,13.355 116.853,13.637 C116.554,13.918 116.164,14.202 115.684,14.489 C115.203,14.777 114.658,15.014 114.049,15.201 C115.877,15.471 117.277,16.203 118.250,17.398 ZM114.357,13.540 C114.901,13.183 115.312,12.673 115.587,12.011 C115.862,11.349 116.000,10.525 116.000,9.541 C116.000,7.713 115.435,6.445 114.304,5.735 C113.173,5.026 111.383,4.672 108.934,4.672 L104.152,4.672 L104.152,14.498 L110.147,14.498 C111.072,14.498 111.869,14.428 112.537,14.287 C113.205,14.146 113.812,13.898 114.357,13.540 ZM109.162,16.221 L104.152,16.221 L104.152,27.242 L110.182,27.242 C114.928,27.242 117.301,25.373 117.301,21.635 C117.301,19.608 116.644,18.198 115.332,17.407 C114.020,16.616 111.963,16.221 109.162,16.221 Z"/>
+                <path class="logo-pm" fill-rule="evenodd"  fill="rgb(51, 51, 51)"
+                  d="M86.846,18.752 L86.882,15.008 L96.725,15.008 L96.725,27.436 C95.131,28.092 93.623,28.578 92.199,28.895 C90.775,29.211 89.231,29.369 87.567,29.369 C83.641,29.369 80.574,28.186 78.365,25.818 C76.156,23.451 75.051,20.211 75.051,16.098 C75.051,13.485 75.567,11.185 76.598,9.198 C77.629,7.212 79.147,5.662 81.151,4.549 C83.155,3.436 85.522,2.879 88.253,2.879 C91.382,2.879 94.065,3.553 96.303,4.900 L94.757,8.451 C92.624,7.303 90.485,6.729 88.341,6.729 C85.739,6.729 83.694,7.572 82.206,9.260 C80.717,10.947 79.973,13.244 79.973,16.150 C79.973,19.033 80.635,21.313 81.960,22.988 C83.284,24.664 85.223,25.502 87.778,25.502 C89.419,25.502 90.907,25.244 92.243,24.729 L92.243,18.752 L86.846,18.752 ZM65.972,3.248 L70.736,3.248 L70.736,29.000 L65.972,29.000 L65.972,3.248 ZM60.760,17.478 C61.604,18.573 62.025,19.924 62.025,21.529 C62.025,23.955 61.167,25.807 59.450,27.084 C57.733,28.361 55.357,29.000 52.322,29.000 L42.777,29.000 L42.777,3.248 L50.811,3.248 C54.221,3.248 56.763,3.746 58.439,4.742 C60.115,5.738 60.953,7.396 60.953,9.717 C60.953,10.092 60.930,10.461 60.883,10.824 C60.836,11.188 60.730,11.601 60.566,12.063 C60.402,12.527 60.185,12.945 59.916,13.320 C59.646,13.695 59.271,14.062 58.791,14.419 C58.310,14.777 57.748,15.055 57.104,15.254 C58.697,15.641 59.916,16.382 60.760,17.478 ZM54.985,7.502 C54.077,6.998 52.633,6.746 50.652,6.746 L47.541,6.746 L47.541,13.883 L51.619,13.883 C54.771,13.883 56.348,12.682 56.348,10.279 C56.348,8.932 55.893,8.006 54.985,7.502 ZM55.785,18.154 C54.871,17.521 53.459,17.205 51.549,17.205 L47.541,17.205 L47.541,25.555 L51.672,25.555 C55.328,25.555 57.156,24.125 57.156,21.266 C57.156,19.824 56.699,18.787 55.785,18.154 Z"/>
+                <path class="logo-pf" fill-rule="evenodd"  opacity="0.6" fill="rgb(71, 186, 193)"
+                  d="M18.000,9.000 L10.000,9.000 L6.000,9.000 L2.000,9.000 C0.900,9.000 -0.000,9.900 -0.000,11.000 L-0.000,23.000 C-0.000,27.400 3.600,31.000 8.000,31.000 L20.000,31.000 C24.400,31.000 28.000,27.400 28.000,23.000 L28.000,11.000 C28.000,9.900 27.100,9.000 26.000,9.000 L22.000,9.000 L18.000,9.000 ZM22.000,13.000 L24.000,13.000 L24.000,23.000 C24.000,25.206 22.205,27.000 20.000,27.000 L8.000,27.000 C5.794,27.000 4.000,25.206 4.000,23.000 L4.000,13.000 L6.000,13.000 L10.000,13.000 L18.000,13.000 L22.000,13.000 Z"/>
+                <path class="logo-pf" fill-rule="evenodd"  opacity="0.6" fill="rgb(71, 186, 193)"
+                  d="M6.000,10.334 L6.000,14.000 L6.000,16.000 C6.000,17.103 6.896,18.000 8.000,18.000 C9.104,18.000 10.000,17.103 10.000,16.000 L10.000,14.000 L10.000,10.000 L10.000,8.000 C10.000,5.791 11.791,4.000 14.000,4.000 C16.209,4.000 18.000,5.791 18.000,8.000 L18.000,10.000 L18.000,14.000 L18.000,16.000 C18.000,17.103 18.896,18.000 20.000,18.000 C21.103,18.000 22.000,17.103 22.000,16.000 L22.000,14.000 L22.000,10.000 L22.000,8.000 C22.000,3.582 18.418,-0.000 14.000,-0.000 C9.582,-0.000 6.000,3.582 6.000,8.000 L6.000,10.000 "/>
+              </svg>
+ 
+              </a>
+            </div>
+            <!-- begin sidebar scrollbar -->
+            <div class="sidebar-scrollbar" data-simplebar style="height: 100%;">
+
+              <!-- sidebar menu -->
+              <ul class="nav sidebar-inner" id="sidebar-menu">
+
+                <li class="has-sub ">
+                  <a class="sidenav-item-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#home"
+                    aria-expanded="true" aria-controls="home">
+                    <i class="mdi mdi-home-outline"></i>
+                    <span class="nav-text">Home</span> <b class="caret"></b>
+                  </a>
+
+                  <ul class="collapse " id="home" data-bs-parent="#sidebar-menu">
+                    <div class="sub-menu">
+                      <li class="">
+                        <a class='sidenav-item-link' href='index.html'>
+                          <span class="nav-text">Home Default</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='index-v2.html'>
+                          <span class="nav-text">Home Classic</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='index-v3.html'>
+                          <span class="nav-text">Home Deals</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='index-v4.html'>
+                          <span class="nav-text">Home Mega</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='index-v5.html'>
+                          <span class="nav-text">Home Onepage</span>
+                        </a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+
+                <li class="has-sub ">
+                  <a class="sidenav-item-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#shop"
+                    aria-expanded="false" aria-controls="shop">
+                    <i class="mdi mdi-shopping"></i>
+                    <span class="nav-text">Shop</span> <b class="caret"></b>
+                  </a>
+
+                  <ul class="collapse " id="shop" data-bs-parent="#sidebar-menu">
+                    <div class="sub-menu">
+                      <li class="section-title">
+                        Products Grid View
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='product-grid-left-sidebar.html'>
+                          <span class="nav-text">Products Sidebar Left</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='product-grid-right-sidebar.html'>
+                          <span class="nav-text">Products Sidebar Right</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='product-grid-3-col-filter.html'>
+                          <span class="nav-text">Products 3 Columns V1</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='product-grid-3-col.html'>
+                          <span class="nav-text">Products 3 Columns V2</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='product-grid-4-col.html'>
+                          <span class="nav-text">Products 4 Columns</span>
+                        </a>
+                      </li>
+
+                      <li class="section-title">
+                        Products List View
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='product-list-left-sidebar.html'>
+                          <span class="nav-text">Products Sidebar Left</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='product-list-right-sidebar.html'>
+                          <span class="nav-text">Products Sidebar Right</span>
+                        </a>
+                      </li>
+
+                      <li class="section-title">
+                        Product Single
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='single-product.html'>
+                          <span class="nav-text">Single Product</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='product-comparison.html'>
+                          <span class="nav-text">Product Comparison</span>
+                        </a>
+                      </li>
+
+                      <li class="section-title">
+                        Checkout
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='checkout-step-2.html'>
+                          <span class="nav-text">Step 1 - Shipping</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='checkout-step-3.html'>
+                          <span class="nav-text">Step 2 - Payment</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='checkout-step-4.html'>
+                          <span class="nav-text">Step 3 - Review</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='checkout-step-5.html'>
+                          <span class="nav-text">Step 4 - Complete</span>
+                        </a>
+                      </li>
+
+                      <li class="section-title">
+                        Others
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='product-categories.html'>
+                          <span class="nav-text">Product Categories</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='cart-page-2.html'>
+                          <span class="nav-text">Cart Page</span>
+                        </a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+
+                <li class="has-sub ">
+                  <a class="sidenav-item-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#pages"
+                    aria-expanded="false" aria-controls="pages">
+                    <i class="mdi mdi-file-multiple"></i>
+                    <span class="nav-text">Pages</span> <b class="caret"></b>
+                  </a>
+
+                  <ul class="collapse " id="pages" data-bs-parent="#sidebar-menu">
+                    <div class="sub-menu">
+                      <li class="">
+                        <a class='sidenav-item-link' href='about-us.html'>
+                          <span class="nav-text">About Us</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='contact-us.html'>
+                          <span class="nav-text">Contact Us</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='signup.html'>
+                          <span class="nav-text">Register</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='signup-login.html'>
+                          <span class="nav-text">Register or Login</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='login.html'>
+                          <span class="nav-text">Login</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='lost-password.html'>
+                          <span class="nav-text">Password Recovery</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='privacy-policy.html'>
+                          <span class="nav-text">Privacy Policy</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='terms-and-conditions.html'>
+                          <span class="nav-text">Terms & Conditions</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='faq.html'>
+                          <span class="nav-text">FAQ</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='404.html'>
+                          <span class="nav-text">404 Not Found</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='coming-soon.html'>
+                          <span class="nav-text">Coming Soon</span>
+                        </a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+
+                <li class="has-sub ">
+                  <a class="sidenav-item-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#blog"
+                    aria-expanded="false" aria-controls="blog">
+                    <i class="mdi mdi-pencil-box"></i>
+                    <span class="nav-text">Blog</span> <b class="caret"></b>
+                  </a>
+
+                  <ul class="collapse " id="blog" data-bs-parent="#sidebar-menu">
+                    <div class="sub-menu">
+                      <li class="">
+                        <a class='sidenav-item-link' href='blog-right-sidebar.html'>
+                          <span class="nav-text">Right Sidebar</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='blog-left-sidebar.html'>
+                          <span class="nav-text">Left Sidebar</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='blog-fullwidth.html'>
+                          <span class="nav-text">Full Width</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='blog-single-fullwidth.html'>
+                          <span class="nav-text">Single Post</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='blog-single-right-sidebar.html'>
+                          <span class="nav-text">Single Right Sidebar</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='blog-single-left-sidebar.html'>
+                          <span class="nav-text">Single Left Sidebar</span>
+                        </a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+
+                <li class="has-sub active expand">
+                  <a class="sidenav-item-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#my-account"
+                    aria-expanded="false" aria-controls="my-account">
+                    <i class="mdi mdi-account-card-details"></i>
+                    <span class="nav-text">My Account</span> <b class="caret"></b>
+                  </a>
+
+                  <ul class="collapse show" id="my-account" data-bs-parent="#sidebar-menu">
+                    <div class="sub-menu">
+                      <li class="">
+                        <a class='sidenav-item-link' href='account-dashboard.html'>
+                          <span class="nav-text">Dashboard</span>
+                        </a>
+                      </li>
+
+                      <li class="active">
+                        <a class='sidenav-item-link' href='account-profile.html'>
+                          <span class="nav-text">Profile</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='account-all-orders.html'>
+                          <span class="nav-text">All Orders</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='account-single-order.html'>
+                          <span class="nav-text">Single Order</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='account-wishlist.html'>
+                          <span class="nav-text">Wishlist</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='/myaddress' href='account-address.html'>
+                          <span class="nav-text">Address</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='my-tickets.html'>
+                          <span class="nav-text">My tickets</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='single-ticket.html'>
+                          <span class="nav-text">Single ticket</span>
+                        </a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+
+                <li class="has-sub ">
+                  <a class="sidenav-item-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#ui-components"
+                    aria-expanded="false" aria-controls="ui-components">
+                    <i class="mdi mdi-folder-outline"></i>
+                    <span class="nav-text">UI Components</span> <b class="caret"></b>
+                  </a>
+
+                  <ul class="collapse " id="ui-components" data-bs-parent="#sidebar-menu">
+                    <div class="sub-menu">
+                      <li class="section-title">
+                        Basic Elements
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-accordions.html'>
+                          <span class="nav-text">Accordions</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-alert.html'>
+                          <span class="nav-text">Alert</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-badge.html'>
+                          <span class="nav-text">Badge</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-buttons.html'>
+                          <span class="nav-text">Buttons</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-buttons-group.html'>
+                          <span class="nav-text">Button Group</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-card.html'>
+                          <span class="nav-text">Cards</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-countdown.html'>
+                          <span class="nav-text">Countdown</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-divider.html'>
+                          <span class="nav-text">Divider</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-forms.html'>
+                          <span class="nav-text">Forms</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-heading.html'>
+                          <span class="nav-text">Heading</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-icon-style.html'>
+                          <span class="nav-text">Icon Style</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-iconset.html'>
+                          <span class="nav-text">Iconset (Font Awesome)</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-modal.html'>
+                          <span class="nav-text">Modal</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-progressbar.html'>
+                          <span class="nav-text">Progressbar</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-tables.html'>
+                          <span class="nav-text">Tables</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-tabs.html'>
+                          <span class="nav-text">Tabs</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-typography.html'>
+                          <span class="nav-text">Typography</span>
+                        </a>
+                      </li>
+
+                      <li class="">
+                        <a class='sidenav-item-link' href='basic-video.html'>
+                          <span class="nav-text">Video</span>
+                        </a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div class="sidebar-footer">
+              <div class="sidebar-footer-content bg-primary">
+                <ul class="d-flex">
+                  <li>
+                    <a href="javascript:void(0)"><i class="mdi mdi-settings"></i></a>
+                  </li>
+
+                  <li>
+                    <a href="javascript:void(0)"><i class="mdi mdi-chat-processing"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+
+<!-- HEADER FORM -->
+<div class="header-form-area bg-primary d-md-none">
+  <form class="header-form" action="#" method="">
+    <div class="input-group">
+      <input type="text" class="form-control py-0" required="" id="expire" placeholder="Search...">
+      <div class="input-group-append">
+        <button class="input-group-text border-0 btn bg-white" type="submit">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.16667 14.8333C11.8486 14.8333 14.8333 11.8486 14.8333 8.16667C14.8333 4.48477 11.8486 1.5 8.16667 1.5C4.48477 1.5 1.5 4.48477 1.5 8.16667C1.5 11.8486 4.48477 14.8333 8.16667 14.8333Z" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.5 16.5L12.875 12.875" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>            
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+
+      <!-- LIGHT SECTION -->
+      <section class="lightSection clearfix pageHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="page-title">
+                <h2>PROFILE</h2>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <ol class="breadcrumb float-right">
+                <li>
+                  <a href='index.html'>Home</a>
+                </li>
+                <li class="active">PROFILE</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAIN CONTENT SECTION -->
+      <section class="mainContent clearfix userProfile">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="btn-group me-0" role="group" aria-label="...">
+                <a class='btn btn-default' href='account-dashboard.html'><i class="fa fa-th" aria-hidden="true"></i>Account Dashboard</a>
+                <a href="javascript:void(0)" class="btn btn-default active"><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
+                <a class='btn btn-default' href='/myaddress'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>My Address</a>
+                <a class='btn btn-default' href='/addaddress'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>Add Address</a>
+                <a class='btn btn-default' href='account-all-orders.html'><i class="fa fa-list" aria-hidden="true"></i>All Orders</a>
+                <a class='btn btn-default' href='account-wishlist.html'><i class="fa fa-gift" aria-hidden="true"></i>Wishlist</a>
+                <a class='btn btn-default me-0' href='my-tickets.html'><i class="fa fa-tag" aria-hidden="true"></i>Tickets</a>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="innerWrapper profile">
+                <div class="row">
+                  <div class="col-md-4 col-lg-3 col-xl-2 col-12">
+                    <div class="thumbnail">
+                      <img src="assets/img/products/profile/profile-image.jpg" alt="profile-image">
+                      <div class="caption">
+                        <!-- <a href="javascript:void(0)" class="btn btn-primary btn-block" role="button">Change Avatar</a> -->
+                        <div  class="imagediv">
+                          <span class="visibleimg"></span>
+                          <span class="showonhover btn btn-primary w-100">Change Avatar</span>
+                          <input id="selectfile" type="file" name="" style="display: none;" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8 col-lg-9 col-xl-10 col-12">
+                      <form class="form-horizontal">
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 control-label">First Name</label>
+                          <div class="col-md-7">
+                            <input type="text" class="form-control" placeholder="Adam" required>
+                          </div>
+                        </div>
+                      
+                        
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 control-label">Phone Number</label>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control" placeholder="+884 5452 6432">
+                          </div>
+                        </div>
+                       
+                        <div class="form-group row">
+                          <div class=" col-md-12 ">
+                            <button type="submit" class="btn btn-primary float-end">SAVE INFO</button>
+                          </div>
+                        </div>
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      			<!-- FOOTER -->
+			<div class="footer clearfix">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-2 col-12">
+							<div class="footerLink">
+								<h5>Accessories</h5>
+								<ul class="list-unstyled">
+									<li><a href="javascript:void(0)">Body care </a></li>
+									<li><a href="javascript:void(0)">Chambray </a></li>
+									<li><a href="javascript:void(0)">Floral </a></li>
+									<li><a href="javascript:void(0)">Rejuvination </a></li>
+									<li><a href="javascript:void(0)">Shaving </a></li>
+									<li><a href="javascript:void(0)">Toilette </a></li>
+								</ul>
+							</div>
+						</div>
+						
+						<div class="col-md-2 col-12">
+							<div class="footerLink">
+								<h5>BRANDS</h5>
+								<ul class="list-unstyled">
+									<li><a href="javascript:void(0)">Barbour </a></li>
+									<li><a href="javascript:void(0)">Brioni </a></li>
+									<li><a href="javascript:void(0)">Oliver Spencer</a></li>
+									<li><a href="javascript:void(0)">Belstaff</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-2 col-12">
+							<div class="footerLink">
+								<h5>Accessories</h5>
+								<ul class="list-unstyled">
+									<li><a href="javascript:void(0)">Body care </a></li>
+									<li><a href="javascript:void(0)">Chambray </a></li>
+									<li><a href="javascript:void(0)">Floral </a></li>
+									<li><a href="javascript:void(0)">Rejuvination </a></li>
+									<li><a href="javascript:void(0)">Shaving </a></li>
+									<li><a href="javascript:void(0)">Toilette </a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-2 col-12">
+							<div class="footerLink text-nowrap">
+								<h5>Get in Touch</h5>
+								<ul>
+									<li><a href="tel:555-555-5555">Call us at (555)-555-5555</a></li>
+									<li><a href="mailto:support@iamabdus.com">support@iamabdus.com</a></li>
+								</ul>
+								<ul class="list-inline">
+									<li><a href="javascript:void(0)"><i class="fab fa-twitter"></i></a></li>
+									<li><a href="javascript:void(0)"><i class="fab fa-facebook-f"></i></a></li>
+									<li><a href="javascript:void(0)"><i class="fab fa-dribbble"></i></a></li>
+									<li><a href="javascript:void(0)"><i class="fab fa-vimeo-v"></i></a></li>
+									<li><a href="javascript:void(0)"><i class="fab fa-tumblr"></i></a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-4 col-12">
+							<div class="newsletter clearfix">
+								<h4>Newsletter</h4>
+								<h3>Sign up now</h3>
+								<p>Enter your email address and get notified about new products. We hate spam!</p>
+								<form class="input-group">
+									<input type="text" class="form-control" required placeholder="your email address" aria-describedby="basic-addon2">
+									<button type="submit" class="input-group-addon" id="basic-addon2">go <i class="fa fa-chevron-right"></i></button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- COPY RIGHT -->
+			<div class="copyRight clearfix">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-7 col-12">
+							<p>&copy; <span id="copy-year"></span> Copyright Bigbag Store Bootstrap Template by <a target="_blank" href="http://www.iamabdus.com/">Abdus</a>.</p>
+						</div>
+						<div class="col-md-5 col-12">
+							<ul class="list-inline">
+								<li>
+									<a href="javascript:void(0)"><img src="assets/img/home/footer/card1.png"></a>
+								</li>
+
+								<li>
+									<a href="javascript:void(0)"><img src="assets/img/home/footer/card2.png"></a>
+								</li>
+
+								<li>
+									<a href="javascript:void(0)"><img src="assets/img/home/footer/card3.png"></a>
+								</li>
+
+								<li>
+									<a href="javascript:void(0)"><img src="assets/img/home/footer/card4.png"></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var d = new Date();
+			var year = d.getFullYear();
+			document.getElementById("copy-year").innerHTML = year;
+		</script>
+
+		<!-- LOGIN MODAL -->
+		<div class="modal fade login-modal" id="login" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header justify-content-center">
+						<h3 class="modal-title">log in</h3>
+						<button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form action="#" method="POST" role="form">
+							<div class="form-group">
+								<label for="">Enter Email</label>
+								<input type="email" class="form-control" required>
+							</div>
+							<div class="form-group">
+								<label for="">Password</label>
+								<input type="password" class="form-control">
+							</div>
+							<div class="checkbox">
+								<input id="checkbox-1" class="checkbox-custom form-check-input" name="checkbox-1" type="checkbox" checked>
+								<label for="checkbox-1" class="checkbox-custom-label form-check-label">Remember me</label>
+							</div>
+							<button type="submit" class="btn btn-primary w-100">log in</button>
+							<button type="button" class="btn btn-link w-100" onclick="location.href='lost-password-2.html';">Forgot Password?</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- SIGN UP MODAL -->
+		<div class="modal fade " id="signup" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header justify-content-center">
+						<button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 class="modal-title">Create an account</h3>
+					</div>
+					<div class="modal-body">
+						<form action="#" method="POST" role="form">
+							<div class="form-group">
+								<label for="">Enter Email</label>
+								<input type="email" required class="form-control">
+							</div>
+							<div class="form-group">
+								<label for="">Password</label>
+								<input type="password" class="form-control">
+							</div>
+							<div class="form-group">
+								<label for="">Confirm Password</label>
+								<input type="password" class="form-control">
+							</div>
+							<button type="submit" class="btn btn-primary w-100">Sign up</button>
+							<button type="button" onclick="location.href='signup-2.html';" class="btn btn-link w-100">New User?</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+
+		<script src="assets/plugins/jquery/jquery-3.5.1.min.js"></script>
+		<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="assets/plugins/simplebar/simplebar.min.js"></script>
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<script src="assets/plugins/smoothscroll/SmoothScroll.js"></script>
+		
+		<script src="assets/js/custom.js"></script>
+
+	<link href="assets/options/optionswitch.css" rel="stylesheet">
+<script src="assets/options/optionswitcher.js"></script>
+</body>
+
+<!-- Mirrored from bigbag-html.netlify.app/account-profile by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 09:40:49 GMT -->
+</html>
+
+
+      <!-- FOOTER SM -->
+<footer class="footer-menu clearfix d-md-none">
+  <div class="container">
+    <div class="row row-cols-5">
+      <div class="col">
+        <a class='footer-nav  ' href='index.html'>
+          <div class="footer-nav-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 2.63417L2.16667 7.30083V13.8333H6.33333V10.5H9.66667V13.8333H13.8333V7.70167C13.8334 7.57669 13.8053 7.45331 13.7512 7.34065C13.6971 7.22799 13.6184 7.12894 13.5208 7.05083L8 2.63417ZM8 0.5L14.5617 5.75C14.8543 5.98407 15.0905 6.28091 15.2529 6.61859C15.4154 6.95626 15.4998 7.32613 15.5 7.70083V13.8333C15.5 14.2754 15.3244 14.6993 15.0118 15.0118C14.6993 15.3244 14.2754 15.5 13.8333 15.5H2.16667C1.72464 15.5 1.30072 15.3244 0.988155 15.0118C0.675595 14.6993 0.5 14.2754 0.5 13.8333V7.30083C0.500031 7.05103 0.556216 6.80442 0.664399 6.57926C0.772582 6.35409 0.929996 6.15613 1.125 6L8 0.5Z" fill="#252525"/>
+            </svg>
+          </div>
+
+          <div class="footer-nav-text">
+            Home
+          </div>
+        </a>
+      </div>
+
+      <div class="col">
+        <a class='footer-nav  ' href='about-us.html'>
+          <div class="footer-nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 1.66669L1.66666 5.83335L10 10L18.3333 5.83335L10 1.66669Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.66666 14.1667L10 18.3334L18.3333 14.1667" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.66666 10L10 14.1667L18.3333 10" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="footer-nav-text">
+            Pages
+          </div>
+        </a>
+      </div>
+
+      <div class="col position-relative">
+        <a class='footer-nav footer-product shadow bg-primary' href='product-grid-left-sidebar.html'>
+          <div class="footer-nav-icon">
+            <i class="mdi mdi-shopping"></i>
+          </div>
+
+          <div class="footer-nav-text text-white">
+            Shop
+          </div>
+        </a>
+      </div>
+
+      <div class="col">
+        <a class='footer-nav  ' href='blog-right-sidebar.html'>
+          <div class="footer-nav-icon">
+            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.66667 1.5H6.66667C7.55072 1.5 8.39857 1.85119 9.02369 2.47631C9.64881 3.10143 10 3.94928 10 4.83333V16.5C10 15.837 9.73661 15.2011 9.26777 14.7322C8.79893 14.2634 8.16304 14 7.5 14H1.66667V1.5Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.3333 1.5H13.3333C12.4493 1.5 11.6014 1.85119 10.9763 2.47631C10.3512 3.10143 10 3.94928 10 4.83333V16.5C10 15.837 10.2634 15.2011 10.7322 14.7322C11.2011 14.2634 11.837 14 12.5 14H18.3333V1.5Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="footer-nav-text">
+            Blog
+          </div>
+        </a>
+      </div>
+
+      <div class="col">
+        <a class='footer-nav  ' href='account-dashboard.html'>
+          <div class="footer-nav-icon">
+            <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.6667 16.5V14.8333C14.6667 13.9493 14.3155 13.1014 13.6903 12.4763C13.0652 11.8512 12.2174 11.5 11.3333 11.5H4.66666C3.78261 11.5 2.93476 11.8512 2.30964 12.4763C1.68452 13.1014 1.33333 13.9493 1.33333 14.8333V16.5" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.99999 8.16667C9.84094 8.16667 11.3333 6.67428 11.3333 4.83333C11.3333 2.99238 9.84094 1.5 7.99999 1.5C6.15904 1.5 4.66666 2.99238 4.66666 4.83333C4.66666 6.67428 6.15904 8.16667 7.99999 8.16667Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="footer-nav-text">
+            Account
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+      <!-- FOOTER SM -->
+<footer class="footer-menu clearfix d-md-none">
+  <div class="container">
+    <div class="row row-cols-5">
+      <div class="col">
+        <a class='footer-nav  ' href='index.html'>
+          <div class="footer-nav-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 2.63417L2.16667 7.30083V13.8333H6.33333V10.5H9.66667V13.8333H13.8333V7.70167C13.8334 7.57669 13.8053 7.45331 13.7512 7.34065C13.6971 7.22799 13.6184 7.12894 13.5208 7.05083L8 2.63417ZM8 0.5L14.5617 5.75C14.8543 5.98407 15.0905 6.28091 15.2529 6.61859C15.4154 6.95626 15.4998 7.32613 15.5 7.70083V13.8333C15.5 14.2754 15.3244 14.6993 15.0118 15.0118C14.6993 15.3244 14.2754 15.5 13.8333 15.5H2.16667C1.72464 15.5 1.30072 15.3244 0.988155 15.0118C0.675595 14.6993 0.5 14.2754 0.5 13.8333V7.30083C0.500031 7.05103 0.556216 6.80442 0.664399 6.57926C0.772582 6.35409 0.929996 6.15613 1.125 6L8 0.5Z" fill="#252525"/>
+            </svg>
+          </div>
+
+          <div class="footer-nav-text">
+            Home
+          </div>
+        </a>
+      </div>
+
+      <div class="col">
+        <a class='footer-nav  ' href='about-us.html'>
+          <div class="footer-nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 1.66669L1.66666 5.83335L10 10L18.3333 5.83335L10 1.66669Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.66666 14.1667L10 18.3334L18.3333 14.1667" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.66666 10L10 14.1667L18.3333 10" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="footer-nav-text">
+            Pages
+          </div>
+        </a>
+      </div>
+
+      <div class="col position-relative">
+        <a class='footer-nav footer-product shadow bg-primary' href='product-grid-left-sidebar.html'>
+          <div class="footer-nav-icon">
+            <i class="mdi mdi-shopping"></i>
+          </div>
+
+          <div class="footer-nav-text text-white">
+            Shop
+          </div>
+        </a>
+      </div>
+
+      <div class="col">
+        <a class='footer-nav  ' href='blog-right-sidebar.html'>
+          <div class="footer-nav-icon">
+            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.66667 1.5H6.66667C7.55072 1.5 8.39857 1.85119 9.02369 2.47631C9.64881 3.10143 10 3.94928 10 4.83333V16.5C10 15.837 9.73661 15.2011 9.26777 14.7322C8.79893 14.2634 8.16304 14 7.5 14H1.66667V1.5Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.3333 1.5H13.3333C12.4493 1.5 11.6014 1.85119 10.9763 2.47631C10.3512 3.10143 10 3.94928 10 4.83333V16.5C10 15.837 10.2634 15.2011 10.7322 14.7322C11.2011 14.2634 11.837 14 12.5 14H18.3333V1.5Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="footer-nav-text">
+            Blog
+          </div>
+        </a>
+      </div>
+
+      <div class="col">
+        <a class='footer-nav active active-stroke' href='account-dashboard.html'>
+          <div class="footer-nav-icon">
+            <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.6667 16.5V14.8333C14.6667 13.9493 14.3155 13.1014 13.6903 12.4763C13.0652 11.8512 12.2174 11.5 11.3333 11.5H4.66666C3.78261 11.5 2.93476 11.8512 2.30964 12.4763C1.68452 13.1014 1.33333 13.9493 1.33333 14.8333V16.5" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.99999 8.16667C9.84094 8.16667 11.3333 6.67428 11.3333 4.83333C11.3333 2.99238 9.84094 1.5 7.99999 1.5C6.15904 1.5 4.66666 2.99238 4.66666 4.83333C4.66666 6.67428 6.15904 8.16667 7.99999 8.16667Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="footer-nav-text">
+            Account
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

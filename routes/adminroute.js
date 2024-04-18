@@ -27,7 +27,9 @@ Router.get('/category',isadmin,categoryConroller.categoryManagement)
 Router.post('/addcategory',categoryConroller.addCategory)
 Router.get('/categorylist',categoryConroller.categoryList)
 Router.get('/adminedit/:id',categoryConroller.editCategory)
-Router.put('/updatecategory/:id',categoryConroller.updateCategory)
+Router.post('/updatecategory',categoryConroller.updateCategory)
+
+
 
 
 
@@ -39,5 +41,5 @@ Router.get('/productlist',productConroller.productList)
 Router.get('/productedit',productConroller.productEdit)
 Router.post('/productupdate/:id',upload.any(),productConroller.productUpdate)
 Router.post("/delete-image", productConroller.deleteImage);
-
+Router.get('/productdelete',productConroller.deleteProduct)
 module.exports=Router

@@ -154,17 +154,18 @@
     integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-   <h1 class="my-5">Add Product</h1>
-  <div style="margin-left: 600px; margin-top: 20px;">
+   <h1 class="my-5 text-center">Add Product</h1>
+   <div class="border border-2" style="display: flex; justify-content:center; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+  <div class="border border-2" style="display: flex; justify-content:center">
     <form id="addproduct" enctype="multipart/form-data">
 
       <div class="form-group">
         <label for="exampleFormControlInput1">Product Name</label>
         <input type="text" name="productName" class="form-control" id="exampleFormControlInput1" placeholder=""
-          maxlength="50" style="max-width: 200px;">
+          maxlength="50" style="max-width: 325px;">
       </div>
       <br>
-      <select name="parentCategory" class="form-control form-control md" style="max-width: 200px;">
+      <select name="parentCategory" class="form-control form-control md" style="max-width: 325px;">
         <option disabled selected>Select Parent Category</option>
         <% for(let i=0;i<categorydet.length;i++){ %>
 
@@ -184,7 +185,7 @@
 
       <div class="form-outline mb-4">
         <input type="text" placeholder="Product Description" name="productdes"
-            id="productdes" class="form-control pb-5" style="max-width: 200px;"/>
+            id="productdes" class="form-control pb-5" style="max-width: 325px;"/>
 
     </div>
 
@@ -200,17 +201,18 @@
       <div class="form-group">
         <label for="exampleFormControlInput1">Product Price</label>
         <input class="form-control" name="productPrice" type="text" placeholder="" maxlength="50"
-          style="max-width: 200px;">
+          style="max-width: 325px;">
       </div>
       <br>
       <div class="form-group">
         <label for="exampleFormControlInput1">Product Stock</label>
         <input class="form-control" name="productStock" type="text" placeholder="" maxlength="50"
-          style="max-width: 200px;">
+          style="max-width: 325;">
       </div>
       <br>
       <button type="submit" class="btn btn-success">Add</button>
     </form>
+  </div>
   </div>
   <script>
     $('#addproduct').validate({

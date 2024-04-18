@@ -71,9 +71,26 @@ const productList = async (req, res) => {
         console.log(err);
     }
 }
+const deleteProduct=async(req,res)=>{
+    try{
+        let deleted
+        
+        if(req.query.action==='delete'){
+            deleted=true
+        }else{
+            deleted=false
+        }
+        await productCollection.updateOne({_id:req.query.id},{$set:{isDelete:deleted}})
+        res.send({del:deleted})
+    }catch(err){
+        console.log(err)
+    
+    }
+  
+  }
 const Product=async(req,res)=>{
     try{
-        const productDetails = await productCollection.find().populate('parentCategory').sort({ _id: -1 })
+        const productDetails = await productCollection.find({isDelete:false}).populate('parentCategory').sort({ _id: -1 })
         
         res.render('adminpages/product',{productDet:productDetails})
     }
@@ -84,7 +101,7 @@ const Product=async(req,res)=>{
 const addProduct=async(req,res)=>{
     try{
         
-        const categoryDetails = await categorycollection.find()
+        const categoryDetails = await categorycollection.find({isListed:true})
         res.render('adminpages/addproduct',{categorydet:categoryDetails})
     }
     catch(error){
@@ -155,4 +172,4 @@ const deleteImage = async (req, res) => {
     
   
 
-module.exports={addProduct2,addProduct,Product,productList,productEdit,productUpdate,deleteImage}
+module.exports={addProduct2,addProduct,Product,productList,productEdit,productUpdate,deleteImage,deleteProduct}

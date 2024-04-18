@@ -122,39 +122,46 @@
                     }
                 },
 
-                                submitHandler: async (form, event) => {
-                                        event.preventDefault()
+                submitHandler: async (form, event) => {
+                                event.preventDefault()
 
-                                        const formData = { category: form.category.value,categorydes: form.categorydes.value }
-                                        console.log(formData);
-                                        const response = await fetch('/updatecategory/<%=categorydetail._id%>', {
-                                            method: 'PUT',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify(formData)
-                                        })
-                                        const result = await response.json()
+                                let formData = {
+                                    categoryName: form.category.value,
+                                    categoryDes: form.categorydes.value,
+                                    categoryId:'<%=categorydetail._id%>'
+                                    
 
-                                        if (result.success) {
-                                            await Swal.fire({
-                                                title: "Edited Successfully!",
-                                                icon: "success",
-
-                                            });
-                                            window.location.href = '/category'
-                                        } else if (result.catexists) {
-                                            await Swal.fire({
-                                                icon: "error",
-                                                title: "Oops...",
-                                                text: "categoryname/categorydiscription already exists",
-
-                                            });
-
-                                        }
-                                    }
-
-
-
+                                }
+                                let response = await fetch('/updatecategory', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(formData)
                                 })
+                                let result = await response.json()
+                                if (result.success) {
+                                    await Swal.fire({
+                                        icon: "success",
+                                        title: "Category Edited"
+
+                                    });
+                                    window.location.href='/category';
+                                } if (result.exists) {
+                                    await Swal.fire({
+                                        icon: "error",
+                                        title: "Category Already Exists"
+
+                                    });
+                                    window.location.href='/category';
+                                } if (result.noValue) {
+                                    await Swal.fire({
+                                        icon: "error",
+                                        title: "Give any value"
+
+                                    });
+                                    window.location.href='/category';
+                                }
+                            }
+                        })
 </script>
 </script>
 </body>
