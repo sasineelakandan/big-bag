@@ -170,6 +170,15 @@
                   style="height: 60px; width: 60px; border-radius: 0;" alt="">
               <button type="button" class="btn btn-danger delete-image"
                   data-id="<%=productDet._id%>" data-index="<%=i%>">Delete</button>
+
+          
+
+      <div class="form-group">
+        <label for="images">Add image</label>    
+          <input type="file" name="images" value="productDet.productImages[i]" class="form-control-file" id="images"
+            multiple>
+      </div>
+      
           </div>
           <% } %>
      </div>
@@ -177,11 +186,7 @@
   
 
 
-      <div class="form-group">
-        <label for="images">Add image</label>    
-          <input type="file" name="images" value="productDet.productImages[i]" class="form-control-file" id="images"
-            multiple>
-      </div>
+      
       <div class="form-outline mb-4">
         <input type="text" placeholder="Product Description" name="productdes"
             id="productdes" class="form-control pb-5" value="<%=productDet.productDiscription%>" style="max-width: 200px;"/>
