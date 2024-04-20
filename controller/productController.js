@@ -152,7 +152,7 @@ const deleteImage = async (req, res) => {
         req.body.index >= 0 &&
         req.body.index < updatedProduct.productImage.length
       ) {
-        updatedProduct.productImage[req.body.index] = null;
+        updatedProduct.productImage[req.body.index] = null
         await updatedProduct.save();
         res.status(200).json({
           message: "Image deleted successfully",

@@ -71,6 +71,7 @@
   
             <div class="me-auto col-10 header-sm-logo-area">
               <img src="./assets/img/logo.png" alt="gg">
+              
             </div>
   
           </div>
@@ -88,7 +89,7 @@
           <!-- Brand and toggle get grouped for better mobile display -->
           <img src="assets/img/logo1.png" alt="gg">
           <h1></h1>
-        
+         
   
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-ex1-collapse"
             aria-controls="navbar-ex1-collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,7 +100,30 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav ms-auto">
-  
+                <li class="nav-item dropdown megaDropMenu ">
+                    <a href="/admin" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                      data-delay="300" data-close-others="true" aria-expanded="false">Home</b></a>
+      
+                  </li>
+                  <li class="nav-item dropdown megaDropMenu ">
+                    <a href="/usermanagement" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                      data-delay="300" data-close-others="true" aria-expanded="false">Users</b></a>
+      
+                  </li>
+                   <li class="nav-item dropdown megaDropMenu ">
+                    <a href="/category" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                      data-delay="300" data-close-others="true" aria-expanded="false">Category</b></a>
+      
+                  </li>
+                  <li class="nav-item dropdown megaDropMenu ">
+                    <a href="/product" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                      data-delay="300" data-close-others="true" aria-expanded="false">Products</b></a>
+      
+                  </li>
+
+
+            
+            
               <li class="nav-item ">
                 <form action="/adminlogout" method="post">
                     <button class="btn btn-danger btn-lg px-3" type="submit">Logout</button>
@@ -113,71 +137,75 @@
         </div>
       </nav>
     </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="adduser">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Add User</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" placeholder="Username*" class="form-control" name="name" id="name">
+
+    <div class="" style="margin-top: 100px;">
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="adduser">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Add User</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" placeholder="Email*" class="form-control" name="email" id="email">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" placeholder="Username*" class="form-control" name="name" id="name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" placeholder="Email*" class="form-control" name="email" id="email">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" placeholder="Phone*" name="phone" id="phone" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" placeholder="Password*(At least 6 characters long)" name="password"
+                                    id="password" class="form-control" />
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Phone Number</label>
-                            <input type="tel" placeholder="Phone*" name="phone" id="phone" class="form-control" />
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" placeholder="Password*(At least 6 characters long)" name="password"
-                                id="password" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
+        
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <form action="/adminsearch" method="post" class="d-flex">
+                    <input class="form-control" name="search" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-success my-2" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+
     </div>
-    
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-            <form action="/adminsearch" method="post" class="d-flex">
-                <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-success" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
 
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
-                <th scope="col">action</th>
+                <th scope="col"><span class="lead fw-bold">Name</span></th>
+                <th scope="col"><span class="lead fw-bold">Email</span></th>
+                <th scope="col"><span class="lead fw-bold">Phone</span></th>
+                <th scope="col"><span class="lead fw-bold">action</span></th>
             </tr>
         </thead>
         <%for(let i=0;i<userdet.length;i++){%>
             <tbody>
                 <tr>
                     <td>
-                        <%=userdet[i].name%>
+                        <span class="lead"><%=userdet[i].name%></span>
                     </td>
                     <td>
-                        <%=userdet[i].email%>
+                        <span class="lead"> <%=userdet[i].email%></span>
                     </td>
                     <td>
-                        <%=userdet[i].phone%>
+                        <span class="lead"><%=userdet[i].phone%></span>
                     </td>
                     <td>
                         <% if(userdet[i].isBlocked){ %>

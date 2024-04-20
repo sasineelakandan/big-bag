@@ -70,7 +70,26 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav ms-auto">
-  
+                <li class="nav-item dropdown megaDropMenu ">
+                    <a href="/admin" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                      data-delay="300" data-close-others="true" aria-expanded="false">Home</b></a>
+      
+                  </li>
+                  <li class="nav-item dropdown megaDropMenu ">
+                    <a href="/usermanagement" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                      data-delay="300" data-close-others="true" aria-expanded="false">Users</b></a>
+      
+                  </li>
+                   <li class="nav-item dropdown megaDropMenu ">
+                    <a href="/category" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                      data-delay="300" data-close-others="true" aria-expanded="false">Category</b></a>
+      
+                  </li>
+                  <li class="nav-item dropdown megaDropMenu ">
+                    <a href="/product" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                      data-delay="300" data-close-others="true" aria-expanded="false">Products</b></a>
+      
+                  </li>
               <li class="nav-item ">
                 <form action="/adminlogout" method="post">
                     <button class="btn btn-danger btn-lg px-3" type="submit">Logout</button>
@@ -136,20 +155,20 @@
             
         </div>
     </nav>
-    <a href="/addproduct" type="button" class="btn btn-primary mt-5"  data-bs-target="">
+    <a href="/addproduct" type="button" class="btn btn-primary" style="margin-top: 80px;"  data-bs-target="">
         Add Product 
        </a>
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Product Name</th>
-                <th scope="col">Parent Category</th>
-                <th scope="col">image 1</th>
+                <th scope="col fw-bold "><span class="lead">  Product Name</span></th>
+                <th scope="col fw-bold "><span class="lead"> Parent Category</span> </th>
+                <th scope="col fw-bold "><span class="lead">image 1</span></th>
                 
-                <th scope="col">price INR</th>
-                <th scope="col">in stock</th>
-                <th scope="col">list/unlist</th>
-                <th scope="col">action</th>
+                <th scope="col fw-bold "><span class="lead">  price INR</span></th>
+                <th scope="col fw-bold "><span class="lead">in stock</span> </th>
+                <th scope="col fw-bold "><span class="lead">list/unlist</span> </th>
+                <th scope="col fw-bold "><span class="lead">action</span> </th>
             </tr>
         </thead>
         <tbody>
@@ -158,10 +177,10 @@
             <% for(let i=0;i<productDet.length;i++){ %>
                 <tr>
                     <th scope="row">
-                        <%= productDet[i].productName %>
+                        <span class="lead"> <%= productDet[i].productName %></span>
                     </th>
                     <td>
-                        <%= productDet[i]?.parentCategory?.categoryname%>
+                        <span class="lead"><%= productDet[i]?.parentCategory?.categoryname%></span>
                     </td>
                     <td>
                         <% for(let j=0;j<productDet[i].productImage.length;j++){ %>
@@ -175,10 +194,10 @@
                             <% } %>
                     </td>
                     <td>
-                        <%= productDet[i].productPrice %>
+                        <span class="lead"> <%= productDet[i].productPrice %></span>
                     </td>
                     <td>
-                        <%= productDet[i].productStock %>
+                        <span class="lead" > <%= productDet[i].productStock %></span>
                     </td>
                     <% if(productDet[i].isListed){ %>
                         <td><button id="unblock<%i%>" onclick="fnlist('<%=productDet[i]._id %>','list')"

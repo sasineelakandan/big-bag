@@ -16,7 +16,7 @@ const Router=express.Router()
 Router.get('/admin',adminConroller.loginpage)
 Router.post('/adminlogin',adminConroller.adminlogin)
 Router.post('/adminlogout',adminConroller.adminlogout)
-Router.get('/usermanagement',adminConroller.usermanagement)
+Router.get('/usermanagement',isadmin,adminConroller.usermanagement)
 Router.get('/userblock',adminConroller.userblock)
 Router.post('/adminsearch',adminConroller.usersearch)
 

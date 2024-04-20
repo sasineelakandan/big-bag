@@ -99,7 +99,26 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav ms-auto">
+              <li class="nav-item dropdown megaDropMenu ">
+                <a href="/admin" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                  data-delay="300" data-close-others="true" aria-expanded="false">Home</b></a>
   
+              </li>
+              <li class="nav-item dropdown megaDropMenu ">
+                <a href="/usermanagement" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                  data-delay="300" data-close-others="true" aria-expanded="false">Users</b></a>
+  
+              </li>
+               <li class="nav-item dropdown megaDropMenu ">
+                <a href="/category" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                  data-delay="300" data-close-others="true" aria-expanded="false">Category</b></a>
+  
+              </li>
+              <li class="nav-item dropdown megaDropMenu ">
+                <a href="/product" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                  data-delay="300" data-close-others="true" aria-expanded="false">Products</b></a>
+  
+              </li>
               <li class="nav-item ">
                 <form action="/adminlogout" method="post">
                     <button class="btn btn-danger btn-lg px-3" type="submit">Logout</button>
@@ -137,10 +156,10 @@
     <div class="form-group">
       <label for="exampleFormControlInput1">Product Name</label>
       <input type="text" value="<%=productDet.productName%>" name="productName" class="form-control"
-        id="exampleFormControlInput1" placeholder="" maxlength="50" style="max-width: 200px;">
+        id="exampleFormControlInput1" placeholder="" maxlength="50" style="max-width: 300px;">
     </div>
     <br>
-    <select name="parentCategory" class="form-control form-control md" style="max-width: 200px;">
+    <select name="parentCategory" class="form-control form-control md" style="max-width: 300px;">
       <option disabled selected>
         <%= categoryDet.categoryname %>
       </option>
@@ -156,8 +175,8 @@
       <span id="imageCount" style="margin-top: 5px;">
         <% if (productDet.productImage.length> 0) { %>
           <%=productDet.productImage.length%> images exists
-            <% } else { %>
-              No image exists
+            <% } else if(productDet.productImage===null){ %>
+                   No exists images
               <% } %>
       </span>
     </div>
@@ -171,25 +190,24 @@
               <button type="button" class="btn btn-danger delete-image"
                   data-id="<%=productDet._id%>" data-index="<%=i%>">Delete</button>
 
-          
 
-      <div class="form-group">
-        <label for="images">Add image</label>    
-          <input type="file" name="images" value="productDet.productImages[i]" class="form-control-file" id="images"
-            multiple>
-      </div>
+      
       
           </div>
           <% } %>
      </div>
 
   
-
-
+   
+     <div class="form-group">
+      <label for="images">Add image</label>    
+        <input type="file" name="images" value="productDet.productImages[i]" class="form-control-file" id="images"
+          multiple>
       
       <div class="form-outline mb-4">
+        <label for="exampleFormControlInput1">Product Discription</label>
         <input type="text" placeholder="Product Description" name="productdes"
-            id="productdes" class="form-control pb-5" value="<%=productDet.productDiscription%>" style="max-width: 200px;"/>
+            id="productdes" class="form-control pb-5" value="<%=productDet.productDiscription%>" style="max-width: 300px;"/>
 
     </div>
 
@@ -197,13 +215,13 @@
         <div class="form-group">
           <label for="exampleFormControlInput1">Product Price</label>
           <input class="form-control" value="<%=productDet.productPrice%>" name="productPrice" type="text"
-            placeholder="" maxlength="50" style="max-width: 200px;">
+            placeholder="" maxlength="50" style="max-width: 300px;">
         </div>
         <br>
         <div class="form-group">
           <label for="exampleFormControlInput1">Product Stock</label>
           <input class="form-control" value="<%=productDet.productStock%>" name="productStock" type="text"
-            placeholder="" maxlength="50" style="max-width: 200px;">
+            placeholder="" maxlength="50" style="max-width: 300px;">
         </div>
         <br>
         <button type="submit" class="btn btn-success">Save</button>

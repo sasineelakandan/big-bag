@@ -99,7 +99,26 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav ms-auto">
+              <li class="nav-item dropdown megaDropMenu ">
+                <a href="/admin" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                  data-delay="300" data-close-others="true" aria-expanded="false">Home</b></a>
   
+              </li>
+              <li class="nav-item dropdown megaDropMenu ">
+                <a href="/usermanagement" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                  data-delay="300" data-close-others="true" aria-expanded="false">Users</b></a>
+  
+              </li>
+               <li class="nav-item dropdown megaDropMenu ">
+                <a href="/category" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                  data-delay="300" data-close-others="true" aria-expanded="false">Category</b></a>
+  
+              </li>
+              <li class="nav-item dropdown megaDropMenu ">
+                <a href="/product" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
+                  data-delay="300" data-close-others="true" aria-expanded="false">Products</b></a>
+  
+              </li>
               <li class="nav-item ">
                 <form action="/adminlogout" method="post">
                     <button class="btn btn-danger btn-lg px-3" type="submit">Logout</button>
@@ -179,22 +198,24 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col"><span class=" fw-bold lead">Category Name</span> </th>
-                <th scope="col"><span class=" fw-bold lead">Discription</span> </th>
-                <th scope="col"><span class=" fw-bold lead">action</span> </th>
-                <th scope="col"><span class=" fw-bold lead">List/Unlist</span> </th>
+                <th scope="col"><span class=" lead">Category Name</span> </th>
+                <th scope="col"><span class=" lead">Discription</span> </th>
+                <th scope="col"><span class=" lead">action</span> </th>
+                <th scope="col"><span class="  lead">List/Unlist</span> </th>
             </tr>
         </thead>
         <tbody>
         <%for(let i=0;i<categorydet.length;i++){%>
                 <tr>
                     <th scope="row">
-                        <span class="lead fw-bold">
-                            <%= categorydet[i].categoryname %>
-                        </span>
+                      <span class="lead ">
+                        <%= categorydet[i].categoryname %>
+                    </span>
                     </th>
-                    <td class="fw-bold fs-6">
+                    <td >
+                      <span class="lead ">
                         <%= categorydet[i].categorydescription %>
+                      </span>
                     </td>
                    
                     <td>
