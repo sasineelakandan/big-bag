@@ -1,6 +1,7 @@
 
 <%- include('../userpart/header') %>
 
+
         <!-- ====================================
           ——— LEFT SIDEBAR WITH OUT FOOTER
         ===================================== -->
@@ -74,14 +75,14 @@
                   </ul>
                 </li>
 
-                <li class="has-sub ">
+                <li class="has-sub active expand">
                   <a class="sidenav-item-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#shop"
                     aria-expanded="false" aria-controls="shop">
                     <i class="mdi mdi-shopping"></i>
                     <span class="nav-text">Shop</span> <b class="caret"></b>
                   </a>
 
-                  <ul class="collapse " id="shop" data-bs-parent="#sidebar-menu">
+                  <ul class="collapse show" id="shop" data-bs-parent="#sidebar-menu">
                     <div class="sub-menu">
                       <li class="section-title">
                         Products Grid View
@@ -187,7 +188,7 @@
                         </a>
                       </li>
 
-                      <li class="">
+                      <li class="active">
                         <a class='sidenav-item-link' href='cart-page-2.html'>
                           <span class="nav-text">Cart Page</span>
                         </a>
@@ -322,14 +323,14 @@
                   </ul>
                 </li>
 
-                <li class="has-sub active expand">
+                <li class="has-sub ">
                   <a class="sidenav-item-link" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#my-account"
                     aria-expanded="false" aria-controls="my-account">
                     <i class="mdi mdi-account-card-details"></i>
                     <span class="nav-text">My Account</span> <b class="caret"></b>
                   </a>
 
-                  <ul class="collapse show" id="my-account" data-bs-parent="#sidebar-menu">
+                  <ul class="collapse " id="my-account" data-bs-parent="#sidebar-menu">
                     <div class="sub-menu">
                       <li class="">
                         <a class='sidenav-item-link' href='account-dashboard.html'>
@@ -337,7 +338,7 @@
                         </a>
                       </li>
 
-                      <li class="active">
+                      <li class="">
                         <a class='sidenav-item-link' href='account-profile.html'>
                           <span class="nav-text">Profile</span>
                         </a>
@@ -362,7 +363,7 @@
                       </li>
 
                       <li class="">
-                        <a class='/myaddress' href='account-address.html'>
+                        <a class='sidenav-item-link' href='account-address.html'>
                           <span class="nav-text">Address</span>
                         </a>
                       </li>
@@ -545,96 +546,19 @@
 
 
       <!-- LIGHT SECTION -->
-      <section class="lightSection clearfix pageHeader">
+      <section class="lightSection clearfix pageHeaderImage">
         <div class="container">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="page-title">
-                <h2>PROFILE</h2>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <ol class="breadcrumb float-right">
-                <li>
-                  <a href='index.html'>Home</a>
-                </li>
-                <li class="active">PROFILE</li>
-              </ol>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- MAIN CONTENT SECTION -->
-      <section class="mainContent clearfix userProfile">
-        <div class="container">
-          <div class="row">
-            <div class="col-12">
-              <div class="btn-group me-0" role="group" aria-label="...">
-                <a href="/account" class="btn btn-default active"><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
-                <a class='btn btn-default' href='/myaddress/?id=<%=userLogged._id%>'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>My Address</a>
-                <a class='btn btn-default' href='/addaddress'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>Add Address</a>
-                <a class='btn btn-default' href='account-all-orders.html'><i class="fa fa-list" aria-hidden="true"></i>All Orders</a>
-                <a class='btn btn-default' href='account-wishlist.html'><i class="fa fa-gift" aria-hidden="true"></i>Wishlist</a>
-                <a class='btn btn-default me-0' href='my-tickets.html'><i class="fa fa-tag" aria-hidden="true"></i>Tickets</a>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="innerWrapper profile">
-                <div class="row">
-                  <div class="col-md-4 col-lg-3 col-xl-2 col-12">
-                    <div class="thumbnail">
-                      <img src="assets/img/products/profile/profile-image.jpg" alt="profile-image">
-                      <div class="caption">
-                        <!-- <a href="javascript:void(0)" class="btn btn-primary btn-block" role="button">Change Avatar</a> -->
-                        <div  class="imagediv">
-                          <span class="visibleimg"></span>
-                          <span class="showonhover btn btn-primary w-100">Change Avatar</span>
-                          <input id="selectfile" type="file" name="" style="display: none;" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-lg-9 col-xl-10 col-12">
-                      <form id="changepass">
-                        <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">First Name</label>
-                          <div class="col-md-7">
-                            <input type="text" class="form-control" name="name" id="name" value="<%=userLogged.name%>" required>
-                          </div>
-                        </div>
-                      
-                        
-                        <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">Phone Number</label>
-                          <div class="col-md-9">
-                            <input type="text" name="phone" id="phone" class="form-control" value="<%=userLogged.phone%>">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">old password</label>
-                          <div class="col-md-7">
-                            <input type="password" id="password" class="form-control" value="<%=password%>" name="password" >
-                          </div>
-                        </div>
-                      
-                        
-                        <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">Change password</label>
-                          <div class="col-md-9">
-                            <input type="password" name="confirm_password" id="confirm_password" class="form-control" value="<%=password%>">
-                          </div>
-                        </div>
-                       
-                        <div class="form-group row">
-                          <div class=" col-md-12 ">
-                            <button type="submit" class="btn btn-primary float-end">SAVE INFO</button>
-                          </div>
-                        </div>
-                      </form>
-                  </div>
+          <div class="tableBlock">
+            <div class="row tableInner">
+              <div class="col-sm-12">
+                <div class="page-title">
+                  <h2>cart</h2>
+                  <ol class="breadcrumb">
+                    <li>
+                      <a href='index.html'>Home</a>
+                    </li>
+                    <li class="active">cart</li>
+                  </ol>
                 </div>
               </div>
             </div>
@@ -642,88 +566,130 @@
         </div>
       </section>
 
-       <script>
-         $("#changepass").validate({
-    rules: {
-      name: {
-        required: true,
-        minlength: 2
-      },
-      phone: {
-        required: true,
-        minlength: 10,
-        maxlength: 15,
-        number: true
-      },
-      password: {
-        required: true,
-        minlength: 6,
-        maxlength: 16
-      },
-      confirm_password: {
-        required: true,
-        minlength: 6,
-        maxlength: 16,
-        
-      }
-    },
-    messages: {
-      name: {
-        required: "Please enter your name",
-        minlength: "Your name must be at least 2 characters long"
-      },
-      phone: {
-        required: "Please enter your phone number",
-        minlength: "Your phone number must be at least 10 digits long",
-        maxlength: "Your phone number cannot be more than 15 digits long",
-        number: "Your phone number must only contain numbers"
-      },
-      password: {
-        required: "Please enter a password",
-        minlength: "Your password must be at least 8 characters long",
-        maxlength: "Your password cannot be more than 16 characters long"
-      },
-      confirm_password: {
-        required: "Please confirm your password",
-        minlength: "Your password must be at least 8 characters long",
-        maxlength: "Your password cannot be more than 16 characters long",
-        equalTo: "Your passwords do not match"
-      }
-    },
+      <!-- MAIN CONTENT SECTION -->
+      <section class="mainContent clearfix cartListWrapper">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="cartListInner text-nowrap">
+                <form action="#">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
 
+                        <tr>
+                          <th></th>
+                          <th>Product Name</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                          <th>Sub Total</th>
+                        </tr>
+                 
+                      </thead>
+                      <% for(let i=0;i<cartDet.length;i++){ %>
+                      <tbody>
+                        <tr class="alert alert-dismissible fade show p-0 mb-0" role="alert">
+                          <td class="">
+                            <button type="button" class="close me-4 p-0 top-0" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <span class="cartImage"><img style="height: 75px;width: 75px;" src="assets/uploads/<%=cartDet[i].productImage%>" alt="image"></span>
+                          </td>
+                          <td class=""><%=cartDet[i].productId.productName%></td>
+                          <td class=""><%=cartDet[i].productId.productPrice%></td>
+                          <td class="count-input">
+						   <a class="incr-btn" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></a>
+							<input class="quantity" type="text" value="<%=cartDet[i].productQuantity%>">
+							<a class="incr-btn" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></a>
+                          </td>
+                          <td class=""><%=cartDet[i].totalCostPerProduct%></td>
+                        </tr>
+                        <% } %>
+                         
+                      </tbody>
+                    </table>
+                  </div>
 
-       submitHandler: async (form, event) => {
+                  <div class="updateArea">
+                    <firm class="input-group">
+                      <input type="text" class="form-control" required placeholder="I have a discount coupon" aria-describedby="basic-addon2">
+                      <button type="submit" class="btn btn-primary-outlined" id="basic-addon2">apply coupon</button>
+                    </firm>
+                    <a href="javascript:void(0)" class="float-end btn btn-secondary-outlined">update cart</a>
+                  </div>
 
-            event.preventDefault()
-            let formData = {
-              name:form.name.value,
-              phone:form.phone.value,
-              password:form.password.value,
-              confirm_password:form.confirm_password.value,
-              userId:'<%=userLogged._id%>'
-                    }
-                    //fetch only to check both email and number not to save
-                    let response = await fetch('/updatePro', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
-                    })
-            
-           let result = await response.json()
-         
-          if (result.success) {
-          await Swal.fire({
-          icon: "success",
-          title: " profile edit successful"
-           }  )
-          window.location.reload()
-           }
-      
-         } 
-        })
+                  <div class="row totalAmountArea">
+                    <div class="col-sm-5 ms-sm-auto">
+                      <ul class="list-unstyled">
+                        <li>Sub Total <span></span></li>
+                        <li>UK Vat <span>$ 18.00</span></li>
+                        <li>Grand Total <span class="grandTotal"></span></li>
+                      </ul>
+                    </div>
+                  </div>
 
-          
-       </script>
+                  <div class="checkBtnArea">
+                    <a class='btn btn-primary btn-default' href='checkout-step-2.html'>checkout<i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+       <!-- LIGHT SECTION -->
+      <section class="lightSection clearfix">
+        <div class="container">
+          <div class="owl-carousel partnersLogoSlider">
+            <div class="slide">
+              <div class="partnersLogo clearfix">
+                <img src="assets/img/home/partners/partner-01.png" alt="partner-img">
+              </div>
+            </div>
+
+            <div class="slide">
+              <div class="partnersLogo clearfix">
+                <img src="assets/img/home/partners/partner-02.png" alt="partner-img">
+              </div>
+            </div>
+
+            <div class="slide">
+              <div class="partnersLogo clearfix">
+                <img src="assets/img/home/partners/partner-03.png" alt="partner-img">
+              </div>
+            </div>
+
+            <div class="slide">
+              <div class="partnersLogo clearfix">
+                <img src="assets/img/home/partners/partner-04.png" alt="partner-img">
+              </div>
+            </div>
+
+            <div class="slide">
+              <div class="partnersLogo clearfix">
+                <img src="assets/img/home/partners/partner-05.png" alt="partner-img">
+              </div>
+            </div>
+
+            <div class="slide">
+              <div class="partnersLogo clearfix">
+                <img src="assets/img/home/partners/partner-01.png" alt="partner-img">
+              </div>
+            </div>
+
+            <div class="slide">
+              <div class="partnersLogo clearfix">
+                <img src="assets/img/home/partners/partner-02.png" alt="partner-img">
+              </div>
+            </div>
+
+            <div class="slide">
+              <div class="partnersLogo clearfix">
+                <img src="assets/img/home/partners/partner-03.png" alt="partner-img">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
 
       			<!-- FOOTER -->
@@ -904,7 +870,7 @@
 		<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 		<script src="assets/plugins/simplebar/simplebar.min.js"></script>
 
-		
+		<script src='assets/plugins/slick/slick.js'></script>
 		
 		
 		
@@ -921,7 +887,7 @@
 <script src="assets/options/optionswitcher.js"></script>
 </body>
 
-<!-- Mirrored from bigbag-html.netlify.app/account-profile by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 09:40:49 GMT -->
+<!-- Mirrored from bigbag-html.netlify.app/cart-page by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 09:40:40 GMT -->
 </html>
 
 
@@ -988,86 +954,6 @@
 
       <div class="col">
         <a class='footer-nav  ' href='account-dashboard.html'>
-          <div class="footer-nav-icon">
-            <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14.6667 16.5V14.8333C14.6667 13.9493 14.3155 13.1014 13.6903 12.4763C13.0652 11.8512 12.2174 11.5 11.3333 11.5H4.66666C3.78261 11.5 2.93476 11.8512 2.30964 12.4763C1.68452 13.1014 1.33333 13.9493 1.33333 14.8333V16.5" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M7.99999 8.16667C9.84094 8.16667 11.3333 6.67428 11.3333 4.83333C11.3333 2.99238 9.84094 1.5 7.99999 1.5C6.15904 1.5 4.66666 2.99238 4.66666 4.83333C4.66666 6.67428 6.15904 8.16667 7.99999 8.16667Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-
-          <div class="footer-nav-text">
-            Account
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-      <!-- FOOTER SM -->
-<footer class="footer-menu clearfix d-md-none">
-  <div class="container">
-    <div class="row row-cols-5">
-      <div class="col">
-        <a class='footer-nav  ' href='index.html'>
-          <div class="footer-nav-icon">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8 2.63417L2.16667 7.30083V13.8333H6.33333V10.5H9.66667V13.8333H13.8333V7.70167C13.8334 7.57669 13.8053 7.45331 13.7512 7.34065C13.6971 7.22799 13.6184 7.12894 13.5208 7.05083L8 2.63417ZM8 0.5L14.5617 5.75C14.8543 5.98407 15.0905 6.28091 15.2529 6.61859C15.4154 6.95626 15.4998 7.32613 15.5 7.70083V13.8333C15.5 14.2754 15.3244 14.6993 15.0118 15.0118C14.6993 15.3244 14.2754 15.5 13.8333 15.5H2.16667C1.72464 15.5 1.30072 15.3244 0.988155 15.0118C0.675595 14.6993 0.5 14.2754 0.5 13.8333V7.30083C0.500031 7.05103 0.556216 6.80442 0.664399 6.57926C0.772582 6.35409 0.929996 6.15613 1.125 6L8 0.5Z" fill="#252525"/>
-            </svg>
-          </div>
-
-          <div class="footer-nav-text">
-            Home
-          </div>
-        </a>
-      </div>
-
-      <div class="col">
-        <a class='footer-nav  ' href='about-us.html'>
-          <div class="footer-nav-icon">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 1.66669L1.66666 5.83335L10 10L18.3333 5.83335L10 1.66669Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.66666 14.1667L10 18.3334L18.3333 14.1667" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.66666 10L10 14.1667L18.3333 10" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-
-          <div class="footer-nav-text">
-            Pages
-          </div>
-        </a>
-      </div>
-
-      <div class="col position-relative">
-        <a class='footer-nav footer-product shadow bg-primary' href='product-grid-left-sidebar.html'>
-          <div class="footer-nav-icon">
-            <i class="mdi mdi-shopping"></i>
-          </div>
-
-          <div class="footer-nav-text text-white">
-            Shop
-          </div>
-        </a>
-      </div>
-
-      <div class="col">
-        <a class='footer-nav  ' href='blog-right-sidebar.html'>
-          <div class="footer-nav-icon">
-            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1.66667 1.5H6.66667C7.55072 1.5 8.39857 1.85119 9.02369 2.47631C9.64881 3.10143 10 3.94928 10 4.83333V16.5C10 15.837 9.73661 15.2011 9.26777 14.7322C8.79893 14.2634 8.16304 14 7.5 14H1.66667V1.5Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M18.3333 1.5H13.3333C12.4493 1.5 11.6014 1.85119 10.9763 2.47631C10.3512 3.10143 10 3.94928 10 4.83333V16.5C10 15.837 10.2634 15.2011 10.7322 14.7322C11.2011 14.2634 11.837 14 12.5 14H18.3333V1.5Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-
-          <div class="footer-nav-text">
-            Blog
-          </div>
-        </a>
-      </div>
-
-      <div class="col">
-        <a class='footer-nav active active-stroke' href='account-dashboard.html'>
           <div class="footer-nav-icon">
             <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M14.6667 16.5V14.8333C14.6667 13.9493 14.3155 13.1014 13.6903 12.4763C13.0652 11.8512 12.2174 11.5 11.3333 11.5H4.66666C3.78261 11.5 2.93476 11.8512 2.30964 12.4763C1.68452 13.1014 1.33333 13.9493 1.33333 14.8333V16.5" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

@@ -115,10 +115,14 @@ const register = async (req, res) => {
 
 const singleProduct = async (req, res) => {
     try {
-        const productDetails = await productcollection.findOne({ _id: req.query.id })
-        const categoryDetails = await categorycollection.findOne({ _id: req.query.id })
-        res.render('userpages/singleProduct', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
-    } catch (err) {
+        
+        
+            const productDetails = await productcollection.findOne({ _id: req.query.id })
+            const categoryDetails = await categorycollection.findOne({ _id: req.query.id })
+            res.render('userpages/singleProduct', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
+        }
+    
+     catch (err) {
         console.log(err);
     }
 }

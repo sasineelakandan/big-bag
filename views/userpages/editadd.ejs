@@ -362,7 +362,7 @@
                       </li>
 
                       <li class="">
-                        <a class='/myaddress' href='account-address.html'>
+                        <a class='sidenav-item-link' href='account-address.html'>
                           <span class="nav-text">Address</span>
                         </a>
                       </li>
@@ -586,7 +586,7 @@
                 <div class="row">
                   <div class="col-md-4 col-lg-3 col-xl-2 col-12">
                     <div class="thumbnail">
-                      <img src="assets/img/products/profile/profile-image.jpg" alt="profile-image">
+                      <img src="/assets/img/products/profile/profile-image.jpg" alt="profile-image">
                       <div class="caption">
                         <!-- <a href="javascript:void(0)" class="btn btn-primary btn-block" role="button">Change Avatar</a> -->
                         <div  class="imagediv">
@@ -598,36 +598,56 @@
                     </div>
                   </div>
                   <div class="col-md-8 col-lg-9 col-xl-10 col-12">
-                      <form id="changepass">
+                      <form  id="editadd" class="form-horizontal">
                         <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">First Name</label>
+                          <label for=""  class="col-md-3 control-label"  >First Name</label>
                           <div class="col-md-7">
-                            <input type="text" class="form-control" name="name" id="name" value="<%=userLogged.name%>" required>
+                            <input type="text" class="form-control" value="<%=addressDet.firstName%>" name="firstName" id="firstName" required>
                           </div>
                         </div>
-                      
-                        
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 control-label">Last Name</label>
+                          <div class="col-md-7">
+                            <input type="text" class="form-control" value="<%=addressDet.lastName%>" name="lastName", id="lastName">
+                          </div>
+                        </div>
                         <div class="form-group row">
                           <label for="" class="col-md-3 control-label">Phone Number</label>
                           <div class="col-md-9">
-                            <input type="text" name="phone" id="phone" class="form-control" value="<%=userLogged.phone%>">
+                            <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" value="<%=addressDet.phone%>" >
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">old password</label>
-                          <div class="col-md-7">
-                            <input type="password" id="password" class="form-control" value="<%=password%>" name="password" >
-                          </div>
-                        </div>
-                      
-                        
-                        <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">Change password</label>
+                          <label for="" class="col-md-3 control-label">address Title</label>
                           <div class="col-md-9">
-                            <input type="password" name="confirm_password" id="confirm_password" class="form-control" value="<%=password%>">
+                            <input type="text" name="addressTitle" id="addressTitle" class="form-control" value="<%=addressDet.addressTitle%>" >
                           </div>
                         </div>
-                       
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 control-label"> Address 1</label>
+                          <div class="col-md-9">
+                            <input type="text" name="address1" id="address1" class="form-control" value="<%=addressDet.addressLine1%>">
+                          </div>
+                          <div class="form-group row">
+                            <label for="" class="col-md-3 control-label"> Address 2</label>
+                            <div class="col-md-9">
+                              <input type="text" name="address2" id="address2" class="form-control" value="<%=addressDet.addressLine2%>">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 control-label"> City </label>
+                          <div class="col-md-9">
+                            <input type="text" name="City" id="City" class="form-control" value="<%=addressDet.City%>">
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 control-label"> State </label>
+                        <div class="col-md-9">
+                          <input type="text" name="State" id="State" class="form-control" value="<%=addressDet.State%>" >
+                        </div>
+                    </div>
+                    
+                        
                         <div class="form-group row">
                           <div class=" col-md-12 ">
                             <button type="submit" class="btn btn-primary float-end">SAVE INFO</button>
@@ -641,69 +661,96 @@
           </div>
         </div>
       </section>
-
-       <script>
-         $("#changepass").validate({
-    rules: {
-      name: {
-        required: true,
-        minlength: 2
-      },
-      phone: {
-        required: true,
-        minlength: 10,
-        maxlength: 15,
-        number: true
-      },
-      password: {
-        required: true,
-        minlength: 6,
-        maxlength: 16
-      },
-      confirm_password: {
-        required: true,
-        minlength: 6,
-        maxlength: 16,
-        
-      }
-    },
-    messages: {
-      name: {
-        required: "Please enter your name",
-        minlength: "Your name must be at least 2 characters long"
-      },
-      phone: {
-        required: "Please enter your phone number",
-        minlength: "Your phone number must be at least 10 digits long",
-        maxlength: "Your phone number cannot be more than 15 digits long",
-        number: "Your phone number must only contain numbers"
-      },
-      password: {
-        required: "Please enter a password",
-        minlength: "Your password must be at least 8 characters long",
-        maxlength: "Your password cannot be more than 16 characters long"
-      },
-      confirm_password: {
-        required: "Please confirm your password",
-        minlength: "Your password must be at least 8 characters long",
-        maxlength: "Your password cannot be more than 16 characters long",
-        equalTo: "Your passwords do not match"
-      }
-    },
-
-
-       submitHandler: async (form, event) => {
+      <script>
+       
+          // Add validation to the form
+          $("#editadd").validate({
+            rules: {
+              "firstName": {
+                required: true,
+                minlength: 2
+              },
+              "lastName": {
+                required: true,
+                minlength: 2
+              },
+              "phoneNumber": {
+                required: true,
+                minlength: 10,
+                maxlength: 15
+              },
+              "addressTitle": {
+                required: true,
+                minlength: 2
+              },
+              "address1": {
+                required: true,
+                minlength: 2
+              },
+              "address2": {
+                required: true,
+                minlength: 2
+              },
+              'City':{
+                required:true,
+                minlength:2
+              },
+              'State':{
+                required:true,
+                minlength:2
+              },
+            },
+            messages: {
+              "firstName": {
+                required: "Please enter your first name",
+                minlength: "Your first name must be at least 2 characters long"
+              },
+              "lastName": {
+                required: "Please enter your last name",
+                minlength: "Your last name must be at least 2 characters long"
+              },
+              "phoneNumber": {
+                required: "Please enter a phone number",
+                minlength: "Your phone number must be at least 10 characters long",
+                maxlength: "Your phone number must be no more than 15 characters long"
+              },
+              "addressTitle": {
+                required: "Please enter an address title",
+                minlength: "Your address title must be at least 2 characters long"
+              },
+              "address1": {
+                required: "Please enter an address",
+                minlength: "Your address must be at least 2 characters long"
+              },
+              "address2": {
+                required: "Please enter an address",
+                minlength: "Your address must be at least 2 characters long"
+              },
+              'City':{
+                required: "Please enter an city",
+                minlength: "Your address must be at least 2 characters long"
+              },
+              'State':{
+                required: "Please enter an State",
+                minlength: "Your address must be at least 2 characters long"
+              },
+            },
+            submitHandler: async (form, event) => {
 
             event.preventDefault()
             let formData = {
-              name:form.name.value,
-              phone:form.phone.value,
-              password:form.password.value,
-              confirm_password:form.confirm_password.value,
-              userId:'<%=userLogged._id%>'
+              firstName: form.firstName.value,
+              lastName : form.lastName.value,
+              phoneNumber: form.phoneNumber.value,
+              addressTitle: form.addressTitle.value,
+              address1:form.address1.value,
+              address2:form.address2.value,
+              City:form.City.value,
+              State:form.State.value,
+              addressId:'<%=addressDet._id%>'
                     }
                     //fetch only to check both email and number not to save
-                    let response = await fetch('/updatePro', {
+                    let response = await fetch('/updateadd', {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(formData)
@@ -714,18 +761,17 @@
           if (result.success) {
           await Swal.fire({
           icon: "success",
-          title: " profile edit successful"
+          title: "address edited"
            }  )
-          window.location.reload()
+          window.location.href='/myaddress/?id=<%=userLogged._id%>'
            }
       
          } 
         })
 
           
-       </script>
-
-
+        
+        </script>
       			<!-- FOOTER -->
 			<div class="footer clearfix">
 				<div class="container">

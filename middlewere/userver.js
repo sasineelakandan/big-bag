@@ -1,4 +1,4 @@
-module.exports=function(req,res,next){
+const isuser=function(req,res,next){
     try{
       if(req.session.logged){
          next()
@@ -9,3 +9,4 @@ module.exports=function(req,res,next){
         console.log(err)
 }
 }
+module.exports={isuser}

@@ -571,9 +571,8 @@
           <div class="row">
             <div class="col-12">
               <div class="btn-group me-0" role="group" aria-label="...">
-                <a class='btn btn-default' href='account-dashboard.html'><i class="fa fa-th" aria-hidden="true"></i>Account Dashboard</a>
-                <a href="javascript:void(0)" class="btn btn-default active"><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
-                <a class='btn btn-default' href='account-address.html'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>My Address</a>
+                <a href="/account" class="btn btn-default active"><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
+                <a class='btn btn-default' href='/myaddress/?id=<%=userLogged._id%>'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>My Address</a>
                 <a class='btn btn-default' href='/addaddress'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>Add Address</a>
                 <a class='btn btn-default' href='account-all-orders.html'><i class="fa fa-list" aria-hidden="true"></i>All Orders</a>
                 <a class='btn btn-default' href='account-wishlist.html'><i class="fa fa-gift" aria-hidden="true"></i>Wishlist</a>
@@ -635,6 +634,18 @@
                               <input type="text" name="address2" id="address2" class="form-control" placeholder="address2">
                             </div>
                         </div>
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 control-label"> City </label>
+                          <div class="col-md-9">
+                            <input type="text" name="City" id="City" class="form-control" placeholder="City">
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 control-label"> State </label>
+                        <div class="col-md-9">
+                          <input type="text" name="State" id="State" class="form-control" placeholder="State">
+                        </div>
+                    </div>
                     
                         
                         <div class="form-group row">
@@ -679,7 +690,15 @@
               "address2": {
                 required: true,
                 minlength: 2
-              }
+              },
+              'City':{
+                required:true,
+                minlength:2
+              },
+              'State':{
+                required:true,
+                minlength:2
+              },
             },
             messages: {
               "firstName": {
@@ -706,9 +725,61 @@
               "address2": {
                 required: "Please enter an address",
                 minlength: "Your address must be at least 2 characters long"
-              }
+              },
+              'City':{
+                required: "Please enter an city",
+                minlength: "Your address must be at least 2 characters long"
+              },
+              'State':{
+                required: "Please enter an State",
+                minlength: "Your address must be at least 2 characters long"
+              },
+            },
+            submitHandler: async (form, event) => {
+
+            event.preventDefault()
+            let formData = {
+              firstName: form.firstName.value,
+              lastName : form.lastName.value,
+              phoneNumber: form.phoneNumber.value,
+              addressTitle: form.addressTitle.value,
+              address1:form.address1.value,
+              address2:form.address2.value,
+              City:form.City.value,
+              State:form.State.value
+              
+                    }
+                    //fetch only to check both email and number not to save
+                    let response = await fetch('/addaddress', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    })
+            
+           let result = await response.json()
+          if(result.exists) {
+          await Swal.fire({
+           icon: "error",
+          title: "Product Already exists"
+           })
             }
-          });
+          if (result.success) {
+          await Swal.fire({
+          icon: "success",
+          title: "address Added"
+           }  )
+          window.location.href='/myaddress/?id=<%=userLogged._id%>'
+           }
+         if (result.noValue) {
+         await Swal.fire({
+         icon: "error",
+         title: "No Value in Product Name"
+         })
+          }
+         } 
+        })
+
+          
         
         </script>
       			<!-- FOOTER -->
