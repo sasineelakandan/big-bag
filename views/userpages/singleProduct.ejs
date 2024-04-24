@@ -36,6 +36,7 @@
 
     <!-- Icons -->
     <link rel="shortcut icon" href="assets/img/favicon.png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -1141,22 +1142,28 @@
                                     <%= productDet.productName %>
                                 </h2>
                                 <h1>
-                                     ₹ <%= productDet.productPrice %> <label for="">INR</label>
+                                    ₹ <%= productDet.productPrice %> <label for="">INR</label>
                                 </h1>
                                 <h3>
                                     <%=productDet.productDiscription%>
                                 </h3>
                                 <div class="count-input my-3">
-                                    <button class="btn btn-info incr-btn decrease fs-1" data-action="decrease">-</button>
-                                    <input style="width: 50px;" class="quantity py-2 text-center" name="quantity" id="quantity" type="text" value="1">
-                                    <button class="btn btn-info incr-btn increase fs-4" data-action="increase">+</button>
-                               </div>
-                                 
+                                    <button  class="btn btn-info incr-btn decrease fs-1"
+                                        data-action="decrease">-</button>
+                                    <input style="width: 50px;" class="quantity py-2 text-center" name="quantity"
+                                        id="quantity" type="text" value="1">
+                                    <button class="btn btn-info incr-btn increase fs-4"
+                                        data-action="increase">+</button>
+                                </div>
+
 
                                 <div class="btn-area mb-0">
                                     <a class='btn btn-primary btn-default' id="addtocart" href=''>Add to cart <i
                                             class="fa fa-angle-right" aria-hidden="true"></i></a>
                                 </div>
+
+
+
 
                                 <div class="tabArea d-none">
                                     <ul class="nav nav-tabs bar-tabs">
@@ -1211,14 +1218,14 @@
                         const decreaseButton = document.querySelector('.decrease');
                         const increaseButton = document.querySelector('.increase');
                         const quantityInput = document.querySelector('.quantity');
-                
+
                         decreaseButton.addEventListener('click', function () {
                             let currentValue = parseInt(quantityInput.value);
                             if (currentValue > 1) {
                                 quantityInput.value = currentValue - 1;
                             }
                         });
-                
+
                         increaseButton.addEventListener('click', function () {
                             let currentValue = parseInt(quantityInput.value);
                             quantityInput.value = currentValue + 1;
@@ -1226,34 +1233,41 @@
                     });
                 </script>
                 <script>
-                     document.getElementById('addtocart').addEventListener('click', () => {
-            const productId = '<%=productDet._id %>';
-            const productStock = '<%=productDet.productStock %>';
-            const productPrice = '<%=productDet.productPrice %>';
-            const userId='<%=userLogged._id%>'
-            const image='<%=productDet.productImage[0]%>'
-            
-            const quantityInput = document.getElementById('quantity').value
-            const Totalprice=Number(productPrice) *Number(quantityInput)
-
-
-            fetch(`/addtocart?pid=${productId}&stock=${productStock}&quantity=${quantityInput}&productPrice=${productPrice}&user=${userId}&total=${Totalprice}&Img=${image}`, {
-                method: 'POST',
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                    document.getElementById('addtocart').addEventListener('click', async (e) => {
+                        e.preventDefault()
+                        const productId = '<%=productDet._id %>';
+                        const productStock = '<%=productDet.productStock %>';
+                        const productPrice = '<%=productDet.productPrice %>';
+                        const userId = '<%=userLogged._id%>'
+                        const image = '<%=productDet.productImage[0]%>'
                        
+                        const quantityInput = document.getElementById('quantity').value
+                        const Totalprice = Number(productPrice) * Number(quantityInput)
+
+
+                        let response = await fetch(`/addtocart?pid=${productId}&stock=${productStock}&quantity=${quantityInput}&productPrice=${productPrice}&user=${userId}&total=${Totalprice}&Img=${image}`, {
+                            method: 'POST',
+                        })
+                        console.log("response"+response);
+                        let result = await response.json()
+                        console.log(result)
+                        if (result.success) {
+                            await Swal.fire({
+                                icon: "success",
+                                title: " cart added",
+                            });
+                        }else{
+                            await Swal.fire({
+                                icon: "error",
+                                title: "quantity outof stock ",
+                            });
+                        } 
+
                         
-                    } else {
-                        throw new Error('Error adding product to cart.');
-                    }
-                })
-                .catch(error => {
-                    // show error message
-                    alert('Error adding product to cart.');
-                });
-        });
+                    })
+
+
+
                 </script>
                 <div class="row singleProduct singleProductTab">
                     <div class="col-12">

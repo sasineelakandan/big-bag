@@ -596,11 +596,11 @@
                           <td class=""><%=cartDet[i].productId.productName%></td>
                           <td class=""><%=cartDet[i].productId.productPrice%></td>
                           <td class="count-input">
-						   <a class="incr-btn" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></a>
-							<input class="quantity" type="text" value="<%=cartDet[i].productQuantity%>">
-							<a class="incr-btn" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></a>
+						   <a class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','min')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></a>
+							<input id="quantity" type="text" value="<%=cartDet[i].productQuantity%>">
+							<a class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','plus')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></a>
                           </td>
-                          <td class=""><%=cartDet[i].totalCostPerProduct%></td>
+                          <td id="total"><%=cartDet[i].totalCostPerProduct%></td>
                         </tr>
                         <% } %>
                          
@@ -625,6 +625,48 @@
                       </ul>
                     </div>
                   </div>
+                  <script>
+                   const quantityInput= document.getElementById('quantity').value
+                   
+                   
+                    async function fn(productId,action){
+                      
+                     let response= await fetch(`/cartbutton?id=${productId}&action=${action}&quantity=${quantityInput}`, {
+                                            method: 'GET',
+                                        })  
+                     let result= await response.json() 
+                     
+                     if(result.success){
+                      document.getElementById('quantity').value=result.cartProduct
+                      document.getElementById('total').innerText=result.Total
+                      if(result.cartProduct==result.Stock){
+                         window.location.reload();
+                      }
+                    
+                     }if(result.exceed){
+                      await Swal.fire({
+                            icon: "error",
+                            title: "product Max quantity reach"
+
+                        });
+                     }
+                     if(result.min){
+                      document.getElementById('quantity').value=result.cartProduct
+                      document.getElementById('total').innerText=result.Total
+                      if(result.cartProduct==1){
+                         window.location.reload();
+                      }
+                    
+                     }if(result.exp){
+                      await Swal.fire({
+                            icon: "error",
+                            title: "product Min quantity reach"
+
+                        });
+                     } 
+                            
+                    }
+                </script>
 
                   <div class="checkBtnArea">
                     <a class='btn btn-primary btn-default' href='checkout-step-2.html'>checkout<i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
