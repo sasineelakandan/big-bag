@@ -596,11 +596,11 @@
                           <td class=""><%=cartDet[i].productId.productName%></td>
                           <td class=""><%=cartDet[i].productId.productPrice%></td>
                           <td class="count-input">
-						   <a class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','min')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></a>
-							<input id="quantity" type="text" value="<%=cartDet[i].productQuantity%>">
-							<a class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','plus')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></a>
+						   <button class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','min','quantity<%i%>')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></button>
+							<input id="quantity<%=cartDet[i].productId._id %>" type="number" value="<%=cartDet[i].productQuantity%>">
+							<button class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','plus')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></button>
                           </td>
-                          <td id="total"><%=cartDet[i].totalCostPerProduct%></td>
+                          <td id="total<%=cartDet[i].productId._id %>"><%=cartDet[i].totalCostPerProduct%></td>
                         </tr>
                         <% } %>
                          
@@ -621,27 +621,34 @@
                       <ul class="list-unstyled">
                         <li>Sub Total <span></span></li>
                         <li>UK Vat <span>$ 18.00</span></li>
-                        <li>Grand Total <span class="grandTotal"></span></li>
+                        <li>Grand Total <span id="grandTotal"><%=grandTotal%></span></li>
                       </ul>
                     </div>
                   </div>
                   <script>
-                   const quantityInput= document.getElementById('quantity').value
+                    
                    
                    
-                    async function fn(productId,action){
+                  
+                    async function fn(productId,price,action){
                       
+                    console.log(document.getElementById('total'+productId))
+                      const quantityInput= document.getElementById('quantity'+productId)?.value
+                    
                      let response= await fetch(`/cartbutton?id=${productId}&action=${action}&quantity=${quantityInput}`, {
                                             method: 'GET',
                                         })  
                      let result= await response.json() 
                      
                      if(result.success){
-                      document.getElementById('quantity').value=result.cartProduct
-                      document.getElementById('total').innerText=result.Total
-                      if(result.cartProduct==result.Stock){
-                         window.location.reload();
-                      }
+                      
+                      document.getElementById('quantity'+productId).value=result.cartProduct
+                      document.getElementById('total'+productId).innerHTML=result.Total
+                     
+                      document.getElementById('grandTotal').innerHTML=result.grandTotal
+                      
+                      
+                      
                     
                      }if(result.exceed){
                       await Swal.fire({
@@ -651,11 +658,13 @@
                         });
                      }
                      if(result.min){
-                      document.getElementById('quantity').value=result.cartProduct
-                      document.getElementById('total').innerText=result.Total
-                      if(result.cartProduct==1){
-                         window.location.reload();
-                      }
+                      
+                      document.getElementById('quantity'+productId).value=result.cartProduct
+                      document.getElementById('total'+productId).innerHTML=result.Total
+                     
+                      document.getElementById('grandTotal').innerHTML=result.grandTotal
+                      
+                      
                     
                      }if(result.exp){
                       await Swal.fire({
