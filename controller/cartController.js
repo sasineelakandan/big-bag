@@ -9,8 +9,9 @@ const Cart=async(req,res)=>{
     try{
         
         const cart= await cartCollection.find().populate('productId')
-        
-        res.render('userpages/cart',{userLogged:req.session.logged,cartDet:cart})
+        const  grandTotal= await cartCollection.aggregate([{$group:{_id:0,sum:{$sum:'$totalCostPerProduct'}}}])
+                const totalSum = grandTotal[0].sum;
+        res.render('userpages/cart',{userLogged:req.session.logged,cartDet:cart,grandTotal:totalSum})
     }
     catch(error){
         console.log(error)
@@ -32,7 +33,7 @@ const addTocart=async(req,res)=>{
             const productStock=parseInt(req.query.stock)
            const totaqty=presentQty + qty
              
-           if(totaqty<productStock+1){
+           if(totaqty<productStock){
             
               await cartCollection.updateOne(
               { productId: req.query.pid },
@@ -71,9 +72,10 @@ const addTocart=async(req,res)=>{
         try {
           const productId = req.query.id;
           const action=req.query.action
-          
+          const index=req.query.index
+        
           const quantity = Number(req.query.quantity);
-         
+          console.log('qty from query: '+quantity);
 
 
           // Retrieve the product from the database
@@ -86,25 +88,29 @@ const addTocart=async(req,res)=>{
       
           const productStock = parseInt(product.productStock);
           const productPrice=parseInt(product.productPrice)
-         if(action=='plus'){
+          
+          if(action=='plus'){
             if (productStock>quantity) {
-                // If quantity is less than productStock, update the cart
-                const cartProduct = await cartCollection.findOneAndUpdate(
+              let total =(1+quantity)*productPrice
+              
+              
+               
+                 const cartProduct = await cartCollection.findOneAndUpdate(
                   { productId },
-                  { $inc: { productQuantity: 1 } },
-                  { new: true } // Return the updated document
+                  { 
+                      $inc: { productQuantity: 1 },
+                      $set: { totalCostPerProduct: total }
+                  },
+                  { 
+                      new: true // Return the updated document
+                  }
                 );
-                 
-                let total =Number(cartProduct.productQuantity)*Number(productPrice)
+                const  grandTotal= await cartCollection.aggregate([{$group:{_id:0,sum:{$sum:'$totalCostPerProduct'}}}])
+                const totalSum = grandTotal[0].sum;
                 
-                const cartProduct2 = await cartCollection.findOneAndUpdate(
-                    { productId },
-                    { $set: { totalCostPerProduct: total } },
-                     // Return the updated document
-                  );
                   
                 // Send success response with updated cart product
-                res.send({ success: true, cartProduct:cartProduct2.productQuantity,Stock:productStock,Total:total});
+                res.send({ success: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:total,grandTotal:totalSum});
     
               }else {
                 res.status(400).send({ success: false, exceed: true });
@@ -114,19 +120,27 @@ const addTocart=async(req,res)=>{
          if(action=='min'){
             if (quantity >1 ) {
                 // If quantity is less than productStock, update the cart
-                const cartProduct = await cartCollection.findOneAndUpdate(
-                  { productId },
-                  { $inc: { productQuantity: -1 } },
-                  { new: true } // Return the updated document
-                );
-                 const total=Number(cartProduct.totalCostPerProduct)-Number(productPrice)
-                 const cartProduct2 = await cartCollection.findOneAndUpdate(
-                  { productId },
-                  { $set: { totalCostPerProduct: total } },
+               
+               const productprice=((quantity-1)*productPrice)
+               const cartProduct = await cartCollection.findOneAndUpdate(
+                { productId },
+                { 
+                    $inc: { productQuantity: -1 },
+                    $set: { totalCostPerProduct: productprice }
+                },
+                { 
+                    new: true // Return the updated document
+                }
+            );
+            
+            const  grandTotal= await cartCollection.aggregate([{$group:{_id:0,sum:{$sum:'$totalCostPerProduct'}}}])
+            const totalSum = grandTotal[0].sum;
+            
+               
                    // Return the updated document
-                );
+                
                 // Send success response with updated cart product
-                res.send({ min: true, cartProduct:cartProduct2.productQuantity,Stock:productStock,Total:total});
+                res.send({ min: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:cartProduct.totalCostPerProduct,grandTotal:totalSum});
     
               }else {
                 res.status(400).send({ success: false, exp: true });
