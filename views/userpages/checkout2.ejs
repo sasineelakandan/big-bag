@@ -1,7 +1,6 @@
 
 <%- include('../userpart/header') %>
 
-
         <!-- ====================================
           ——— LEFT SIDEBAR WITH OUT FOOTER
         ===================================== -->
@@ -160,7 +159,7 @@
                         </a>
                       </li>
 
-                      <li class="">
+                      <li class="active">
                         <a class='sidenav-item-link' href='checkout-step-3.html'>
                           <span class="nav-text">Step 2 - Payment</span>
                         </a>
@@ -188,7 +187,7 @@
                         </a>
                       </li>
 
-                      <li class="active">
+                      <li class="">
                         <a class='sidenav-item-link' href='cart-page-2.html'>
                           <span class="nav-text">Cart Page</span>
                         </a>
@@ -546,149 +545,181 @@
 
 
       <!-- LIGHT SECTION -->
-      <section class="lightSection clearfix pageHeaderImage">
+      <section class="lightSection clearfix pageHeader">
         <div class="container">
-          <div class="tableBlock">
-            <div class="row tableInner">
-              <div class="col-sm-12">
-                <div class="page-title">
-                  <h2>cart</h2>
-                  <ol class="breadcrumb">
-                    <li>
-                      <a href='index.html'>Home</a>
-                    </li>
-                    <li class="active">cart</li>
-                  </ol>
-                </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="page-title">
+                <h2>Shipping method</h2>
               </div>
+            </div>
+            <div class="col-md-6">
+              <ol class="breadcrumb float-right">
+                <li>
+                  <a href='index.html'>Home</a>
+                </li>
+                <li class="active">Shipping method</li>
+              </ol>
             </div>
           </div>
         </div>
       </section>
 
       <!-- MAIN CONTENT SECTION -->
-      <section class="mainContent clearfix cartListWrapper">
+      <section class="mainContent clearfix stepsWrapper">
         <div class="container">
           <div class="row">
-            <div class="col-12">
-              <div class="cartListInner text-nowrap">
-                <form action="#">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead>
-
-                        <tr>
-                          <th></th>
-                          <th>Product Name</th>
-                          <th>Price</th>
-                          <th>Quantity</th>
-                          <th>Sub Total</th>
-                        </tr>
-                 
-                      </thead>
-                      <% for(let i=0;i<cartDet.length;i++){ %>
-                      <tbody>
-                        <tr class="alert alert-dismissible fade show p-0 mb-0" role="alert">
-                          <td class="">
-                            <button type="button" class="close me-4 p-0 top-0" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <span class="cartImage"><img style="height: 75px;width: 75px;" src="assets/uploads/<%=cartDet[i].productImage%>" alt="image"></span>
-                          </td>
-                          <td class=""><%=cartDet[i].productId.productName%></td>
-                          <td class=""><%=cartDet[i].productId.productPrice%></td>
-                          <td class="count-input">
-						   <button class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','min','<%=userLogged._id%>')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></button>
-							<input id="quantity<%=cartDet[i].productId._id %>" type="number" value="<%=cartDet[i].productQuantity%>">
-							<button class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','plus','<%=userLogged._id%>')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></button>
-                          </td>
-                          <td id="total<%=cartDet[i].productId._id %>"><%=cartDet[i].totalCostPerProduct%></td>
-                        </tr>
-                        <% } %>
-                         
-                      </tbody>
-                    </table>
+            <div class="col-md-8">
+              <div class="innerWrapper clearfix stepsPage">
+                <div class="row progress-wizard" style="border-bottom:0;">
+                  <div class="col-4 progress-wizard-step complete fullBar">
+                    <div class="text-center progress-wizard-stepnum">Shipping Method</div>
+                    <div class="progress"><div class="progress-bar"></div></div>
+                    <a class='progress-wizard-dot' href='checkout-step-2.html'></a>
                   </div>
 
-                  <div class="updateArea">
-                    <firm class="input-group">
-                      <input type="text" class="form-control" required placeholder="I have a discount coupon" aria-describedby="basic-addon2">
-                      <button type="submit" class="btn btn-primary-outlined" id="basic-addon2">apply coupon</button>
-                    </firm>
-                  
+                  <div class="col-4 progress-wizard-step active">
+                    <div class="text-center progress-wizard-stepnum">Payment Method</div>
+                    <div class="progress"><div class="progress-bar"></div></div>
+                    <a href="javascript:void(0)" class="progress-wizard-dot"></a>
                   </div>
 
-                  <div class="row totalAmountArea">
-                    <div class="col-sm-5 ms-sm-auto">
-                      <ul class="list-unstyled">
-                        <li>Sub Total <span></span></li>
-                        <li>UK Vat <span>$ 18.00</span></li>
-                        <li>Grand Total <span id="grandTotal"><%=grandTotal%></span></li>
-                      </ul>
+                  <div class="col-4 progress-wizard-step disabled">
+                    <div class="text-center progress-wizard-stepnum">Review</div>
+                    <div class="progress"><div class="progress-bar"></div></div>
+                    <a class='progress-wizard-dot' href='checkout-step-4.html'></a>
+                  </div>
+                </div>
+
+                <div class="page-header">
+                  <h4>Shipping Information</h4>
+                </div>
+
+                <div class="row shipping-info">
+                  <div class="col-6">
+                    <h5>Shipping Address</h5>
+                    <address>
+                      <%=userDet.firstName%> <br>
+                      <%=userDet.addressLine1%> <br>
+                      <%=userDet.phone%><br>
+                      <%=userDet.City%><br>
+                    </address>
+                  </div>
+                  <div class="col-6">
+                    <h5>Shipping Method</h5>
+                    <p>
+                      Cash On Delivery<br>
+                      Delivered in 8-12 business days.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="page-header">
+                  <h4>Billing Information</h4>
+                </div>
+                <form action="#" class="row" method="POST" role="form">
+                  <div class=" checkboxArea card-check">
+                    <div class="col-sm-12 mb-2">
+                      <input type="radio" name="checkbox" value="1" >
+                      <label ><span></span>Cash on Delivery</label>
                     </div>
-                  </div>
-                  <script>
-                    
-                   
-                  
-                    async function fn(productId,price,action,userId){
-                      
-                    console.log(document.getElementById('total'+productId))
-                      const quantityInput= document.getElementById('quantity'+productId)?.value
-                    
-                     let response= await fetch(`/cartbutton?id=${productId}&action=${action}&quantity=${quantityInput}&user=${userId}`, {
-                                            method: 'GET',
-                                        })  
-                     let result= await response.json() 
-                     
-                     if(result.success){
-                      
-                      
-                      document.getElementById('quantity'+productId).value=result.cartProduct
-                      document.getElementById('total'+productId).innerHTML=result.Total
-                     
-                      document.getElementById('grandTotal').innerHTML=result.grandTotal
-                      
-                      
-                    
-                     }if(result.exceed){
-                      await Swal.fire({
-                            icon: "error",
-                            title: "product Max quantity reach"
+                    <div class="col-sm-12 mb-2">
+                      <input id="checkbox2" type="radio" name="checkbox" value="1" checked="checked">
+                      <label for="checkbox2"><span></span>Credit Card</label>
+                      <small class="mb-2 d-block">We accept following credit card</small>
+                      <ul class="list-unstyled list-inline">
+                        <li><img src="assets/img/products/card1.jpg" alt=""><!--  --></li>
+                        <li><img src="assets/img/products/card2.jpg" alt=""><!-- </li>
+                        <!-- <li><img src="assets/img/products/card3.jpg" alt=""><!--  --></li>
+                        <!-- <li><img src="assets/img/products/card4.jpg" alt=""><!--  --></li> -->
+                      </ul>
+                      <!-- <!-- <div class="form-group row my-3 ml-3">
+                        <div class="col-md-6">
+                          <label for="" class="col-form-label">Name on Card</label>
+                          <input class="form-control" type="text" >
+                        </div>
 
-                        });
-                     }
-                     if(result.min){
-                      
-                      document.getElementById('quantity'+productId).value=result.cartProduct
-                      document.getElementById('total'+productId).innerHTML=result.Total
-                     
-                      document.getElementById('grandTotal').innerHTML=result.grandTotal
-                      
-                      
-                      
+                        <div class="col-md-6">
+                          <label for="" class="col-form-label">Card Number</label>
+                          <input class="form-control" type="text" >
+                        </div>
+                        <div class="col-md-6 col-12 mb-4 mb-md-0">
+                          <label for="">Expiration Date</label>
+                          <span class="step-drop">
+                            <select name="guiest_id3"  class="select-drop">
+                              <option value="0">Year</option>
+                              <option value="1">Choose 1</option>
+                              <option value="2">Choose 2</option>
+                              <option value="3">Choose 3</option>
+                            </select> -->
+                          <!-- </span>
+                          <span class="step-drop"> -->
+                            <!-- <select name="guiest_id3"  class="select-drop">
+                              <option value="0">Month</option>
+                              <option value="1">January</option>
+                              <option value="2">February</option>
+                              <option value="3">March</option>
+                            </select>
+                          </span>
+                        </div> -->
+                        <!-- <div class="col-md-6">
+                          <label for="" class="">CVC/CVV</label>
+                          <div class="input-group">
+                            <input type="text" class="form-control" aria-label="" placeholder="1234">
+                            <span class="input-group-addon"><i class="fa fa-question-circle"></i></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb-2">
+                      <div class="checkbox">
+                        <input id="checkbox-1" class="checkbox-custom form-check-input" name="checkbox-1" type="checkbox">
+                        <label for="checkbox-1" class="checkbox-custom-label form-check-label">Reward Points</label>
+                      </div>
+                    </div>
+                  </div> -->
 
-                    
-                     }if(result.exp){
-                      await Swal.fire({
-                            icon: "error",
-                            title: "product Min quantity reach"
-
-                        });
-                     } 
-                            
-                    }
-                </script>
-
-                  <div class="checkBtnArea">
-                    <a class='btn btn-primary btn-default' href='/checkout?user=<%=userLogged._id%>'>checkout<i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
-                  </div>
-                </form>
+                 
+            <div class="col-md-4">
+              <div class="summery-box">
+                <h4>Order Summery</h4>
+                <p>Excepteur sint occaecat cupidat non proi dent sunt.officia.</p>
+                <ul class="list-unstyled">
+                  <li class="d-flex justify-content-between">
+                    <span class="tag">Subtotal</span>
+                    <span class="val"><%=grandTotal%></span>
+                  </li>
+                  <li class="d-flex justify-content-between">
+                    <span class="tag">Shipping & Handling</span>
+                    <span class="val"><%=Charge%></span>
+                  </li>
+                  <li class="d-flex justify-content-between">
+                    <span class="tag">Tax</span>
+                    <span class="val"><%=Gst%></span>
+                  </li>
+                  <li class="d-flex justify-content-between">
+                    <span class="tag">Total</span>
+                    <span class="val"><%=Total%> </span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
+        <div class="col-sm-12">
+            <div class="well well-lg clearfix">
+              <ul class="pager">
+              <li class="previous float-left"><a class='btn btn-secondary btn-default float-start' href=>back</a></li>
+                <li class="next"><a class='btn btn-primary btn-default float-end' href='/checkout3?productId=<%=usercartDet.productId%>&user=<%=userLogged._id%>&id=<%=userDet._id%>'>Continue <i class="fa fa-angle-right"></i></a></li>
+              </ul>
+            </div>
+          </div>
+        </form>
+      </div>  
+    </div> 
       </section>
 
-       <!-- LIGHT SECTION -->
+      <!-- LIGHT SECTION -->
       <section class="lightSection clearfix">
         <div class="container">
           <div class="owl-carousel partnersLogoSlider">
@@ -697,43 +728,36 @@
                 <img src="assets/img/home/partners/partner-01.png" alt="partner-img">
               </div>
             </div>
-
             <div class="slide">
               <div class="partnersLogo clearfix">
                 <img src="assets/img/home/partners/partner-02.png" alt="partner-img">
               </div>
             </div>
-
             <div class="slide">
               <div class="partnersLogo clearfix">
                 <img src="assets/img/home/partners/partner-03.png" alt="partner-img">
               </div>
             </div>
-
             <div class="slide">
               <div class="partnersLogo clearfix">
                 <img src="assets/img/home/partners/partner-04.png" alt="partner-img">
               </div>
             </div>
-
             <div class="slide">
               <div class="partnersLogo clearfix">
                 <img src="assets/img/home/partners/partner-05.png" alt="partner-img">
               </div>
             </div>
-
             <div class="slide">
               <div class="partnersLogo clearfix">
                 <img src="assets/img/home/partners/partner-01.png" alt="partner-img">
               </div>
             </div>
-
             <div class="slide">
               <div class="partnersLogo clearfix">
                 <img src="assets/img/home/partners/partner-02.png" alt="partner-img">
               </div>
             </div>
-
             <div class="slide">
               <div class="partnersLogo clearfix">
                 <img src="assets/img/home/partners/partner-03.png" alt="partner-img">
@@ -742,7 +766,6 @@
           </div>
         </div>
       </section>
-
 
       			<!-- FOOTER -->
 			<div class="footer clearfix">
@@ -927,7 +950,7 @@
 		
 		
 		
-		
+		<script src='assets/plugins/selectbox/jquery.selectbox-0.1.3.min.js'></script>
 		
 		
 		
@@ -939,7 +962,7 @@
 <script src="assets/options/optionswitcher.js"></script>
 </body>
 
-<!-- Mirrored from bigbag-html.netlify.app/cart-page by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 09:40:40 GMT -->
+<!-- Mirrored from bigbag-html.netlify.app/checkout-step-2 by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 09:40:32 GMT -->
 </html>
 
 

@@ -3,15 +3,23 @@ const categoryCollection=require('../model/categorymodel')
 const addressCollection=require('../model/addressmodel')
 const usercollection=require('../model/usermodel')
 const cartCollection=require('../model/cartmodel')
+const orderCollection=require('../model/ordermodel')
+
 
 
 const Cart=async(req,res)=>{
     try{
         
-        const cart= await cartCollection.find().populate('productId')
-        const  grandTotal= await cartCollection.aggregate([{$group:{_id:0,sum:{$sum:'$totalCostPerProduct'}}}])
-                const totalSum = grandTotal[0].sum;
-        res.render('userpages/cart',{userLogged:req.session.logged,cartDet:cart,grandTotal:totalSum})
+        const cart= await cartCollection.find({userId:req.query.user}).populate('productId')
+         
+         Sum=0
+         for(let i=0;i<cart.length;i++){
+          Sum=Sum+cart[i].totalCostPerProduct
+         }
+        
+     
+              
+        res.render('userpages/cart',{userLogged:req.session.logged,cartDet:cart,grandTotal:Sum})
     }
     catch(error){
         console.log(error)
@@ -57,7 +65,8 @@ const addTocart=async(req,res)=>{
             productStock:req.query.stock,
             productprice:req.query.productPrice,
             totalCostPerProduct:req.query.total,
-            productImage:req.query.Img
+            productImage:req.query.Img,
+            productName:req.query.productname
         })
         newcart.save()
         res.send({success:true})
@@ -70,12 +79,17 @@ const addTocart=async(req,res)=>{
  const cartbutton=async(req,res)=>{
    
         try {
+          
+          const user=req.query.user
+      
           const productId = req.query.id;
           const action=req.query.action
           const index=req.query.index
+         
         
           const quantity = Number(req.query.quantity);
-          console.log('qty from query: '+quantity);
+          
+  
 
 
           // Retrieve the product from the database
@@ -105,12 +119,17 @@ const addTocart=async(req,res)=>{
                       new: true // Return the updated document
                   }
                 );
-                const  grandTotal= await cartCollection.aggregate([{$group:{_id:0,sum:{$sum:'$totalCostPerProduct'}}}])
-                const totalSum = grandTotal[0].sum;
-                
+              
+                const cart= await cartCollection.find({userId:user}).populate('productId')
+         
+                Sum=0
+                for(let i=0;i<cart.length;i++){
+                 Sum=Sum+cart[i].totalCostPerProduct
+                }
+               
                   
                 // Send success response with updated cart product
-                res.send({ success: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:total,grandTotal:totalSum});
+                res.send({ success: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:total,grandTotal:Sum});
     
               }else {
                 res.status(400).send({ success: false, exceed: true });
@@ -132,15 +151,18 @@ const addTocart=async(req,res)=>{
                     new: true // Return the updated document
                 }
             );
-            
-            const  grandTotal= await cartCollection.aggregate([{$group:{_id:0,sum:{$sum:'$totalCostPerProduct'}}}])
-            const totalSum = grandTotal[0].sum;
-            
+            const cart= await cartCollection.find({userId:user}).populate('productId')
+         
+            Sum=0
+            for(let i=0;i<cart.length;i++){
+             Sum=Sum+cart[i].totalCostPerProduct
+            }
+           
                
                    // Return the updated document
                 
                 // Send success response with updated cart product
-                res.send({ min: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:cartProduct.totalCostPerProduct,grandTotal:totalSum});
+                res.send({ min: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:cartProduct.totalCostPerProduct,grandTotal:Sum});
     
               }else {
                 res.status(400).send({ success: false, exp: true });
@@ -154,5 +176,95 @@ const addTocart=async(req,res)=>{
           res.status(500).send({ success: false, message: "Internal server error" });
         }
       };
+     const checkOut1=async(req,res)=>{
 
-module.exports={Cart, addTocart,cartbutton}
+      try{
+        const cart= await cartCollection.find({userId:req.query.user}).populate('productId')
+         
+        Sum=0
+        for(let i=0;i<cart.length;i++){
+         Sum=Sum+cart[i].totalCostPerProduct
+        }
+        req.session.grandTotal=Number(Sum)
+        const address= await addressCollection.find({userId:req.query.user})
+        
+        res.render('userpages/shippingAddress',{userLogged:req.session.logged,grandTotal:req.session.grandTotal,addressDet:address})
+      }
+      catch(error){
+        console.log(error)
+      }
+     }
+     const checkOut2=async(req,res)=>{
+      try{
+        const useraddress= await addressCollection.findOne({_id:req.query.id})
+        
+        const usercart=await cartCollection.find({userId:req.query.user})
+        const grandTotal=Number(req.session.grandTotal)
+        const shippingfee=(100)
+        
+        const gst=Math.round(grandTotal*0.18)
+        
+        const total=grandTotal+gst+shippingfee
+
+         res.render('userpages/checkout2',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,Gst:gst,Charge:shippingfee})
+      }
+      catch(error){
+        console.log(error)
+      }
+     }
+     const checkOut3=async(req,res)=>{
+      try{
+        
+        const useraddress= await addressCollection.findOne({_id:req.query.id})
+        
+      
+        const usercart=await cartCollection.find({userId:req.query.user})
+        const grandTotal=Number(req.session.grandTotal)
+        const shippingfee=(100)
+        
+        const gst=Math.round(grandTotal*0.18)
+        
+        const total=grandTotal+gst+shippingfee
+
+         res.render('userpages/checkout3',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,Gst:gst,Charge:shippingfee})
+      }
+      catch(error){
+        console.log(error)
+      }
+     }
+     const checkOut4=async(req,res)=>{
+      try{
+        const usercart=await cartCollection.find({userId:req.query.id})
+        console.log(usercart)
+        for (let i = 0; i < usercart.length; i++) {
+          await productCollection.updateOne(
+            { _id: usercart[i].productId },
+            { $inc: { productStock: -usercart[i].productQuantity } }
+          );
+        }
+        await cartCollection.deleteMany({userId:req.query.id})
+
+        const newOrder = new orderCollection({
+          userId:req.query.id,
+          paymentType:'COD',
+          address:req.query.addressId,
+          grandTotalCost:req.query.Grandtotal,
+          cartData:usercart,
+          Gst:req.query.gst,
+          Scharge:req.query.charge,
+          Total:req.query.total
+      })
+      newOrder.save()
+    
+      res.send({success:true})
+         
+        
+         
+      }
+      catch(error){
+        console.log(error)
+      }
+     }
+     
+
+module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4}

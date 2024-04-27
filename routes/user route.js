@@ -38,4 +38,9 @@ Router.put('/updatePro',addressController.updatePro)
 Router.get('/cart',cartController.Cart)
 Router.post("/addtocart",cartController.addTocart)
 Router.get('/cartbutton',cartController.cartbutton)
+//checkout
+Router.get('/checkout',cartController.checkOut1)
+Router.get('/checkout2',cartController.checkOut2)
+Router.get('/checkout3',cartController.checkOut3)
+Router.post('/checkout4',cartController.checkOut4)
 module.exports=Router

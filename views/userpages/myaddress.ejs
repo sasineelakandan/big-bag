@@ -752,6 +752,8 @@
                           <th>City</th>
                           <th>Title</th>
                           <th> Action</th>
+                         
+                          
                         </tr>
                       </thead>
                       <% for(let i=0;i<addressDet?.length;i++){ %>
@@ -770,7 +772,7 @@
                             <div class="btn-group" role="group">
                              <a href="/editadd/<%=addressDet[i]?._id%>"> <button type="button" id="edit<%i%>" class="btn btn-info">edit</button></a>
                               <a href="/deleteAdd/?id=<%=addressDet[i]?._id%>"><button type="button" id="delete<%i%>" class="btn btn-danger">delete</button></a>
-                              <button type="button"  class="btn btn-success">select</button>
+
                             </div>
                           </td>
                         </tr>

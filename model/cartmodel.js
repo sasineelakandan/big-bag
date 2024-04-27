@@ -12,6 +12,7 @@ const cartSchema = new mongoose.Schema(
     productImage: {type: String} ,
     productQuantity: { type: Number, required: true, default: 1, min: 1 },
     totalCostPerProduct: { type: Number },
+    productName:{type:String}
   },
   { strictPopulate: false }
 );

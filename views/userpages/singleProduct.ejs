@@ -1240,12 +1240,12 @@
                         const productPrice = '<%=productDet.productPrice %>';
                         const userId = '<%=userLogged._id%>'
                         const image = '<%=productDet.productImage[0]%>'
-                       
+                        const productName='<%=productDet.productName%>'
                         const quantityInput = document.getElementById('quantity').value
                         const Totalprice = Number(productPrice) * Number(quantityInput)
 
 
-                        let response = await fetch(`/addtocart?pid=${productId}&stock=${productStock}&quantity=${quantityInput}&productPrice=${productPrice}&user=${userId}&total=${Totalprice}&Img=${image}`, {
+                        let response = await fetch(`/addtocart?pid=${productId}&stock=${productStock}&quantity=${quantityInput}&productPrice=${productPrice}&user=${userId}&total=${Totalprice}&Img=${image}&productname=${productName}`, {
                             method: 'POST',
                         })
                         console.log("response"+response);
