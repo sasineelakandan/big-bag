@@ -16,6 +16,7 @@ const orderSchema = new mongoose.Schema(
       ref: "addresses",
     },
     cartData: { type: Array, required: true },
+    Items:{type: Number, required: true},
     grandTotalCost: { type: Number, required: true },
     paymentId: { type: String, default: null },
     Gst:{type: Number, required: true},

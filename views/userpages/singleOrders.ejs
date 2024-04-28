@@ -1,4 +1,3 @@
-
 <%- include('../userpart/header') %>
 
         <!-- ====================================
@@ -337,7 +336,7 @@
                         </a>
                       </li>
 
-                      <li class="active">
+                      <li class="">
                         <a class='sidenav-item-link' href='account-profile.html'>
                           <span class="nav-text">Profile</span>
                         </a>
@@ -349,7 +348,7 @@
                         </a>
                       </li>
 
-                      <li class="">
+                      <li class="active">
                         <a class='sidenav-item-link' href='account-single-order.html'>
                           <span class="nav-text">Single Order</span>
                         </a>
@@ -362,7 +361,7 @@
                       </li>
 
                       <li class="">
-                        <a class='/myaddress' href='account-address.html'>
+                        <a class='sidenav-item-link' href='account-address.html'>
                           <span class="nav-text">Address</span>
                         </a>
                       </li>
@@ -550,7 +549,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="page-title">
-                <h2>PROFILE</h2>
+                <h2>SINGLE ORDER</h2>
               </div>
             </div>
             <div class="col-md-6">
@@ -558,7 +557,7 @@
                 <li>
                   <a href='index.html'>Home</a>
                 </li>
-                <li class="active">PROFILE</li>
+                <li class="active">SINGLE ORDER</li>
               </ol>
             </div>
           </div>
@@ -571,69 +570,213 @@
           <div class="row">
             <div class="col-12">
               <div class="btn-group me-0" role="group" aria-label="...">
-                <a href="/account" class="btn btn-default active"><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
-                <a class='btn btn-default' href='/myaddress/?id=<%=userLogged._id%>'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>My Address</a>
-                <a class='btn btn-default' href='/addaddress'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>Add Address</a>
-                <a class='btn btn-default' href='/allorders?id=<%=userLogged._id%>'><i class="fa fa-list" aria-hidden="true"></i>All Orders</a>
-                <a class='btn btn-default' href='account-wishlist.html'><i class="fa fa-gift" aria-hidden="true"></i>Wishlist</a>
-                <a class='btn btn-default me-0' href='my-tickets.html'><i class="fa fa-tag" aria-hidden="true"></i>Tickets</a>
+                
+                <a class='btn btn-default' href='account-profile.html'><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
+                <a class='btn btn-default' href='account-address.html'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>My Address</a>
+                <a href="javascript:void(0)" class="btn btn-default active"><i class="fa fa-list" aria-hidden="true"></i>All Orders</a>
+                <!-- <a class='btn btn-default' href='account-wishlist.html'><i class="fa fa-gift" aria-hidden="true"></i>Wishlist</a>
+                <a class='btn btn-default me-0' href='my-tickets.html'><i class="fa fa-tag" aria-hidden="true"></i>Tickets</a> -->
               </div>
             </div>
           </div>
+
           <div class="row">
-            <div class="col-md-12">
-              <div class="innerWrapper profile">
-                <div class="row">
-                  <div class="col-md-4 col-lg-3 col-xl-2 col-12">
-                    <div class="thumbnail">
-                      <img src="assets/img/products/profile/profile-image.jpg" alt="profile-image">
-                      <div class="caption">
-                        <!-- <a href="javascript:void(0)" class="btn btn-primary btn-block" role="button">Change Avatar</a> -->
-                        <div  class="imagediv">
-                          <span class="visibleimg"></span>
-                          <span class="showonhover btn btn-primary w-100">Change Avatar</span>
-                          <input id="selectfile" type="file" name="" style="display: none;" />
+            <div class="col-12">
+              <div class="innerWrapper singleOrder">
+                <div class="orderBox d-flex align-items-center mb-4">
+                  <h2 class="orderBoxContent mb-0">Order ID:<%=orderDet?._id%></h2>
+                  <div class="ms-3">
+                    <a class='btn btn-sm btn-primary' href='account-all-orders.html'>Order Details</a>
+                  </div>
+                </div>
+
+                <div class="orderTracking">
+                  <div class="mb-3">
+                    <div class="trackingProgress">
+                      <div class="progress customProgress">
+                        <div class="progress-bar customProgressBar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="trackingProgressContent">
+                    <div class="row">
+                      <div class="col">
+                        <h4>ordered</h4>
+                        <h5>18/03/21</h5>
+                        <h6 class="mb-0">13:19</h6>
+                      </div>
+          
+                      <div class="col ps-0 pe-2 px-md-3">
+                        <h4>ready</h4>
+                        <h5>20/03/21</h5>
+                        <h6 class="mb-0">15:29</h6>
+                      </div>
+          
+                      <div class="col ps-0 pe-2 px-md-3">
+                        <div class="width-lg">
+                          <h4>shipped</h4>
+                          <h5>20/03/21</h5>
+                          <h6 class="mb-0">17:05</h6>
+                        </div>
+                      </div>
+          
+                      <div class="col px-0 px-md-3">
+                        <div class="float-lg-end ms-md-4 ms-lg-0 me-lg-4">
+                          <h4>dispatched</h4>
+                          <h5>25/03/21</h5>
+                          <h6 class="mb-0">14:00</h6>
+                        </div>
+                      </div>
+          
+                      <div class="col">
+                        <div class="float-end">
+                          <h4>delivered</h4>
+                          <h5>30/03/21</h5>
+                          <h6 class="mb-0">16:00</h6>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-8 col-lg-9 col-xl-10 col-12">
-                      <form id="changepass">
-                        <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">First Name</label>
-                          <div class="col-md-7">
-                            <input type="text" class="form-control" name="name" id="name" value="<%=userLogged.name%>" required>
-                          </div>
-                        </div>
-                      
+                </div>
+
+                <div class="row">
+                  <div class="col-12">
+                    <div class="panel panel-default mb-5">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">Order Details</h4>
+                      </div>
+                      <div class="panel-body">
+                        <div class="row">
+                          <div class="col-lg-4">
+                            <address class="mb-4">
+                              <a href="#">Email:<%=userDet?.email%></a> <br>
+                              <span>Phone:<%=userDet?.phone%></span>
+                            </address>
+
+                            
+                              <span>Additional Information: </span><br>
+                              <address>
                         
-                        <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">Phone Number</label>
-                          <div class="col-md-9">
-                            <input type="text" name="phone" id="phone" class="form-control" value="<%=userLogged.phone%>">
+                                <%=userAdd?.firstName%> <br>
+                                <%=userAdd?.addressLine1%> <br>
+                                <%=userAdd?.phone%><br>
+                                <%=userAdd?.City%><br>
+                              </address>
+                            
                           </div>
+
+                          
+
+                  <div class="col-12 mb-5">
+                    <div class="cartListInner text-nowrap">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th>Product Name</th>
+                              <th>Product Price</th>
+                              <th>Quantity</th>
+                              <th>Sub Total</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                        <% for(let i=0;i<orderDet?.cartData?.length;i++){%>
+                          <tbody>
+                            <tr class="alert alert-dismissible fade show p-0 mb-0" role="alert">
+                              <td class="">
+     
+                                <span class="cartImage"><img style="height: 75px; width: 75px;" src="assets/uploads/<%=orderDet?.cartData[i]?.productImage%>" alt="image"></span>
+                              </td>
+                              <td class=""><%=orderDet?.cartData[i]?.productName%></td>
+                              <td class="">₹ <%=orderDet?.cartData[i]?.productprice%></td>
+                              <td class=""><%=orderDet?.cartData[i]?.productQuantity%></td>
+                              <td class="">₹ <%=orderDet?.cartData[i]?.totalCostPerProduct%></td>
+                           <td class="">  <a href="/cancel?id=<%=orderDet?.cartData[i]._id%>&order=<%=orderDet._id%>"> <button id="cancel" type="button"class="btn btn-danger">cancel</button></a></td>
+                            </tr>
+    
+                           <%}%>
+    
+                          </tbody>
+                        </table>
+                      </div>
+    
+                      <div class="row totalAmountArea">
+                        <div class="col-sm-5 ms-sm-auto">
+                          <ul class="list-unstyled">
+                            <li>SubTotal <span>₹ <%=orderDet?.grandTotalCost%></span></li>
+                            <li>Gst <span>₹ <%=orderDet?.Gst%></span></li>
+                            <li>charge <span>₹ <%=orderDet?.Scharge%></span></li>
+                            <li>Grand Total <span class="grandTotal">₹ <%=orderDet?.Total%></span></li>
+                          </ul>
                         </div>
-                        <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">old password</label>
-                          <div class="col-md-7">
-                            <input type="password" id="password" class="form-control" value="<%=password%>" name="password" >
-                          </div>
-                        </div>
-                      
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-12">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">Billing Address</h4>
+                      </div>
+                      <div class="panel-body">
+                        <address>
                         
-                        <div class="form-group row">
-                          <label for="" class="col-md-3 control-label">Change password</label>
-                          <div class="col-md-9">
-                            <input type="password" name="confirm_password" id="confirm_password" class="form-control" value="<%=password%>">
-                          </div>
-                        </div>
-                       
-                        <div class="form-group row">
-                          <div class=" col-md-12 ">
-                            <button type="submit" class="btn btn-primary float-end">SAVE INFO</button>
-                          </div>
-                        </div>
-                      </form>
+                            <%=userAdd?.firstName%> <br>
+                            <%=userAdd?.addressLine1%> <br>
+                            <%=userAdd?.phone%><br>
+                            <%=userAdd?.City%><br>
+                          </address>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">Shipping Address</h4>
+                      </div>
+                      <div class="panel-body">
+                        <address>
+                        
+                            <%=userAdd?.firstName%> <br>
+                            <%=userAdd?.addressLine1%> <br>
+                            <%=userAdd?.phone%><br>
+                            <%=userAdd?.City%><br>
+                          </address>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">Payment Method</h4>
+                      </div>
+                      <div class="panel-body">
+                        <address>
+                          <span>Cash On Delivery</span>
+                        </address>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">Shipping Method</h4>
+                      </div>
+                      <div class="panel-body">
+                        <address>
+                          <span>Door Delivery</span>
+                        </address>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="btn-group" role="group" aria-label="...">
+                      <!-- <button type="button" class="btn btn-default">Print</button>
+                      <button type="button" class="btn btn-default">Save to pdf</button> -->
+                      <button type="button" id="cancel" class="btn btn-danger">cancel order</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -641,91 +784,28 @@
           </div>
         </div>
       </section>
+        <script>
+             document.getElementById('cancel').addEventListener('click', async (e) => {
+                        e.preventDefault()
+                        orderId='<%=orderDet?._id%>'
+                        let response = await fetch(`/cancelall?order=${orderId}`, {
+                            method: 'POST',
+                        })
+                        
+                        let result = await response.json()
+                        
+                        if (result.success) {
+                            await Swal.fire({
+                                icon: "success",
+                                title: " order cancel",
+                            });
+                            window.location.reload()
+                        }
 
-       <script>
-         $("#changepass").validate({
-    rules: {
-      name: {
-        required: true,
-        minlength: 2
-      },
-      phone: {
-        required: true,
-        minlength: 10,
-        maxlength: 15,
-        number: true
-      },
-      password: {
-        required: true,
-        minlength: 6,
-        maxlength: 16
-      },
-      confirm_password: {
-        required: true,
-        minlength: 6,
-        maxlength: 16,
-        
-      }
-    },
-    messages: {
-      name: {
-        required: "Please enter your name",
-        minlength: "Your name must be at least 2 characters long"
-      },
-      phone: {
-        required: "Please enter your phone number",
-        minlength: "Your phone number must be at least 10 digits long",
-        maxlength: "Your phone number cannot be more than 15 digits long",
-        number: "Your phone number must only contain numbers"
-      },
-      password: {
-        required: "Please enter a password",
-        minlength: "Your password must be at least 8 characters long",
-        maxlength: "Your password cannot be more than 16 characters long"
-      },
-      confirm_password: {
-        required: "Please confirm your password",
-        minlength: "Your password must be at least 8 characters long",
-        maxlength: "Your password cannot be more than 16 characters long",
-        equalTo: "Your passwords do not match"
-      }
-    },
-
-
-       submitHandler: async (form, event) => {
-
-            event.preventDefault()
-            let formData = {
-              name:form.name.value,
-              phone:form.phone.value,
-              password:form.password.value,
-              confirm_password:form.confirm_password.value,
-              userId:'<%=userLogged._id%>'
-                    }
-                    //fetch only to check both email and number not to save
-                    let response = await fetch('/updatePro', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
+                        
                     })
-            
-           let result = await response.json()
-         
-          if (result.success) {
-          await Swal.fire({
-          icon: "success",
-          title: " profile edit successful"
-           }  )
-          window.location.reload()
-           }
-      
-         } 
-        })
-
-          
-       </script>
-
-
+                    
+        </script>
       			<!-- FOOTER -->
 			<div class="footer clearfix">
 				<div class="container">
@@ -921,88 +1001,8 @@
 <script src="assets/options/optionswitcher.js"></script>
 </body>
 
-<!-- Mirrored from bigbag-html.netlify.app/account-profile by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 09:40:49 GMT -->
+<!-- Mirrored from bigbag-html.netlify.app/account-single-order by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 09:40:49 GMT -->
 </html>
-
-
-      <!-- FOOTER SM -->
-<footer class="footer-menu clearfix d-md-none">
-  <div class="container">
-    <div class="row row-cols-5">
-      <div class="col">
-        <a class='footer-nav  ' href='index.html'>
-          <div class="footer-nav-icon">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8 2.63417L2.16667 7.30083V13.8333H6.33333V10.5H9.66667V13.8333H13.8333V7.70167C13.8334 7.57669 13.8053 7.45331 13.7512 7.34065C13.6971 7.22799 13.6184 7.12894 13.5208 7.05083L8 2.63417ZM8 0.5L14.5617 5.75C14.8543 5.98407 15.0905 6.28091 15.2529 6.61859C15.4154 6.95626 15.4998 7.32613 15.5 7.70083V13.8333C15.5 14.2754 15.3244 14.6993 15.0118 15.0118C14.6993 15.3244 14.2754 15.5 13.8333 15.5H2.16667C1.72464 15.5 1.30072 15.3244 0.988155 15.0118C0.675595 14.6993 0.5 14.2754 0.5 13.8333V7.30083C0.500031 7.05103 0.556216 6.80442 0.664399 6.57926C0.772582 6.35409 0.929996 6.15613 1.125 6L8 0.5Z" fill="#252525"/>
-            </svg>
-          </div>
-
-          <div class="footer-nav-text">
-            Home
-          </div>
-        </a>
-      </div>
-
-      <div class="col">
-        <a class='footer-nav  ' href='about-us.html'>
-          <div class="footer-nav-icon">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 1.66669L1.66666 5.83335L10 10L18.3333 5.83335L10 1.66669Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.66666 14.1667L10 18.3334L18.3333 14.1667" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.66666 10L10 14.1667L18.3333 10" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-
-          <div class="footer-nav-text">
-            Pages
-          </div>
-        </a>
-      </div>
-
-      <div class="col position-relative">
-        <a class='footer-nav footer-product shadow bg-primary' href='product-grid-left-sidebar.html'>
-          <div class="footer-nav-icon">
-            <i class="mdi mdi-shopping"></i>
-          </div>
-
-          <div class="footer-nav-text text-white">
-            Shop
-          </div>
-        </a>
-      </div>
-
-      <div class="col">
-        <a class='footer-nav  ' href='blog-right-sidebar.html'>
-          <div class="footer-nav-icon">
-            <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1.66667 1.5H6.66667C7.55072 1.5 8.39857 1.85119 9.02369 2.47631C9.64881 3.10143 10 3.94928 10 4.83333V16.5C10 15.837 9.73661 15.2011 9.26777 14.7322C8.79893 14.2634 8.16304 14 7.5 14H1.66667V1.5Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M18.3333 1.5H13.3333C12.4493 1.5 11.6014 1.85119 10.9763 2.47631C10.3512 3.10143 10 3.94928 10 4.83333V16.5C10 15.837 10.2634 15.2011 10.7322 14.7322C11.2011 14.2634 11.837 14 12.5 14H18.3333V1.5Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-
-          <div class="footer-nav-text">
-            Blog
-          </div>
-        </a>
-      </div>
-
-      <div class="col">
-        <a class='footer-nav  ' href='account-dashboard.html'>
-          <div class="footer-nav-icon">
-            <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14.6667 16.5V14.8333C14.6667 13.9493 14.3155 13.1014 13.6903 12.4763C13.0652 11.8512 12.2174 11.5 11.3333 11.5H4.66666C3.78261 11.5 2.93476 11.8512 2.30964 12.4763C1.68452 13.1014 1.33333 13.9493 1.33333 14.8333V16.5" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M7.99999 8.16667C9.84094 8.16667 11.3333 6.67428 11.3333 4.83333C11.3333 2.99238 9.84094 1.5 7.99999 1.5C6.15904 1.5 4.66666 2.99238 4.66666 4.83333C4.66666 6.67428 6.15904 8.16667 7.99999 8.16667Z" stroke="#252525" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-
-          <div class="footer-nav-text">
-            Account
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
-</footer>
 
 
       <!-- FOOTER SM -->

@@ -5,6 +5,7 @@ const cartController=require('../controller/cartController')
 const Router=express.Router()
 const {isuser}=require('../middlewere/userver')
 const blockedUser=require('../middlewere/userblock')
+const orderConroller=require('../controller/orderController')
 
 Router.get('/login',userConroller.loginget)
 Router.get('/',blockedUser,userConroller.home)
@@ -43,4 +44,10 @@ Router.get('/checkout',cartController.checkOut1)
 Router.get('/checkout2',cartController.checkOut2)
 Router.get('/checkout3',cartController.checkOut3)
 Router.post('/checkout4',cartController.checkOut4)
+Router.get('/checkout5',cartController.checkOut5)
+//orders
+Router.get('/allorders',orderConroller.allOrder)
+Router.get('/singleorders',orderConroller.singleOrder)
+Router.get('/cancel',orderConroller.Cancel)
+Router.post('/cancelall',orderConroller.Cancelall)
 module.exports=Router

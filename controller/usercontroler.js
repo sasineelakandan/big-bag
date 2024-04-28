@@ -4,6 +4,7 @@ const categorycollection = require('../model/categorymodel')
 const productcollection = require("../model/productmodel")
 const sendotp = require("../services/sendotp")
 const bcrypt = require('bcryptjs')
+const cartCollection=require('../model/cartmodel')
 const { productList } = require('./productController')
 
 
@@ -116,9 +117,15 @@ const register = async (req, res) => {
 const singleProduct = async (req, res) => {
     try {
         
+        const productDetails = await productcollection.findOne({ _id: req.query.id })
+        const categoryDetails = await categorycollection.findOne({ _id: req.query.id })
+      
+
+           
+           
+            
+           
         
-            const productDetails = await productcollection.findOne({ _id: req.query.id })
-            const categoryDetails = await categorycollection.findOne({ _id: req.query.id })
             res.render('userpages/singleProduct', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
         }
     

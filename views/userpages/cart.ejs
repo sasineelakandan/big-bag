@@ -594,13 +594,13 @@
                             <span class="cartImage"><img style="height: 75px;width: 75px;" src="assets/uploads/<%=cartDet[i].productImage%>" alt="image"></span>
                           </td>
                           <td class=""><%=cartDet[i].productId.productName%></td>
-                          <td class=""><%=cartDet[i].productId.productPrice%></td>
+                          <td class="">₹ <%=cartDet[i].productId.productPrice%></td>
                           <td class="count-input">
-						   <button class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','min','<%=userLogged._id%>')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></button>
-							<input id="quantity<%=cartDet[i].productId._id %>" type="number" value="<%=cartDet[i].productQuantity%>">
-							<button class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','plus','<%=userLogged._id%>')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></button>
+						              <button class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','min','<%=userLogged._id%>')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></button>
+							              <input id="quantity<%=cartDet[i].productId._id %>" type="number" value="<%=cartDet[i].productQuantity%>">
+							             <button class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','plus','<%=userLogged._id%>')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></button>
                           </td>
-                          <td id="total<%=cartDet[i].productId._id %>"><%=cartDet[i].totalCostPerProduct%></td>
+                          <td id="total<%=cartDet[i].productId._id %>">₹ <%=cartDet[i].totalCostPerProduct%></td>
                         </tr>
                         <% } %>
                          
@@ -619,9 +619,8 @@
                   <div class="row totalAmountArea">
                     <div class="col-sm-5 ms-sm-auto">
                       <ul class="list-unstyled">
-                        <li>Sub Total <span></span></li>
-                        <li>UK Vat <span>$ 18.00</span></li>
-                        <li>Grand Total <span id="grandTotal"><%=grandTotal%></span></li>
+                        
+                        <li>Grand Total <span id="grandTotal">₹ <%=grandTotal%></span></li>
                       </ul>
                     </div>
                   </div>

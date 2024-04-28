@@ -41,7 +41,7 @@ const addTocart=async(req,res)=>{
             const productStock=parseInt(req.query.stock)
            const totaqty=presentQty + qty
              
-           if(totaqty<productStock){
+           if(totaqty<=productStock){
             
               await cartCollection.updateOne(
               { productId: req.query.pid },
@@ -58,6 +58,9 @@ const addTocart=async(req,res)=>{
           }
         }
     if(!productExist){
+      const qty2=await productCollection.findOne({ _id: req.query.pid})
+           const qtyy=Number(req.query.quantity)
+      if(qtyy<=qty2.productStock){
         const newcart = new cartCollection({
             userId:req.query.user,
             productId:req.query.pid ,
@@ -70,6 +73,9 @@ const addTocart=async(req,res)=>{
         })
         newcart.save()
         res.send({success:true})
+      }else{
+        res.send({success:false})
+      }
     }
 }
     catch(error){
@@ -235,8 +241,15 @@ const addTocart=async(req,res)=>{
      const checkOut4=async(req,res)=>{
       try{
         const usercart=await cartCollection.find({userId:req.query.id})
-        console.log(usercart)
-        for (let i = 0; i < usercart.length; i++) {
+        var count=0
+        for(let i=0;i<usercart?.length;i++){
+         var cartData=usercart[i]?._id
+            count++
+        }
+       
+       console.log(count)
+    
+        for (let i = 0; i < usercart?.length; i++) {
           await productCollection.updateOne(
             { _id: usercart[i].productId },
             { $inc: { productStock: -usercart[i].productQuantity } }
@@ -250,6 +263,7 @@ const addTocart=async(req,res)=>{
           address:req.query.addressId,
           grandTotalCost:req.query.Grandtotal,
           cartData:usercart,
+          Items:count,
           Gst:req.query.gst,
           Scharge:req.query.charge,
           Total:req.query.total
@@ -265,6 +279,20 @@ const addTocart=async(req,res)=>{
         console.log(error)
       }
      }
-     
+     const checkOut5=async(req,res)=>{
+      try{
+        
+         const orderDet= await orderCollection.findOne({userId:req.session.logged._id})
+         
+         const address=orderDet.address
+         
+         const add=await addressCollection.findOne({_id:address})
+         
+         res.render('userpages/checkout4',{userLogged:req.session.logged,Order:orderDet,addressDet:add})
+      }
+      catch(error){
+        console.log(error)
+      }
+     }  
 
-module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4}
+module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4,checkOut5}
