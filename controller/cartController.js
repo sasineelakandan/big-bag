@@ -67,6 +67,7 @@ const addTocart=async(req,res)=>{
             productQuantity:req.query.quantity, 
             productStock:req.query.stock,
             productprice:req.query.productPrice,
+            Status:'pending',
             totalCostPerProduct:req.query.total,
             productImage:req.query.Img,
             productName:req.query.productname
@@ -210,7 +211,7 @@ const addTocart=async(req,res)=>{
         
         const gst=Math.round(grandTotal*0.18)
         
-        const total=grandTotal+gst+shippingfee
+        const total=grandTotal+gst
 
          res.render('userpages/checkout2',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,Gst:gst,Charge:shippingfee})
       }

@@ -586,7 +586,13 @@
                 <div class="orderBox d-flex align-items-center mb-4">
                   <h2 class="orderBoxContent mb-0">Order ID:<%=orderDet?._id%></h2>
                   <div class="ms-3">
-                    <a class='btn btn-sm btn-primary' href='account-all-orders.html'>Order Details</a>
+                    <% if ('Pending'==orderDet?.orderStatus) { %>
+                      <a class='btn btn-sm btn-primary' href=''><%=orderDet?.orderStatus%></a>
+                      <% } else if('Success'==orderDet?.orderStatus){ %>
+                      <a class='btn btn-sm btn-success' href=''><%=orderDet?.orderStatus%></a>
+                      <% }else { %>
+                       <a class='btn btn-sm btn-danger' href=''><%=orderDet?.orderStatus%></a>
+                       <% } %>
                   </div>
                 </div>
 
@@ -679,6 +685,7 @@
                               <th>Product Price</th>
                               <th>Quantity</th>
                               <th>Sub Total</th>
+                              <th>Status</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -693,7 +700,12 @@
                               <td class="">₹ <%=orderDet?.cartData[i]?.productprice%></td>
                               <td class=""><%=orderDet?.cartData[i]?.productQuantity%></td>
                               <td class="">₹ <%=orderDet?.cartData[i]?.totalCostPerProduct%></td>
-                           <td class="">  <a href="/cancel?id=<%=orderDet?.cartData[i]._id%>&order=<%=orderDet._id%>"> <button id="cancel" type="button"class="btn btn-danger">cancel</button></a></td>
+                              <% if ('cancel'==orderDet?.cartData[i]?.Status) { %> 
+                              <td class="" style="color: red;" > <%=orderDet?.cartData[i]?.Status%></td>
+                              <% }else { %>
+                                <td class=""  > <%=orderDet?.cartData[i]?.Status%></td>
+                                <% } %>
+                           <td class="">  <a href="/cancel?id=<%=orderDet?.cartData[i]._id%>&order=<%=orderDet._id%>&user=<%=userDet._id%>&add=<%=userAdd._id%>"> <button id="cancelone" type="button"class="btn btn-danger">cancel</button></a></td>
                             </tr>
     
                            <%}%>
@@ -701,20 +713,22 @@
                           </tbody>
                         </table>
                       </div>
-    
+                     <script>
+                     
+                     </script>
                       <div class="row totalAmountArea">
                         <div class="col-sm-5 ms-sm-auto">
                           <ul class="list-unstyled">
                             <li>SubTotal <span>₹ <%=orderDet?.grandTotalCost%></span></li>
                             <li>Gst <span>₹ <%=orderDet?.Gst%></span></li>
-                            <li>charge <span>₹ <%=orderDet?.Scharge%></span></li>
+                            
                             <li>Grand Total <span class="grandTotal">₹ <%=orderDet?.Total%></span></li>
                           </ul>
                         </div>
                       </div>
                     </div>
                   </div>
-
+                    
                   <div class="col-md-6 col-12">
                     <div class="panel panel-default">
                       <div class="panel-heading">

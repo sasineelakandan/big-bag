@@ -2,7 +2,7 @@ const express=require('express')
 const adminConroller=require('../controller/admincontroller')
 const productConroller=require('../controller/productController')
 const categoryConroller=require('../controller/categoryConroller')
-
+const orderConroller=require('../controller/orderController')
 const upload = require('../services/multer')
 const {isadmin}=require('../middlewere/adminver')
 
@@ -42,4 +42,7 @@ Router.get('/productedit',productConroller.productEdit)
 Router.post('/productupdate/:id',upload.any(),productConroller.productUpdate)
 Router.post("/delete-image", productConroller.deleteImage);
 Router.get('/productdelete',productConroller.deleteProduct)
+
+//Order Controller
+Router.get('/order',orderConroller.Order)
 module.exports=Router

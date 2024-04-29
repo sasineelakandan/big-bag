@@ -20,7 +20,7 @@ const orderSchema = new mongoose.Schema(
     grandTotalCost: { type: Number, required: true },
     paymentId: { type: String, default: null },
     Gst:{type: Number, required: true},
-    Scharge:{type: Number, required: true},
+    
     Total:{type: Number, required: true},
     couponApplied: {
       type: mongoose.Types.ObjectId,
