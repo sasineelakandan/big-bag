@@ -48,7 +48,7 @@ const Cancel = async (req, res) => {
             let price=a[i].totalCostPerProduct
             let gst=price*0.18
             let tt=price+gst
-            console.log(tt)
+            
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
             const update2 = await orderCollection.updateOne({ _id:  req.query.order }, { $inc: { Total:-tt,Gst:-gst,grandTotalCost:-price,} })
       }  
@@ -105,7 +105,98 @@ const Cancelall = async (req, res) => {
 const adminOrder=async(req,res)=>{
     try{
       const orderDetails=await orderCollection.find()
-      res.render('adminpages')
+    
+        
+      
+      
+      res.render('adminpages/ordermanagement',{orderDet:orderDetails})
+    }
+    catch(error){
+        console.log(error)
     }
 }
-module.exports = { allOrder, singleOrder, Cancel, Cancelall }
+const orderStatus=async(req,res)=>{
+    
+    const orderDetails=await orderCollection.findOne({_id:req.query.orderId})
+    
+
+        const userDetails=await userCollection.findOne({_id:req.query.user})
+        const useradd=await addressCollection.findOne({_id:req.query.add})
+    res.render('adminpages/singleOrder',{orderDet:orderDetails,userDet:userDetails,userAdd:useradd})
+}
+const updateStatus=async(req,res)=>{
+ try{
+    console.log(req.query.id)
+    const order=await orderCollection.findOne({_id:req.query.id})
+    const a=order.cartData
+   let b=req.query.value
+
+  let c= b.split('')
+   c.pop()
+    
+   let d=c.join('')
+  
+   
+for(let i=0;i<a.length;i++){
+    if(order.orderStatus=='cancel'){
+            a[i].Status='cancel'
+         }
+    if(a[i]._id==req.query.cardid){
+    
+        if(d=='Shipped'){
+            a[i].Status='shipped'
+            
+           
+         }
+         if(d=='cancel'){
+            a[i].Status='cancel'
+            
+           
+         } 
+         if(d=='Pending'){
+            a[i].Status='Pending'
+            
+           
+         } 
+         if(d=='Delivered'){
+            a[i].Status='Delivered'
+            
+           
+         } 
+         if(d=='Return'){
+            a[i].Status='Return'
+            
+           
+         }    
+        }
+    }
+        
+    await orderCollection.updateOne({ _id: req.query.id }, { $set: { cartData:a } })
+    res.send({success:true})
+}       
+catch(error){
+    console.log(error)
+}
+}
+const updateStatus2=async(req,res)=>{
+    try{
+      
+       await orderCollection.updateOne({ _id: req.query.id }, { $set: { orderStatus:req.query.value} })
+       const order=await orderCollection.findOne({_id:req.query.id})
+        const a=order.cartData
+       for(let i=0;i<a.length;i++){
+        if(order.orderStatus=='cancel'){
+                a[i].Status='cancel'
+                
+             }
+            }
+        
+            await orderCollection.updateOne({ _id: req.query.id }, { $set: {cartData:a} })
+      
+       res.send({success:true})
+   }       
+   catch(error){
+       console.log(error)
+   }
+   }
+    module.exports = { allOrder, singleOrder, Cancel, Cancelall ,adminOrder,orderStatus,updateStatus,updateStatus2}

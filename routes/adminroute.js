@@ -44,5 +44,8 @@ Router.post("/delete-image", productConroller.deleteImage);
 Router.get('/productdelete',productConroller.deleteProduct)
 
 //Order Controller
-Router.get('/order',orderConroller.Order)
+Router.get('/order',orderConroller.adminOrder)
+Router.get('/orderStatus',orderConroller.orderStatus)
+Router.put('/updateStatus',orderConroller.updateStatus)
+Router.put('/updateStatus2',orderConroller.updateStatus2)
 module.exports=Router

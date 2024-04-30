@@ -607,7 +607,7 @@
                           <td><%=orderDet[i].Total%></td>
                           <% if ('cancel'==orderDet[i]?.orderStatus) { %> 
                           <td><span  class="badge bg-danger"><%=orderDet[i].orderStatus%></span></td>
-                          <% } else if('Success'==orderDet[i]?.orderStatus){ %>
+                          <% } else if('Delivered'==orderDet[i]?.orderStatus){ %>
                             <td><span  class="badge bg-success"><%=orderDet[i].orderStatus%></span></td>
                             <% }else { %> 
                               <td><span  class="badge bg-primary"><%=orderDet[i].orderStatus%></span></td>
