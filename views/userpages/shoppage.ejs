@@ -1194,7 +1194,21 @@
 
                   </div>
                   <div class="productCaption clearfix">
-                  
+                    <% if(productDet[i].productStock==2){%>
+                      <h5 style="color: red;" > Only 2 stocks left</h5>
+                   <% } else if(productDet[i].productStock==1){ %>
+                     <h5 style="color: red;" > Only 1 stocks left</h5>
+                    <% } else if(productDet[i].productStock==4){ %>
+                      <h4 style="color: red;" >limited Stocks availaple</h4>
+                      <% } else if(productDet[i].productStock==3){ %>
+                        <h4 style="color: red;" >limited Stocks availaple</h4>
+                      <% } else if(productDet[i].productStock==0){ %>
+                        <h3 style="color: red;" > Out of Stocks</h3>
+
+                        <% }%>
+                        <i class="fa-solid fa-heart fa-beat"></i>
+                         
+
                       <h5>
                         <%=productDet[i].productName%>
                       </h5>
@@ -1602,7 +1616,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-body">
-              <button type="button" class="close top-0 lh-1 px-3" data-bs-dismiss="modal" aria-hidden="true">×</button>
+              <button type="button" class="close top-0 lh-1 px-3" data-bs-dismiss="modal" aria-hidden="true"></button>
               
               <div class="media flex-wrap">
                 <div class="media-left px-0">
@@ -1645,3 +1659,34 @@
 
       			<!-- FOOTER -->
             <%- include('../userpart/footer') %>
+      <!-- <script>
+        async function fn(productId,index,userId){
+            
+          let response = await fetch(`whishlis?id=${productId}&action=${userId}&index=${index}`, {
+                            method: 'GET',
+                        })
+                        let result = await response.json()
+                        if (result.list) {
+                            await Swal.fire({
+                                icon: "success",
+                                title: "Product Listed",
+                            });
+                        } else {
+                            await Swal.fire({
+                                icon: "success",
+                                title: "Product Unlisted",
+                                confirmButtonText: "OK",
+                            });
+                        }
+                    } -->
+                    
+                
+            
+                   
+                 
+        
+      </script>
+   
+
+      			<!-- FOOTER -->
+           
