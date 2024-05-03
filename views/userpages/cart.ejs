@@ -583,6 +583,7 @@
                           <th>Price</th>
                           <th>Quantity</th>
                           <th>Sub Total</th>
+                          <th>Action</th>
                         </tr>
                  
                       </thead>
@@ -601,6 +602,7 @@
 							             <button class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','plus','<%=userLogged._id%>')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></button>
                           </td>
                           <td id="total<%=cartDet[i].productId._id %>">₹ <%=cartDet[i].totalCostPerProduct%></td>
+                          <td><button type="button" id="delete<%i%>"  onclick="fn2('<%=cartDet[i]._id %>')" class="btn btn-danger">remove</button></td>
                         </tr>
                         <% } %>
                          
@@ -686,7 +688,22 @@
           </div>
         </div>
       </section>
-
+       <script>
+        async function fn2(cardId){
+          let response= await fetch(`/removecart?id=${cardId}`, {
+                                            method: 'GET',
+                                        })  
+                     let result= await response.json() 
+                     
+                     if(result.success){
+                      await Swal.fire({
+                                icon: "success",
+                                title: "Remove Cart Success",
+                            });
+                            window.location.reload()
+                          }
+      }
+       </script>
        <!-- LIGHT SECTION -->
       <section class="lightSection clearfix">
         <div class="container">

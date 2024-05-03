@@ -588,8 +588,10 @@
                   <div class="ms-3">
                     <% if ('Pending'==orderDet?.orderStatus) { %>
                       <a class='btn btn-sm btn-primary' href=''><%=orderDet?.orderStatus%></a>
-                      <% } else if('Success'==orderDet?.orderStatus){ %>
+                      <% } else if('Delivered'==orderDet?.orderStatus){ %>
                       <a class='btn btn-sm btn-success' href=''><%=orderDet?.orderStatus%></a>
+                      <% } else if('Return'==orderDet?.orderStatus){ %>
+                        <a class='btn btn-sm btn-success' href=''><%=orderDet?.orderStatus%></a>
                       <% }else { %>
                        <a class='btn btn-sm btn-danger' href=''><%=orderDet?.orderStatus%></a>
                        <% } %>
@@ -700,7 +702,12 @@
                               <td class="">₹ <%=orderDet?.cartData[i]?.productprice%></td>
                               <td class=""><%=orderDet?.cartData[i]?.productQuantity%></td>
                               <td class="">₹ <%=orderDet?.cartData[i]?.totalCostPerProduct%></td>
-                              <% if ('cancel'==orderDet?.cartData[i]?.Status) { %> 
+                              <% if ('Delivered'==orderDet?.cartData[i]?.Status) { %>
+                                <td class="">  <a href="/return?id=<%=orderDet?.cartData[i]._id%>&order=<%=orderDet._id%>&user=<%=userDet._id%>&add=<%=userAdd._id%>"> <button id="cancelone" type="button"class="btn btn-success">return</button></a></td>
+                                <%}else if ('Return'==orderDet?.cartData[i]?.Status) { %> 
+                                  <td class="" style="color: green;" > <%=orderDet?.cartData[i]?.Status%></td>
+                                
+                                <%}else if ('cancel'==orderDet?.cartData[i]?.Status) { %> 
                               <td class="" style="color: red;" > <%=orderDet?.cartData[i]?.Status%></td>
                               <% }else { %>
                                 <td class="">  <a href="/cancel?id=<%=orderDet?.cartData[i]._id%>&order=<%=orderDet._id%>&user=<%=userDet._id%>&add=<%=userAdd._id%>"> <button id="cancelone" type="button"class="btn btn-danger">cancel</button></a></td>

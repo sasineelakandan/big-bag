@@ -30,8 +30,7 @@ const Cancel = async (req, res) => {
 
         const orderId = req.query.order;
         const cartProductId = req.query.id;
-        console.log(orderId)
-        console.log(cartProductId)
+     
         
         const order = await orderCollection.findOne(
             { _id: orderId }
@@ -199,4 +198,71 @@ const updateStatus2=async(req,res)=>{
        console.log(error)
    }
    }
-    module.exports = { allOrder, singleOrder, Cancel, Cancelall ,adminOrder,orderStatus,updateStatus,updateStatus2}
+
+   const RetunOrder=async(req,res)=>{
+    
+  
+
+    try {
+
+
+        const orderId = req.query.order;
+        const cartProductId = req.query.id;
+     
+        
+        const order = await orderCollection.findOne(
+            { _id: orderId }
+             
+          );
+
+  const a=order.cartData
+  for(let i=0;i<a.length;i++){
+    if(a[i]._id==cartProductId){
+      if(a[i].Status=='Delivered'){
+        a[i].Status='Return'
+        let b = a[i].productId
+            let qty = a[i].productQuantity
+            let price=a[i].totalCostPerProduct
+            let gst=price*0.18
+            let tt=price+gst
+            
+            const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
+            const update2 = await orderCollection.updateOne({ _id:  req.query.order }, { $inc: { Total:-tt,Gst:-gst,grandTotalCost:-price,} })
+      }  
+            
+        }
+    
+       
+    }  await orderCollection.updateOne({ _id: req.query.order }, { $set: { cartData:a } })
+    let flag=1
+    for(i=0;i<a.length;i++){
+        if(a[i].Status!='Return'){
+          flag=0
+        }
+    }if(flag==1){
+        await orderCollection.updateOne({ _id:orderId }, { $set: { orderStatus: 'Return' } })  
+    }
+   
+  
+
+
+
+        
+
+
+
+        const orderDetails=await orderCollection.findOne({_id:req.query.order})
+
+        const userDetails=await userCollection.findOne({_id:req.query.user})
+        const useradd=await addressCollection.findOne({_id:req.query.add})
+        res.render('userpages/singleOrders',{userLogged:req.session.logged,orderDet:orderDetails,userDet:userDetails,userAdd:useradd})
+
+  }
+    
+    catch (error) {
+        console.log(error)
+    }
+
+} 
+   
+    module.exports = { allOrder, singleOrder, Cancel, Cancelall ,adminOrder,orderStatus,updateStatus,updateStatus2,RetunOrder}

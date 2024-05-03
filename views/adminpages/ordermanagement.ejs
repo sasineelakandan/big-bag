@@ -100,23 +100,25 @@
           <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav ms-auto">
               <li class="nav-item dropdown megaDropMenu ">
-                <a href="/admin" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
-                  data-delay="300" data-close-others="true" aria-expanded="false">Home</b></a>
+                <a href="/admin" class="dropdown-toggle nav-link">Home</a>
   
               </li>
               <li class="nav-item dropdown megaDropMenu ">
-                <a href="/usermanagement" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
-                  data-delay="300" data-close-others="true" aria-expanded="false">Users</b></a>
+                <a href="/usermanagement" class="dropdown-toggle nav-link" 
+                 >Users</b></a>
   
               </li>
                <li class="nav-item dropdown megaDropMenu ">
-                <a href="/category" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
-                  data-delay="300" data-close-others="true" aria-expanded="false">Category</b></a>
+                <a href="/category" class="dropdown-toggle nav-link" 
+                  >Category</b></a>
   
               </li>
               <li class="nav-item dropdown megaDropMenu ">
-                <a href="/product" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
-                  data-delay="300" data-close-others="true" aria-expanded="false">Products</b></a>
+                <a href="/product" class="dropdown-toggle nav-link" >Products</b></a>
+  
+              </li>
+              <li class="nav-item dropdown megaDropMenu ">
+                <a href="/order" class="dropdown-toggle nav-link" >Orders</b></a>
   
               </li>
               <li class="nav-item ">
@@ -127,7 +129,7 @@
               </li>
   
             </ul>
-          </div><!-- /.navbar-collapse -->
+          </div>
   
         </div>
       </nav>
@@ -236,6 +238,8 @@
                         <td><span  class="badge bg-danger"><%=orderDet[i].orderStatus%></span></td>
                         <% } else if('Delivered'==orderDet[i]?.orderStatus){ %>
                           <td><span  class="badge bg-success"><%=orderDet[i].orderStatus%></span></td>
+                          <% } else if('Return'==orderDet[i]?.orderStatus){ %>
+                            <td><span  class="badge bg-success"><%=orderDet[i].orderStatus%></span></td>
                           <% }else { %> 
                             <td><span  class="badge bg-primary"><%=orderDet[i].orderStatus%></span></td>
                             <% } %>

@@ -674,9 +674,9 @@
                         const address='<%=userDet._id%>'
                         const Totalprice = '<%=Total%>'
                         const grandTotal='<%=grandTotal%>'
-                        const Scharge='<%=Charge%>'
+                       
                         console.log(address)
-                        let response = await fetch(`/checkout4?gst=${gst}&Grandtotal=${grandTotal}&charge=${Scharge}&total=${Totalprice}&id=${userId}&addressId=${address}`, {
+                        let response = await fetch(`/checkout4?gst=${gst}&Grandtotal=${grandTotal}&total=${Totalprice}&id=${userId}&addressId=${address}`, {
                             method: 'POST',
                         })
                         console.log("response"+response);
@@ -708,8 +708,8 @@
                     <span class="val"><%=grandTotal%></span>
                   </li>
                   <li class="d-flex justify-content-between">
-                    <span class="tag">Shipping & Handling</span>
-                    <span class="val"><%=Charge%></span>
+                    <span class="tag"></span>
+                    <span class="val"></span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="tag">Tax</span>

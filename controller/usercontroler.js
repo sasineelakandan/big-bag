@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs')
 const cartCollection=require('../model/cartmodel')
 const { productList } = require('./productController')
 
-
+const whishlistCollection=require('../model/whishlistmodel')
 
 const home = async (req, res) => {
     try {
@@ -277,7 +277,6 @@ const shopPage = async (req, res) => {
         
         count = await productcollection.find({isListed:true,isDelete:false}).countDocuments()
        
-       
         products = await productcollection.find({isListed:true,isDelete:false})
           .skip(skip)
           .limit(limit)
@@ -291,10 +290,10 @@ const shopPage = async (req, res) => {
              
              req.session.page=null
              req.session.save()
-             return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages})
+             return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages,})
         }
       
-
+       
         const productDetails = await productcollection.find({isListed:true,isDelete:false}).limit(3)
         
         return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages})
@@ -389,8 +388,22 @@ const Parent=async(req,res)=>{
     res.redirect('/shop')
   }
 }
+const Whishlist=async(req,res)=>{
+
+    try{
+    const whishlist = new whishlistCollection({
+        productId: req.query.id,
+        userId:req.query.action,
+        Whishlist:true
+    })
+    await whishlist.save()
+    res.send({list:true})
+    }catch(error){
+        console.log(error)
+    }
+ }
 
 module.exports = {
     home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register, shopPage,
-    singleProduct, logout, prodeuctsearch,priceRange,nameSort,priceSort,Parent,
+    singleProduct, logout, prodeuctsearch,priceRange,nameSort,priceSort,Parent,Whishlist
 }

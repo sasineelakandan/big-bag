@@ -227,13 +227,13 @@ const addTocart=async(req,res)=>{
       
         const usercart=await cartCollection.find({userId:req.query.user})
         const grandTotal=Number(req.session.grandTotal)
-        const shippingfee=(100)
+        
         
         const gst=Math.round(grandTotal*0.18)
         
-        const total=grandTotal+gst+shippingfee
+        const total=grandTotal+gst
 
-         res.render('userpages/checkout3',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,Gst:gst,Charge:shippingfee})
+         res.render('userpages/checkout3',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,Gst:gst})
       }
       catch(error){
         console.log(error)
@@ -266,7 +266,7 @@ const addTocart=async(req,res)=>{
           cartData:usercart,
           Items:count,
           Gst:req.query.gst,
-          Scharge:req.query.charge,
+        
           Total:req.query.total
       })
       newOrder.save()
@@ -294,6 +294,15 @@ const addTocart=async(req,res)=>{
       catch(error){
         console.log(error)
       }
-     }  
+     }
+    const removeCart =async(req,res)=>{
+      try{
+        await cartCollection.deleteOne({_id:req.query.id})
+        res.send({success:true})
+      }
+      catch(error){
+        console.log(error)
+      }
+    } 
 
-module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4,checkOut5}
+module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4,checkOut5,removeCart}

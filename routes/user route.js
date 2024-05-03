@@ -39,6 +39,7 @@ Router.put('/updatePro',addressController.updatePro)
 Router.get('/cart',cartController.Cart)
 Router.post("/addtocart",cartController.addTocart)
 Router.get('/cartbutton',cartController.cartbutton)
+Router.get('/removecart',cartController.removeCart)
 //checkout
 Router.get('/checkout',cartController.checkOut1)
 Router.get('/checkout2',cartController.checkOut2)
@@ -50,4 +51,6 @@ Router.get('/allorders',orderConroller.allOrder)
 Router.get('/singleorders',orderConroller.singleOrder)
 Router.get('/cancel',orderConroller.Cancel)
 Router.post('/cancelall',orderConroller.Cancelall)
+//whishlist
+Router.get('/whishlist',userConroller.Whishlist)
 module.exports=Router
