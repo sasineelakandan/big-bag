@@ -201,7 +201,7 @@
    
      <div class="form-group">
       <label for="images">Add image</label>    
-        <input type="file" name="images" value="productDet.productImages[i]" class="form-control-file" id="images"
+        <input type="file" name="images" value="productDet.productImages[i]" accept="image/*" class="form-control-file" id="images"
           multiple>
       
       <div class="form-outline mb-4">
@@ -234,6 +234,7 @@
         productName: {
           required: true,
         },
+        
         productPrice: {
           required: true,
           pattern: "[0-9]+"

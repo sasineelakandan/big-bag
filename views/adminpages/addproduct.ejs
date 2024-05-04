@@ -133,7 +133,7 @@
 
       <div class="form-group">
         <label for="images">Add image</label>
-        <input type="file" name="images" class="form-control-file" id="images" multiple>
+        <input type="file" name="images" class="form-control-file" id="images"  accept="image/*" multiple>
       </div>
        
         
@@ -162,6 +162,9 @@
     $('#addproduct').validate({
       rules: {
         productName: {
+          required: true,
+        },
+        images:{
           required: true,
         },
         productPrice: {

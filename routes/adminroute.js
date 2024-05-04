@@ -48,5 +48,5 @@ Router.get('/order',orderConroller.adminOrder)
 Router.get('/orderStatus',orderConroller.orderStatus)
 Router.put('/updateStatus',orderConroller.updateStatus)
 Router.put('/updateStatus2',orderConroller.updateStatus2)
-Router.get('/return',orderConroller.RetunOrder)
+
 module.exports=Router

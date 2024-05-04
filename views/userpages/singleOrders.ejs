@@ -571,9 +571,9 @@
             <div class="col-12">
               <div class="btn-group me-0" role="group" aria-label="...">
                 
-                <a class='btn btn-default' href='account-profile.html'><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
-                <a class='btn btn-default' href='account-address.html'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>My Address</a>
-                <a href="javascript:void(0)" class="btn btn-default active"><i class="fa fa-list" aria-hidden="true"></i>All Orders</a>
+                <a class='btn btn-default' href='/account'><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
+                <a class='btn btn-default' href='/myaddress/?id=<%=userLogged._id%>'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>My Address</a>
+                <!-- <a href="/allorders" class="btn btn-default active"><i class="fa fa-list" aria-hidden="true"></i>All Orders</a> -->
                 <!-- <a class='btn btn-default' href='account-wishlist.html'><i class="fa fa-gift" aria-hidden="true"></i>Wishlist</a>
                 <a class='btn btn-default me-0' href='my-tickets.html'><i class="fa fa-tag" aria-hidden="true"></i>Tickets</a> -->
               </div>
@@ -703,14 +703,16 @@
                               <td class=""><%=orderDet?.cartData[i]?.productQuantity%></td>
                               <td class="">₹ <%=orderDet?.cartData[i]?.totalCostPerProduct%></td>
                               <% if ('Delivered'==orderDet?.cartData[i]?.Status) { %>
-                                <td class="">  <a href="/return?id=<%=orderDet?.cartData[i]._id%>&order=<%=orderDet._id%>&user=<%=userDet._id%>&add=<%=userAdd._id%>"> <button id="cancelone" type="button"class="btn btn-success">return</button></a></td>
+                                <td class=""> <button id=" Return"  onclick="fn('<%=orderDet?.cartData[i]?._id%>')" type="button"class="btn btn-success">Return</button></td>
                                 <%}else if ('Return'==orderDet?.cartData[i]?.Status) { %> 
                                   <td class="" style="color: green;" > <%=orderDet?.cartData[i]?.Status%></td>
+                                  <%}else if ('cancel'==orderDet?.orderStatus) { %> 
+                                    <td class="" style="color: red;" > <%=orderDet?.cartData[i]?.Status%></td>
                                 
                                 <%}else if ('cancel'==orderDet?.cartData[i]?.Status) { %> 
                               <td class="" style="color: red;" > <%=orderDet?.cartData[i]?.Status%></td>
                               <% }else { %>
-                                <td class="">  <a href="/cancel?id=<%=orderDet?.cartData[i]._id%>&order=<%=orderDet._id%>&user=<%=userDet._id%>&add=<%=userAdd._id%>"> <button id="cancelone" type="button"class="btn btn-danger">cancel</button></a></td>
+                                <td class=""> <button id="cancelone" onclick="fn2('<%=orderDet?.cartData[i]?._id%>')" type="button"class="btn btn-danger">cancel</button></td>
                                 <% } %>
                           
                             </tr>
@@ -808,24 +810,138 @@
         <script>
              document.getElementById('cancel').addEventListener('click', async (e) => {
                         e.preventDefault()
-                        orderId='<%=orderDet?._id%>'
-                        let response = await fetch(`/cancelall?order=${orderId}`, {
-                            method: 'POST',
-                        })
-                        
-                        let result = await response.json()
-                        
-                        if (result.success) {
-                            await Swal.fire({
-                                icon: "success",
-                                title: " order cancel",
-                            });
-                            window.location.reload()
-                        }
-
-                        
-                    })
+                        Swal.fire({
+             title: "Are you sure?",
+             icon: "warning",
+             showCancelButton: true,
+             confirmButtonColor: "#3085d6",
+             cancelButtonColor: "#d33",
+             confirmButtonText: "Yes!"
+         }).then(async (result) => {
+             if (result.isConfirmed) {
+                
+                 try {
+                      let orderId='<%=orderDet._id%>'
+                     let response = await fetch(`/cancelall?order=${orderId}&id`, {
+                         method: 'PUT'
+                     });
+ 
                     
+                     let data = await response.json();
+ 
+                    
+                     if (data.success) {
+                         await Swal.fire({
+                             icon: "success",
+                             title: "OrderStatus updated",
+                         });
+                         
+                         
+                         window.location.reload();
+                     }
+                 } catch (error) {
+                     
+                     Swal.fire({
+                         icon: "error",
+                         title: "Oops...",
+                         text: "Something went wrong!",
+                     });
+                 }
+             }
+         });
+              
+            })
+          
+        </script>
+        <script>
+          async function fn2(cardId){
+            Swal.fire({
+             title: "Are you sure?",
+             icon: "warning",
+             showCancelButton: true,
+             confirmButtonColor: "#3085d6",
+             cancelButtonColor: "#d33",
+             confirmButtonText: "Yes!"
+         }).then(async (result) => {
+             if (result.isConfirmed) {
+                
+                 try {
+                      let orderId='<%=orderDet._id%>'
+                     let response = await fetch(`/cancel?order=${orderId}&id=${cardId}`, {
+                         method: 'PUT'
+                     });
+ 
+                    
+                     let data = await response.json();
+ 
+                    
+                     if (data.success) {
+                         await Swal.fire({
+                             icon: "success",
+                             title: "OrderStatus updated",
+                         });
+                         
+                         
+                         window.location.reload();
+                     }
+                 } catch (error) {
+                     
+                     Swal.fire({
+                         icon: "error",
+                         title: "Oops...",
+                         text: "Something went wrong!",
+                     });
+                 }
+             }
+         });
+              
+            }
+          
+        </script>
+        <script>
+          async function fn(cardId){
+            Swal.fire({
+             title: "Are you sure?",
+             icon: "warning",
+             showCancelButton: true,
+             confirmButtonColor: "#3085d6",
+             cancelButtonColor: "#d33",
+             confirmButtonText: "Yes!"
+         }).then(async (result) => {
+             if (result.isConfirmed) {
+                
+                 try {
+                      let orderId='<%=orderDet._id%>'
+                     let response = await fetch(`/return?order=${orderId}&id=${cardId}`, {
+                         method: 'PUT'
+                     });
+ 
+                    
+                     let data = await response.json();
+ 
+                    
+                     if (data.success) {
+                         await Swal.fire({
+                             icon: "success",
+                             title: "OrderStatus updated",
+                         });
+                         
+                         
+                         window.location.reload();
+                     }
+                 } catch (error) {
+                     
+                     Swal.fire({
+                         icon: "error",
+                         title: "Oops...",
+                         text: "Something went wrong!",
+                     });
+                 }
+             }
+         });
+              
+            }
+          
         </script>
       			<!-- FOOTER -->
 			<div class="footer clearfix">

@@ -2,6 +2,7 @@ const orderCollection = require('../model/ordermodel')
 const userCollection = require('../model/usermodel')
 const addressCollection = require('../model/addressmodel')
 const productCollection = require('../model/productmodel')
+const { subscribe } = require('../routes/user route')
 const allOrder = async (req, res) => {
     try {
         const orderDetails = await orderCollection.find({ userId: req.query.id })
@@ -26,7 +27,7 @@ const singleOrder = async (req, res) => {
 }
 const Cancel = async (req, res) => {
     try {
-
+    
 
         const orderId = req.query.order;
         const cartProductId = req.query.id;
@@ -49,7 +50,7 @@ const Cancel = async (req, res) => {
             let tt=price+gst
             
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
-            const update2 = await orderCollection.updateOne({ _id:  req.query.order }, { $inc: { Total:-tt,Gst:-gst,grandTotalCost:-price,} })
+
       }  
             
         }
@@ -65,7 +66,7 @@ const Cancel = async (req, res) => {
         await orderCollection.updateOne({ _id:orderId }, { $set: { orderStatus: 'cancel' } })  
     }
    
-  
+     res.send({success:true})
 
 
 
@@ -73,12 +74,7 @@ const Cancel = async (req, res) => {
 
 
 
-        const orderDetails=await orderCollection.findOne({_id:req.query.order})
-
-        const userDetails=await userCollection.findOne({_id:req.query.user})
-        const useradd=await addressCollection.findOne({_id:req.query.add})
-        res.render('userpages/singleOrders',{userLogged:req.session.logged,orderDet:orderDetails,userDet:userDetails,userAdd:useradd})
-
+       
   }
     
     catch (error) {
@@ -90,11 +86,16 @@ const Cancelall = async (req, res) => {
         const orderDet = await orderCollection.findOne({ _id: req.query.order })
         let a = orderDet.cartData
         for (i = 0; i < a.length; i++) {
+            a[i].Status='cancel'
             let b = a[i].productId
             let qty = a[i].productQuantity
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
         }
-        await orderCollection.updateOne({ _id: req.query.order }, { $set: { orderStatus: 'cancel' } })
+        await orderCollection.updateOne(
+            { _id: req.query.order }, 
+            { $set: { orderStatus: 'cancel', cartData: a } }
+        );
+        
         res.send({ success: true })
     }
     catch (error) {
@@ -227,7 +228,7 @@ const updateStatus2=async(req,res)=>{
             let tt=price+gst
             
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
-            const update2 = await orderCollection.updateOne({ _id:  req.query.order }, { $inc: { Total:-tt,Gst:-gst,grandTotalCost:-price,} })
+           
       }  
             
         }
@@ -242,7 +243,7 @@ const updateStatus2=async(req,res)=>{
     }if(flag==1){
         await orderCollection.updateOne({ _id:orderId }, { $set: { orderStatus: 'Return' } })  
     }
-   
+   res.send({success:true})
   
 
 
@@ -250,12 +251,6 @@ const updateStatus2=async(req,res)=>{
         
 
 
-
-        const orderDetails=await orderCollection.findOne({_id:req.query.order})
-
-        const userDetails=await userCollection.findOne({_id:req.query.user})
-        const useradd=await addressCollection.findOne({_id:req.query.add})
-        res.render('userpages/singleOrders',{userLogged:req.session.logged,orderDet:orderDetails,userDet:userDetails,userAdd:useradd})
 
   }
     

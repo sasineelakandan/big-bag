@@ -216,23 +216,24 @@
                     </span>
                     </th>
                     <td >
-                      
+                      <span class="lead ">
                         <%=orderDet[i]?.orderDate.toDateString()%>
-                      
+                      </span>
                     </td>
                    
                     <td>
-
+                      <span class="lead ">
                         <%=orderDet[i]?.Total%>  
-
+                      </span>
 
 
                     </td>
                     <td>
+                      <span class="lead ">
                         <%=orderDet[i]?.paymentType%>
-     
+                      </span>
                     </td> 
-                    
+                    <
                    
                       <% if ('cancel'==orderDet[i]?.orderStatus) { %> 
                         <td><span  class="badge bg-danger"><%=orderDet[i].orderStatus%></span></td>
@@ -243,11 +244,12 @@
                           <% }else { %> 
                             <td><span  class="badge bg-primary"><%=orderDet[i].orderStatus%></span></td>
                             <% } %>
-                       
+                     
                    
                     <td>
+                      <span class="lead ">
                         <a href="/orderStatus?orderId=<%=orderDet[i]?._id%>&user=<%=orderDet[i].userId%>&add=<%=orderDet[i].address%>"><button style="height: 30px;width: 75px;" class="btn-primary" >View</button>v
-     
+                      </span>
                     </td>
                 </tr>
              <% } %>

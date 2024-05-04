@@ -2,7 +2,7 @@ const express=require('express')
 require('./config/dbconnect')
 require('dotenv').config()
 
-
+require('./middlewere/googleAuth')
 const app=express()
 app.use(express.static('public'));
 const session=require('express-session')
@@ -11,7 +11,6 @@ const userrouter=require('./routes/user route')
 const adminerout=require('./routes/adminroute')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
-
 
 
 
@@ -30,7 +29,10 @@ app.use((req, res, next) => {
 })
 app.use(adminerout)
 app.use(userrouter)
-    
+app.get('*', function(req, res){
+    res.status(404).render('userpages/404');
+  });
+
 app.listen(8001,()=>{
     console.log('portstarted')
 })
