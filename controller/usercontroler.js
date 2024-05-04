@@ -3,9 +3,11 @@ const otpcollections = require('../model/otpmodel')
 const categorycollection = require('../model/categorymodel')
 const productcollection = require("../model/productmodel")
 const sendotp = require("../services/sendotp")
+const auth=require('../middlewere/googleAuth')
 const bcrypt = require('bcryptjs')
 const cartCollection=require('../model/cartmodel')
 const { productList } = require('./productController')
+
 
 const whishlistCollection=require('../model/whishlistmodel')
 
@@ -402,8 +404,34 @@ const Whishlist=async(req,res)=>{
         console.log(error)
     }
  }
+ const PageNotfound=async(req,res)=>{
+    try{
+      res.render('userpages/404')  
+    }
+    catch(error){
+        console.log(error)
+    }
+ }
 
+    const googleCallback = async (req, res) => {
+        try {
+            const user = await usercollection.findOneAndUpdate(
+                { email: req.user.email }, // Search condition
+                { $set: { name: req.user.displayName } }, // Update fields
+                { upsert: true, new: true } // Options: upsert (create if not found), new (return updated document)
+            );
+            
+            req.session.logged=user
+            res.redirect('/')
+        } catch (error) {
+            console.error("Error updating user:", error);
+            // Handle error
+        }
+    }
+    const notFound=async(req, res)=>{
+        res.status(404).render('userpages/404') ;
+      };
 module.exports = {
     home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register, shopPage,
-    singleProduct, logout, prodeuctsearch,priceRange,nameSort,priceSort,Parent,Whishlist
+    singleProduct, logout, prodeuctsearch,priceRange,nameSort,priceSort,Parent,PageNotfound,googleCallback,notFound
 }
