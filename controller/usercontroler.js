@@ -10,6 +10,7 @@ const { productList } = require('./productController')
 
 
 const whishlistCollection=require('../model/whishlistmodel')
+const { search } = require('../routes/user route')
 
 const home = async (req, res) => {
     try {
@@ -227,49 +228,10 @@ const shopPage = async (req, res) => {
 
     try {
 
-        const categoryDetails = await categorycollection.find({ isListed: true })
-        let query = { isListed: true };
-        if (req.query.id) {
-            query.parentCategory = req.query.id;
-        }
-        if (req.session.search) {
-            let pages=(count/limit)
-            let productDetails = req.session.search
-            req.session.search = null
-            req.session.save()
-          return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
-        }
-        if(req.session.range){
-            let pages=(count/limit)
-            let productDetails=req.session.range
-            req.session.range=null
-            req.session.save()
-            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
-        }
-        if(req.session.sort){
-            let pages=(count/limit)
-            let productDetails=req.session.sort
-            req.session.sort=null
-            req.session.save()
-            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
-        }
-        if(req.session.price){
-            let pages=(count/limit)
-            let productDetails=req.session.price
-            req.session.price=null
-            req.session.save()
-            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
-        }
-        if(req.session.parent){
-            let pages=(count/limit)
-            const productDetails=req.session.parent
-            
-            req.session.parent=null
-            req.session.save()
+        let categoryDetails= await categorycollection.find({isListed:true})
         
-            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails,page:pages})
-        }
         
+       
          let products;
         var count;
         let page = Number(req.query.pages) || 1;
@@ -285,16 +247,46 @@ const shopPage = async (req, res) => {
         
         req.session.page=products
         let pages=(count/limit)
+        if (req.session.product) {
+                let pages=(count/limit)
+                let productDetails = req.session.product
+                
+                req.session.product= null
+                req.session.save()
+              return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
+            }
+            if (req.session.search) {
+                let pages=(count/limit)
+                let productDetails = req.session.search
+                
+                req.session.search = null
+                req.session.save()
+                return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
+            }
+            if(req.session.category){
+                
+                let pages=(count/limit)
+                let productDetail = req.session.category
+                const find= productDetail._id
+                const productDetails=await productcollection.find({parentCategory:find})
+
+                req.session.category = null
+                req.session.save()
+                return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
+            }
           if(req.session.page){
-             
-             
+            
+           
              const productDetails=req.session.page
              
              req.session.page=null
              req.session.save()
              return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages,})
         }
-      
+       
+       
+        
+        
        
         const productDetails = await productcollection.find({isListed:true,isDelete:false}).limit(3)
         
@@ -312,84 +304,110 @@ const logout = async (req, res) => {
     req.session.logged = false
     res.redirect('/')
 }
-const prodeuctsearch = async (req, res) => {
-    try {
-        if (req.query.search) {
-            const searchproduct = await productcollection.find({ productName: { $regex: req.query.search, $options: 'i' } })
 
-            req.session.search = searchproduct
+const Fillters =async(req,res)=>{
+    console.log(req.body)
+   
+    if(req.body.search){
+        const searchproduct = await productcollection.find({ productName: { $regex: req.body.search, $options: 'i' } })
+
+        req.session.search = searchproduct
+        res.redirect('/shop')
+    }
+    
+   
+         
+        
+    
+      
+       
+       
+      
+        
+         if(req.body.PriceAssending){
+         const rangeproducts = await productcollection.find({ isListed:true,isDelete:false }).sort({productPrice:Number(req.body.PriceAssending)})
+         const category= categorycollection.findOne({_id:req.body.cid})
+         req.session.product=rangeproducts
+         
+
+         
+         res.redirect('/shop')
+         }
+        
+       
+        if(req.body.PriceDisending){
+        
+        const rangeproducts = await productcollection.find({isListed:true,isDelete:false }).sort({productPrice:Number(req.body.PriceDisending)})
+        const category= categorycollection.findOne({_id:req.body.cid})
+        req.session.product=rangeproducts
+         res.redirect('/shop')
+        
+        } 
+        
+        
+         if(req.body.NameAssending){
+        const rangeproducts = await productcollection.find({ isListed:true,isDelete:false }).sort({productName:Number(req.body.NameAssending)})
+        const category= categorycollection.findOne({_id:req.body.cid})
+        req.session.product=rangeproducts
+         res.redirect('/shop')
+         }
+        
+        if(req.body.NameDisending){
+        const rangeproducts = await productcollection.find({isListed:true,isDelete:false }).sort({productName:Number(req.body.NameDisending)})
+        const category= categorycollection.findOne({_id:req.body.cid})
+        req.session.product=rangeproducts
+         res.redirect('/shop')
+       
+        
+       }
+       
+    
+    if(req.body.cid){    
+    if(req.body.range=='500-1000'){
+       
+        const rangeproducts = await productcollection.find({parentCategory:req.body?.cid, productPrice: { $gte: 500, $lte: 1000 },isListed:true,isDelete:false })
+        req.session.product=rangeproducts
+        return res.redirect('/shop')
+       
+       }
+
+       
+     
+     if(req.body.range=='1000-1500'){
+        
+         const rangeproducts = await productcollection.find({parentCategory:req.body?.cid, productPrice: { $gte: 1000, $lte: 1500 },isListed:true,isDelete:false })
+         req.session.product=rangeproducts
+         return res.redirect('/shop')
+         
+      }
+    
+      if(req.body.range=='1500-2000'){
+        
+         const rangeproducts = await productcollection.find({parentCategory:req.body?.cid, productPrice: { $gte: 1500, $lte: 2000 },isListed:true,isDelete:false })
+         req.session.product=rangeproducts
+         return res.redirect('/shop')
+         
+      }
+    }else{
+        if(req.body.cid){
+            const rangeproducts=await productcollection.find({parentCategory:req.body.cid})
+            console.log(rangeproducts)
+            req.session.product=rangeproducts
             res.redirect('/shop')
         }
     }
-    catch (err) {
-        console.log(err)
-    }
+   
 }
-const priceRange=async(req,res)=>{
-    
-    if(req.query.range=='500-1000'){
-      
-       const rangeproducts = await productcollection.find({ productPrice: { $gte: 500, $lte: 1000 },isListed:true,isDelete:false })
-       req.session.range=rangeproducts
-       return res.redirect('/shop')
-       
-    }
-    if(req.query.range=='1000-1500'){
-      
-        const rangeproducts = await productcollection.find({ productPrice: { $gte: 1000, $lte: 1500 },isListed:true,isDelete:false })
-        req.session.range=rangeproducts
-        return res.redirect('/shop')
-        
-     }
-     if(req.query.range=='1500-2000'){
-      
-        const rangeproducts = await productcollection.find({ productPrice: { $gte: 1500, $lte: 2000 },isListed:true,isDelete:false })
-        req.session.range=rangeproducts
-        return res.redirect('/shop')
-        
-     }
-}
-const nameSort=async(req,res)=>{
-    if(req.query.sort=='true'){
-        
-        const sortname=await productcollection.find({isListed:true,isDelete:false}).sort({productName:1})
-        
-        req.session.sort=sortname
-        
-        return res.redirect('/shop')
-    }else{
-        const sortname=await productcollection.find({isListed:true,isDelete:false}).sort({productName:-1})
-        
-        req.session.sort=sortname
-        
-        return res.redirect('/shop')
-    }
-}
-const priceSort=async(req,res)=>{
-if(req.query.price==='true'){
 
-   const sortprice=await productcollection.find({isListed:true,isDelete:false}).sort({productPrice:1})
-   req.session.price=sortprice
-   return res.redirect('/shop')
-}else{
+       
     
-    const sortprice=await productcollection.find({isListed:true,isDelete:false}).sort({productPrice:-1})
-    req.session.price=sortprice
-    
-    return res.redirect('/shop')
-}
-}
-const Parent=async(req,res)=>{
-  if(req.query.id){
-    
-    
-    
-    const parent=await productcollection.find({parentCategory:req.query.id,isListed:true,isDelete:false})
-    
-    req.session.parent=parent
-    res.redirect('/shop')
-  }
-}
+   
+      
+       
+     
+   
+
+
 const Whishlist=async(req,res)=>{
 
     try{
@@ -433,5 +451,5 @@ const Whishlist=async(req,res)=>{
       };
 module.exports = {
     home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register, shopPage,
-    singleProduct, logout, prodeuctsearch,priceRange,nameSort,priceSort,Parent,PageNotfound,googleCallback,notFound
+    singleProduct, logout,Fillters,PageNotfound,googleCallback,notFound
 }

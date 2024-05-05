@@ -1047,17 +1047,18 @@
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Sport Tops &amp; Shoes <span>(3)</span></a></li>
                                 </ul> -->
                               </li>
-        
+                              <form  action="/filtter" method="post" >
                               <li>
-                                <% for(let i=0;i<categoryDet.length;i++){%>
-                                  <div class="" role="tab" id="heading2">
-                                    <a href="/parent?id=<%=categoryDet[i]?._id%>" aria-controls="">
-                                       
-                                       <%=categoryDet[i]?.categoryname%>
-                                    </a>
-                                  </div>
+                                <ul>
+                                <%for (i=0;i<categoryDet.length;i++){%>
+                                  <li>
+                                    <input type="radio" name="cid" value="<%=categoryDet[i]._id%>" />
+                                    <label for="range-500-1000"><%=categoryDet[i].categoryname%></label>
+                                  </li>
+                                  <%}%>
+                                </ul>
                             
-                                <%}%>
+                                
                                 <!-- <ul id="men" class="collapse collapseItem" role="tabpanel" aria-labelledby="heading2" data-bs-parent="#accordion2">
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Accessories <span>(6)</span></a></li>
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Bag <span>(6)</span></a></li>
@@ -1124,7 +1125,7 @@
                         <div class="panel-heading">Filter by Price</div>
                         <div class="panel-body">
                           <ul class="list-unstyled">
-                            <form action="/price" method="get">
+                            
                               <ul>
                                 <li>
                                   <input type="radio" name="range" value="500-1000" />
@@ -1139,38 +1140,57 @@
                                   <label for="range-1500-2000">1500-2000</label>
                                 </li>
                               </ul>
-                              <button type="submit"  class="btn btn-primary">Apply filter</button>
-                            </form>
+                             
+                           
                             <!-- <li><a href="javascript:void(0)">Blue<span>(12)</span></a></li>
                             <li><a href="javascript:void(0)">Orange<span>(12)</span></a></li> -->
                           </ul>
                         </div>
                       </div>
-                      
+                      <button type="submit"  class="btn btn-primary">Apply filter</button>
+
  
                       </script>
-                      <div class="panel panel-default filterNormal">
+                      <div style="margin-top: 20px;" class="panel panel-default filterNormal">
                         <div class="panel-heading">filter by product</div>
                         <div class="panel-body">
                           <ul class="list-unstyled clearfix">
-                            <li><a href="/namesort?sort=true">Name assending<span></span></a></li>
-                            <li><a href="/namesort?sort=false">Name desending<span></span></a></li>
-                            <li><a href="/pricesort?price=true">price asending<span></span></a></li>
-                            <li><a href="/pricesort?price=false">price desending<span></span></a></li>
+                            <li>
+                              <input type="radio" name="NameAssending" value="1" />
+                              <label for="range-500-1000">NameAssending</label>
+                            </li>
+                            <li>
+                              <input type="radio" name="NameDisending" value="-1" />
+                              <label for="range">NameDisending</label>
+                            </li>
+                            <li>
+                              <input type="radio" name="PriceAssending" value="1" />
+                              <label for="range">PriceAssending</label>
+                            </li>
+                            <li>
+                              <input type="radio" name="PriceDisending" value="-1" />
+                              <label for="range">PriceDisending</label>
+                            </li>
+                           
                           </ul>
+                         
                         </div>
                       </div>
+                      <button type="submit"  class="btn btn-primary">Apply filter</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-             
+          
+          </form>
+
+ 
             <div class="col-lg-9 col-md-8">
               <div class="row filterArea">
                 <div class="col-6">
               
-                <form action="/productsearch" method="get">
+                <form action="/filtter" method="post">
                  <input class="px-4 py-2" style="margin-left: 25px;" type="search" placeholder="search" name="search" ><button class="btn bg-info py-0" type="submit">search</button>
                 </form>
                 </div>
@@ -1274,6 +1294,34 @@
 </div>
 </div> --> --> -->
 </section> 
+   <script>
+    $('').validate({
+        
+        submitHandler: async (form, event) => {
+          event.preventDefault()
+          let filterdata = {
+           cid: form.cid.value,
+           NameAssending:form.NameAssending.value,
+           NameDisending:form.NameDisending.value,
+           PriceAssending:form.PriceAssending.value,
+           PriceDisending:form.PriceDisending.value,
+           range:form.range.value,
+          }
+          console.log(filterdata)
+          let response = await fetch(`/filtter`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filterdata)
+          })
+          let result = await response.json()
+
+          if(result.success){
+            console.log('hai')
+        
+          }
+        }
+      })
+   </script>
    
 
           <!-- <div class="row">

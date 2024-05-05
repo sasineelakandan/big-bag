@@ -21,11 +21,9 @@ Router.post('/register',userConroller.register)
 Router.get('/shop',blockedUser,userConroller.shopPage)
 Router.get('/singleProduct',isuser,blockedUser,userConroller.singleProduct)
 Router.get('/logout',userConroller.logout)
-Router.get('/productsearch',userConroller.prodeuctsearch)
-Router.get('/price',userConroller.priceRange)
-Router.get('/namesort',userConroller.nameSort)
-Router.get('/pricesort',userConroller.priceSort)
-Router.get('/parent',userConroller.Parent)
+
+Router.post('/filtter',userConroller.Fillters)
+
 
 // addressController
 Router.get('/account',isuser,blockedUser,addressController.account)
