@@ -97,7 +97,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <ul class="list-inline float-end top-right topBarLeft">
               <% if(userLogged){ %>
                 <li class="account-login"><span>
-                    <a style="color: wheat;">Hi, <%= userLogged.name %>
+                    <a style="color: wheat;">Hi, <%= userLogged?.name %>
                     </a><small></small><a href='/logout'>logout</a>
                   </span></li>
                 <% }else{ %>

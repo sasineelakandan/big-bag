@@ -51,7 +51,11 @@ Router.get('/singleorders',blockedUser,orderConroller.singleOrder)
 Router.put('/cancel',orderConroller.Cancel)
 Router.put('/cancelall',orderConroller.Cancelall)
 Router.put('/return',orderConroller.RetunOrder)
-
+//whishlist
+Router.get('/whishlist',userConroller.Whishlist)
+Router.get('/whishlist2',userConroller.Whishlist2)
+Router.get('/removewhishlist',userConroller.WhishlistRemove)
+Router.post('/addtocart2',userConroller.whishToCart)
 //googleAuth
 
 Router.get('/googleAuth/googlever',passport.authenticate('google',{scope:['email','profile']}))

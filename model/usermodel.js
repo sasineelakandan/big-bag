@@ -1,4 +1,5 @@
 const mongoose=require('mongoose')
+const { Whishlist } = require('../controller/usercontroler')
 
 
 const userschema=new mongoose.Schema({
@@ -22,6 +23,9 @@ const userschema=new mongoose.Schema({
         required:true,
         type:Boolean,
         default:false
-    }
+    },
+    Whishlist:[ {type: String} ],
+
+    
 })
 module.exports=mongoose.model('user',userschema)

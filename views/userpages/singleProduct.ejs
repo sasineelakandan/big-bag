@@ -778,7 +778,7 @@
                         let response = await fetch(`/addtocart?pid=${productId}&stock=${productStock}&quantity=${quantityInput}&productPrice=${productPrice}&user=${userId}&total=${Totalprice}&Img=${image}&productname=${productName}`, {
                             method: 'POST',
                         })
-                        console.log("response"+response);
+                    
                         let result = await response.json()
                         console.log(result)
                         if (result.success) {

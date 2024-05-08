@@ -227,6 +227,14 @@ const resendotp = async (req, res) => {
 const shopPage = async (req, res) => {
 
     try {
+        if (req.session.search) {
+            let pages=(count/limit)
+            let productDetails = req.session.search
+            
+            req.session.search = null
+            req.session.save()
+            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
+        }
 
         let categoryDetails= await categorycollection.find({isListed:true})
         
@@ -244,36 +252,40 @@ const shopPage = async (req, res) => {
         products = await productcollection.find({isListed:true,isDelete:false})
           .skip(skip)
           .limit(limit)
+
         
         req.session.page=products
         let pages=(count/limit)
-        if (req.session.product) {
-                let pages=(count/limit)
-                let productDetails = req.session.product
-                
-                req.session.product= null
-                req.session.save()
-              return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
+        if(req.session.logged){
+            let pages=(count/limit)
+            const {_id}=req.session?.logged
+            let whishlistDet=await whishlistCollection.find({userId:_id})
+            let whishlistarr=[]
+            for(i=0;i<whishlistDet.length;i++){
+                whishlistarr.push(whishlistDet[i].productId.toString())
             }
-            if (req.session.search) {
-                let pages=(count/limit)
-                let productDetails = req.session.search
-                
-                req.session.search = null
-                req.session.save()
-                return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
-            }
-            if(req.session.category){
-                
-                let pages=(count/limit)
-                let productDetail = req.session.category
-                const find= productDetail._id
-                const productDetails=await productcollection.find({parentCategory:find})
 
-                req.session.category = null
-                req.session.save()
-                return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
-            }
+           for(i=0;i<products.length;i++){
+                
+             products[i].isWhishlisted=whishlistarr.includes(products[i]._id.toString())
+             console.log(products[i].isWhishlisted)
+           }
+           
+           return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: products, categoryDet: categoryDetails,page:pages})
+        }
+        
+            
+            // if(req.session.category){
+                
+            //     let pages=(count/limit)
+            //     let productDetail = req.session.category
+            //     const find= productDetail._id
+            //     const productDetails=await productcollection.find({parentCategory:find})
+
+            //     req.session.category = null
+            //     req.session.save()
+            //     return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
+            // }
           if(req.session.page){
             
            
@@ -281,16 +293,16 @@ const shopPage = async (req, res) => {
              
              req.session.page=null
              req.session.save()
-             return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages,})
+             return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages})
         }
-       
+        
        
         
         
        
-        const productDetails = await productcollection.find({isListed:true,isDelete:false}).limit(3)
-        
-        return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages})
+        // const productDetails = await productcollection.find({isListed:true,isDelete:false}).limit(3)
+      
+        // return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages})
         
 
     }
@@ -308,120 +320,45 @@ const logout = async (req, res) => {
 const Fillters =async(req,res)=>{
     console.log(req.body)
    
-    if(req.body.search){
-        const searchproduct = await productcollection.find({ productName: { $regex: req.body.search, $options: 'i' } })
-
-        req.session.search = searchproduct
-        res.redirect('/shop')
-    }
-    
    
-         
-        
-    
-      
-       
-       
-      
-        
-         if(req.body.PriceAssending){
-         const rangeproducts = await productcollection.find({ isListed:true,isDelete:false }).sort({productPrice:Number(req.body.PriceAssending)})
-         const category= categorycollection.findOne({_id:req.body.cid})
-         req.session.product=rangeproducts
-         
 
-         
-         res.redirect('/shop')
-         }
-        
-       
-        if(req.body.PriceDisending){
-        
-        const rangeproducts = await productcollection.find({isListed:true,isDelete:false }).sort({productPrice:Number(req.body.PriceDisending)})
-        const category= categorycollection.findOne({_id:req.body.cid})
-        req.session.product=rangeproducts
-         res.redirect('/shop')
-        
-        } 
-        
-        
-         if(req.body.NameAssending){
-        const rangeproducts = await productcollection.find({ isListed:true,isDelete:false }).sort({productName:Number(req.body.NameAssending)})
-        const category= categorycollection.findOne({_id:req.body.cid})
-        req.session.product=rangeproducts
-         res.redirect('/shop')
-         }
-        
-        if(req.body.NameDisending){
-        const rangeproducts = await productcollection.find({isListed:true,isDelete:false }).sort({productName:Number(req.body.NameDisending)})
-        const category= categorycollection.findOne({_id:req.body.cid})
-        req.session.product=rangeproducts
-         res.redirect('/shop')
-       
-        
-       }
-       
-    
-    if(req.body.cid){    
-    if(req.body.range=='500-1000'){
-       
-        const rangeproducts = await productcollection.find({parentCategory:req.body?.cid, productPrice: { $gte: 500, $lte: 1000 },isListed:true,isDelete:false })
-        req.session.product=rangeproducts
-        return res.redirect('/shop')
-       
-       }
-
-       
-     
-     if(req.body.range=='1000-1500'){
-        
-         const rangeproducts = await productcollection.find({parentCategory:req.body?.cid, productPrice: { $gte: 1000, $lte: 1500 },isListed:true,isDelete:false })
-         req.session.product=rangeproducts
-         return res.redirect('/shop')
-         
-      }
-    
-      if(req.body.range=='1500-2000'){
-        
-         const rangeproducts = await productcollection.find({parentCategory:req.body?.cid, productPrice: { $gte: 1500, $lte: 2000 },isListed:true,isDelete:false })
-         req.session.product=rangeproducts
-         return res.redirect('/shop')
-         
-      }
-    }else{
-        if(req.body.cid){
-            const rangeproducts=await productcollection.find({parentCategory:req.body.cid})
-            console.log(rangeproducts)
-            req.session.product=rangeproducts
-            res.redirect('/shop')
-        }
-    }
-   
 }
-
-       
-    
-   
-      
-       
-     
-   
-
-
 const Whishlist=async(req,res)=>{
 
     try{
+        
+       
+    
+    
+    if(req.query.action){
     const whishlist = new whishlistCollection({
-        productId: req.query.id,
+        productId:req.query.id,
         userId:req.query.action,
         Whishlist:true
     })
+    req.session.whishlist=whishlist
+    
     await whishlist.save()
+    
     res.send({list:true})
-    }catch(error){
+    
+}else{
+    res.send({unlist:false})
+}
+    
+    
+ 
+    
+}
+
+    catch(error){
         console.log(error)
     }
- }
+}
+const WhishlistRemove=async(req,res)=>{
+    await whishlistCollection.deleteOne({productId:req.query.id})
+    res.send({list:true})
+}
  const PageNotfound=async(req,res)=>{
     try{
       res.render('userpages/404')  
@@ -430,6 +367,21 @@ const Whishlist=async(req,res)=>{
         console.log(error)
     }
  }
+const Whishlist2=async(req,res)=>{
+   const Whishlist=await whishlistCollection.find({userId:req.query.id})
+   console.log(Whishlist)
+   let products=[]
+   for(i=0;i<Whishlist.length;i++){
+    Whishlist[i].productId
+    const prod=await productcollection.find({_id:Whishlist[i].productId})
+     products.push(prod)
+
+   }
+ const productDetail=products.flat()
+   
+   res.render('userpages/whishlist',{whishlistDet:Whishlist,userLogged:req.session.logged,productDet:productDetail}) 
+
+}
 
     const googleCallback = async (req, res) => {
         try {
@@ -449,7 +401,46 @@ const Whishlist=async(req,res)=>{
     const notFound=async(req, res)=>{
         res.status(404).render('userpages/404') ;
       };
+
+
+    const whishToCart=async(req,res)=>{
+     
+   
+   const productExist = await cartCollection.findOne({
+    userId: req.session.logged._id,
+    productId: req.query.pid,});
+    
+    if(productExist){
+    //     const update2=await productcollection.findOne({_id:req.query.pid})
+    //    console.log(update2.productPrice)
+    //     const update=await cartCollection.updateOne({ productId: req.query.pid },{$inc:{productQuantity:1,totalCostPerProduct:update2.productPrice}})
+    res.send({productExist:true})
+     }else{
+        const qty2=await productcollection.findOne({ _id: req.query.pid})
+        console.log(qty2.productImage[0])
+   if(0<qty2.productStock){
+     const newcart = new cartCollection({
+         userId:req.query.userid,
+         productId:req.query.pid ,
+         productQuantity:1, 
+         productStock:qty2.productStock,
+         productprice:qty2.productPrice,
+         Status:'pending',
+         totalCostPerProduct:+qty2.productPrice,
+         productImage:qty2.productImage[0],
+         productName:qty2.productName,
+     })
+     newcart.save()
+     res.send({success:true})
+     }else{
+        res.send({OutStock:true}) 
+     }
+    }
+    
+  
+}
+
 module.exports = {
     home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register, shopPage,
-    singleProduct, logout,Fillters,PageNotfound,googleCallback,notFound
+    singleProduct, logout,Fillters,PageNotfound,googleCallback,notFound,Whishlist,WhishlistRemove,Whishlist2,whishToCart
 }

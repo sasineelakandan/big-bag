@@ -248,7 +248,7 @@ const addTocart=async(req,res)=>{
             count++
         }
        
-       console.log(count)
+      
     
         for (let i = 0; i < usercart?.length; i++) {
           await productCollection.updateOne(

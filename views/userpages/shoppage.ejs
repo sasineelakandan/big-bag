@@ -1226,14 +1226,81 @@
                         <h3 style="color: red;" > Out of Stocks</h3>
 
                         <% }%>
-                        <i class="fa-solid fa-heart fa-beat"></i>
-                         
+                      <%if(productDet[i]?.isWhishlisted==true){%>
+                        <i class="fa-solid fa-heart fa-beat" onclick="fn2('<%=productDet[i]?._id%>','<%=userLogged?._id%>')" style="color: #e50b41;font-size: 20px;"></i>
+                     <% }else{%>
+                        <i class="fa-solid fa-heart fa-beat" onclick="fn('<%=productDet[i]?._id%>','<%=userLogged?._id%>')" ></i>
+    
+                        <% }%>
 
+
+<script>
+  async function fn(productId,userId){
+    
+            let response = await fetch(`/whishlist?id=${productId}&action=${userId}`, {
+                              method: 'GET',
+                          })
+                          let result = await response.json()
+                          if (result.list) {
+                              await Swal.fire({
+                                  icon: "success",
+                                  title: "Product Listed",
+                              });
+                              window.location.reload()
+
+
+                          } else {
+                            await Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Please Login!",
+                        
+                      });
+                          }
+                      }
+                       
+  
+
+</script> 
+<script>
+  async function fn2(productId,userId){
+    
+    let response = await fetch(`/removewhishlist?id=${productId}&action=${userId}`, {
+                      method: 'GET',
+                  })
+                  let result = await response.json()
+                  if (result.list) {
+                      await Swal.fire({
+                          icon: "success",
+                          title: "Product Listed",
+                      });
+                      window.location.reload()
+
+
+                  } else {
+                    
+                        await Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Please Login!",
+                        
+                      });
+                  }
+              }
+               
+</script>                   
+        
+                        
+                      
+                        
+                      
+                       
                       <h5>
-                        <%=productDet[i].productName%>
+                        <%=productDet[i]?.productName%>
                       </h5>
                    
-                    <h3> ₹ <%=productDet[i].productPrice%>
+                    <h3> 
+                      ₹ <%=productDet[i]?.productPrice%>
                     </h3>
                   </div>
                 </div>
@@ -1295,32 +1362,7 @@
 </div> --> --> -->
 </section> 
    <script>
-    $('').validate({
-        
-        submitHandler: async (form, event) => {
-          event.preventDefault()
-          let filterdata = {
-           cid: form.cid.value,
-           NameAssending:form.NameAssending.value,
-           NameDisending:form.NameDisending.value,
-           PriceAssending:form.PriceAssending.value,
-           PriceDisending:form.PriceDisending.value,
-           range:form.range.value,
-          }
-          console.log(filterdata)
-          let response = await fetch(`/filtter`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(filterdata)
-          })
-          let result = await response.json()
-
-          if(result.success){
-            console.log('hai')
-        
-          }
-        }
-      })
+   
    </script>
    
 
@@ -1707,27 +1749,8 @@
 
       			<!-- FOOTER -->
             <%- include('../userpart/footer') %>
-      <!-- <script>
-        async function fn(productId,index,userId){
-            
-          let response = await fetch(`whishlis?id=${productId}&action=${userId}&index=${index}`, {
-                            method: 'GET',
-                        })
-                        let result = await response.json()
-                        if (result.list) {
-                            await Swal.fire({
-                                icon: "success",
-                                title: "Product Listed",
-                            });
-                        } else {
-                            await Swal.fire({
-                                icon: "success",
-                                title: "Product Unlisted",
-                                confirmButtonText: "OK",
-                            });
-                        }
-                    } -->
-                    
+      <script>
+        
                 
             
                    
