@@ -608,22 +608,22 @@
                             <th>Sub Total</th>
                           </tr>
                         </thead>
-                        <% for(let i=0;i<usercartDet.length;i++){ %>
+                        <% for(let i=0;i<usercartDet?.length;i++){ %>
                         <tbody>
                        
                           <tr>
                             <td class="">
                               
-                              <span class="cartImage"><img style="height: 75px;width: 75px;" src="assets/uploads/<%=usercartDet[i].productImage%>" alt="image"></span>
+                              <span class="cartImage"><img style="height: 75px;width: 75px;" src="assets/uploads/<%=usercartDet[i]?.productImage%>" alt="image"></span>
                             </td>
-                            <td class=""><%=usercartDet[i].productName%></td>
+                            <td class=""><%=usercartDet[i]?.productName%></td>
                             <td class=""></td>
                             <td class="count-input">
                               
-                              <input class="quantity" type="text" value="<%=usercartDet[i].productQuantity%>" disabled>
+                              <input class="quantity" type="text" value="<%=usercartDet[i]?.productQuantity%>" disabled>
                               
                             </td>
-                            <td class=""><%=usercartDet[i].totalCostPerProduct%></td>
+                            <td class=""><%=usercartDet[i]?.totalCostPerProduct%></td>
                           </tr>
                          
                           <% } %>
@@ -638,10 +638,10 @@
                     <h5>Shipping Address</h5>
                     <address>
                         
-                        <%=userDet.firstName%> <br>
-                        <%=userDet.addressLine1%> <br>
-                        <%=userDet.phone%><br>
-                        <%=userDet.City%><br>
+                        <%=userDet?.firstName%> <br>
+                        <%=userDet?.addressLine1%> <br>
+                        <%=userDet?.phone%><br>
+                        <%=userDet?.City%><br>
                       </address>
                   </div>
                   <div class="col-md-4">
@@ -661,7 +661,7 @@
                 </div>
                 <div class="well well-lg clearfix">
                   <ul class="pager">
-                  <li class="previous float-start"><a class='btn btn-secondary btn-default float-start' href='checkout-step-3.html'>back</a></li>
+                  <li class="previous float-start"><a class='btn btn-secondary btn-default float-start' href='/pay?id=<%=userLogged._id%>'>back</a></li>
                     <li class="next"><a class='btn btn-primary btn-default float-end' id="Continue" href=''>Continue <i class="fa fa-angle-right"></i></a></li>
                   </ul>
                 </div>

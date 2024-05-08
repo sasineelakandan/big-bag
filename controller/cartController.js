@@ -283,13 +283,13 @@ const addTocart=async(req,res)=>{
      const checkOut5=async(req,res)=>{
       try{
         
-         const orderDet= await orderCollection.findOne({userId:req.session.logged._id})
+        //  const orderDet= await orderCollection.findOne({userId:req.session.logged._id})
          
-         const address=orderDet.address
+        //  const address=orderDet.address
          
-         const add=await addressCollection.findOne({_id:address})
+        //  const add=await addressCollection.findOne({_id:address})
          
-         res.render('userpages/checkout4',{userLogged:req.session.logged,Order:orderDet,addressDet:add})
+         res.render('userpages/checkout4',{userLogged:req.session.logged})
       }
       catch(error){
         console.log(error)

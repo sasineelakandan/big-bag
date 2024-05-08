@@ -19,7 +19,7 @@ const orderSchema = new mongoose.Schema(
     Items:{type: Number, required: true},
     grandTotalCost: { type: Number, required: true },
     paymentId: { type: String, default: null },
-    Gst:{type: Number, required: true},
+   
     
     Total:{type: Number, required: true},
     couponApplied: {

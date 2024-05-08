@@ -2,6 +2,7 @@ const express=require('express')
 const userConroller=require('../controller/usercontroler')
 const addressController=require('../controller/addressController')
 const cartController=require('../controller/cartController')
+const paymentcontroller=require('../controller/Paypalpaymentcontroller')
 const Router=express.Router()
 const {isuser}=require('../middlewere/userver')
 const blockedUser=require('../middlewere/userblock')
@@ -60,4 +61,6 @@ Router.post('/addtocart2',userConroller.whishToCart)
 
 Router.get('/googleAuth/googlever',passport.authenticate('google',{scope:['email','profile']}))
 Router.get('/google/callback',passport.authenticate('google'),userConroller.googleCallback)
+//online payment
+Router.get('/pay',paymentcontroller.paymentPage)
 module.exports=Router
