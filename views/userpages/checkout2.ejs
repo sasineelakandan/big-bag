@@ -617,22 +617,29 @@
                 <div class="page-header">
                   <h4>Billing Information</h4>
                 </div>
-                <form action="#" class="row" method="POST" role="form">
+                
+              
+                <div class="container mt-5">
+                  <h2>Select Payment Method:</h2>
+                  
+                  <select id="paymentMethod" style="width: 250px;" class="form-control" onchange="changePaymentMethod()">
+                    <option value="Cash on Deliver">Cash on Delivery</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="Cash on Delivery">Cash on Delivery</option>
+                  </select>
+              
+                  <div id="paymentDetails" class="mt-3"></div>
+                </div>
+              
+                
                   <div class=" checkboxArea card-check">
-                    <div class="col-sm-12 mb-2">
-                      <input type="radio" name="checkbox" value="1" >
-                      <label ><span></span>Cash on Delivery</label>
-                    </div>
-                    <div class="col-sm-12 mb-2">
-                      <input id="checkbox2" type="radio" name="checkbox" value="1" checked="checked">
-                      <label for="checkbox2"><span></span>Credit Card</label>
-                      <small class="mb-2 d-block">We accept following credit card</small>
-                      <ul class="list-unstyled list-inline">
-                        <li><img src="assets/img/products/card1.jpg" alt=""><!--  --></li>
-                        <li><img src="assets/img/products/card2.jpg" alt=""><!-- </li>
+                   
+                      <!-- <ul class="list-unstyled list-inline">
+                        <li><img src="assets/img/products/card1.jpg" alt=""></li> -->
+                        <!-- <li><img src="assets/img/products/card2.jpg" alt=""><!-- </li> -->
                         <!-- <li><img src="assets/img/products/card3.jpg" alt=""><!--  --></li>
-                        <!-- <li><img src="assets/img/products/card4.jpg" alt=""><!--  --></li> -->
-                      </ul>
+                        <!-- <li><img src="assets/img/products/card4.jpg" alt=""><!--  --></li> 
+                      <!-- </ul> --> -->
                       <!-- <!-- <div class="form-group row my-3 ml-3">
                         <div class="col-md-6">
                           <label for="" class="col-form-label">Name on Card</label>
@@ -678,7 +685,41 @@
                       </div>
                     </div>
                   </div> -->
+ <script>
+   async function changePaymentMethod() {
+                        const userId='<%=userLogged._id%>'
+                       const productId='<%=usercartDet.productId%>'
+                       const address='<%=userDet._id%>'
+                       const Totalprice = '<%=Total%>'
+                       const grandTotal='<%=grandTotal%>'
+                      const id='<%=userDet._id%>'
+      var selectedMethod = document.getElementById("paymentMethod").value;
+      var paymentDetailsDiv = document.getElementById("paymentDetails");
 
+      
+
+      // Clear previous details
+      paymentDetailsDiv.innerHTML = "";
+
+      if (selectedMethod === "Cash on Delivery") {
+        paymentDetailsDiv.innerHTML = "<p> Make payment Cash on Delivery:</p>";
+      } else if (selectedMethod === "paypal") {
+        paymentDetailsDiv.innerHTML = "<p> Make payment PayPal account:</p>";
+      } else if (selectedMethod === "Cash on Delivery") {
+        paymentDetailsDiv.innerHTML = "<p>Make payment to the wallet :</p>";
+      }
+
+      let response = await fetch(`/checkout3?Grandtotal=${grandTotal}&total=${Totalprice}&user=${userId}&id=${address}&pid=${productId}&pm=${selectedMethod}`, {
+                            method: 'GET',
+                        })
+                        let result = await response.json()
+
+          if(result.success){
+            
+            window.location.href = '/checkout6?id=<%=userLogged._id%>&payment='+selectedMethod
+    }
+  }
+  </script>
                  
             <div class="col-md-4">
               <div class="summery-box">
@@ -691,8 +732,8 @@
                   </li>
                   
                   <li class="d-flex justify-content-between">
-                    <span class="tag">Tax</span>
-                    <span class="val">₹ <%=Gst%></span>
+                    <span class="tag"></span>
+                    <span class="val"></span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="tag">Total</span>
@@ -706,8 +747,8 @@
         <div class="col-sm-12">
             <div class="well well-lg clearfix">
               <ul class="pager">
-              <li class="previous float-left"><a class='btn btn-secondary btn-default float-start' href=>back</a></li>
-                <li class="next"><a class='btn btn-primary btn-default float-end' href='/checkout3?productId=<%=usercartDet.productId%>&user=<%=userLogged._id%>&id=<%=userDet._id%>'>Continue <i class="fa fa-angle-right"></i></a></li>
+              <!-- <li class="previous float-left"><a class='btn btn-secondary btn-default float-start' href=>back</a></li>
+                <li class="next"><a id="checkout" class='btn btn-primary btn-default float-end' href='/checkout3?productId=<%=usercartDet.productId%>&user=<%=userLogged._id%>&id=<%=userDet._id%>'>Continue <i class="fa fa-angle-right"></i></a></li> -->
               </ul>
             </div>
           </div>
@@ -715,6 +756,22 @@
       </div>  
     </div> 
       </section>
+      <script>
+  //  async function changePaymentMethod(productId,user,id) {
+  //     var selectedMethod = document.getElementById("paymentMethod").value; 
+  //    let response = await fetch(`/checkout3?productId=${productId}&user=${user}&id=${id}&pay=${selectedMethod}`, {
+  //       method: 'GET'
+  //   });
+
+        
+    
+        // Call fn() with parameters for Online Payment option
+      
+    
+
+
+         
+      </script>
 
       <!-- LIGHT SECTION -->
       <section class="lightSection clearfix">

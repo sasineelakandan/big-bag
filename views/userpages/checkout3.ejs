@@ -654,14 +654,14 @@
                   <div class="col-md-4">
                     <h5>Payment Method</h5>
                     <p>
-                      Cash On Delivery <br>
+                      <%=pm%><br>
                       
                     </p>
                   </div>
                 </div>
                 <div class="well well-lg clearfix">
                   <ul class="pager">
-                  <li class="previous float-start"><a class='btn btn-secondary btn-default float-start' href='/pay?id=<%=userLogged._id%>'>back</a></li>
+                  <li class="previous float-start"><a class='btn btn-secondary btn-default float-start' href=''>back</a></li>
                     <li class="next"><a class='btn btn-primary btn-default float-end' id="Continue" href=''>Continue <i class="fa fa-angle-right"></i></a></li>
                   </ul>
                 </div>
@@ -670,24 +670,30 @@
                         e.preventDefault()
                        
                         const userId='<%=userLogged._id%>'
-                        const gst='<%=Gst%>'
+                        const pm='<%=pm%>'
                         const address='<%=userDet._id%>'
                         const Totalprice = '<%=Total%>'
                         const grandTotal='<%=grandTotal%>'
                        
-                        console.log(address)
-                        let response = await fetch(`/checkout4?gst=${gst}&Grandtotal=${grandTotal}&total=${Totalprice}&id=${userId}&addressId=${address}`, {
+                        
+                        let response = await fetch(`/checkout4?Grandtotal=${grandTotal}&total=${Totalprice}&id=${userId}&addressId=${address}&pm=${pm}`, {
                             method: 'POST',
                         })
                         console.log("response"+response);
                         let result = await response.json()
-                        console.log(result)
-                        if (result.success) {
-                            await Swal.fire({
+                      
+                       
+                        if(result.success){
+                          await Swal.fire({
                                 icon: "success",
                                 title: " Order Placed",
                             });
                             window.location.href='/checkout5'
+                        }else{
+                          
+                            
+                            window.location.href='/pay?id=<%=userLogged._id%>'
+                        
                         }
 
                         
@@ -713,7 +719,7 @@
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="tag">Tax</span>
-                    <span class="val">₹ <%=Gst%></span>
+                    
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="tag">Total</span>

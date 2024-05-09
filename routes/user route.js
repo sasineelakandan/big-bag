@@ -46,6 +46,7 @@ Router.get('/checkout2',blockedUser,cartController.checkOut2)
 Router.get('/checkout3',blockedUser,cartController.checkOut3)
 Router.post('/checkout4',blockedUser,cartController.checkOut4)
 Router.get('/checkout5',cartController.checkOut5)
+Router.get('/checkout6',cartController.Chek3page)
 //orders
 Router.get('/allorders',blockedUser,orderConroller.allOrder)
 Router.get('/singleorders',blockedUser,orderConroller.singleOrder)

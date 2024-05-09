@@ -104,7 +104,7 @@ const Cancelall = async (req, res) => {
 }
 const adminOrder=async(req,res)=>{
     try{
-      const orderDetails=await orderCollection.find()
+      const orderDetails=await orderCollection.find({}).sort({_id:-1})
     
         
       

@@ -207,13 +207,13 @@ const addTocart=async(req,res)=>{
         
         const usercart=await cartCollection.find({userId:req.query.user})
         const grandTotal=Number(req.session.grandTotal)
-        const shippingfee=(100)
         
-        const gst=Math.round(grandTotal*0.18)
         
-        const total=grandTotal+gst
+        
+        
+        const total=grandTotal
 
-         res.render('userpages/checkout2',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,Gst:gst,Charge:shippingfee})
+         res.render('userpages/checkout2',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,})
       }
       catch(error){
         console.log(error)
@@ -221,19 +221,9 @@ const addTocart=async(req,res)=>{
      }
      const checkOut3=async(req,res)=>{
       try{
-        
-        const useraddress= await addressCollection.findOne({_id:req.query.id})
-        
-      
-        const usercart=await cartCollection.find({userId:req.query.user})
-        const grandTotal=Number(req.session.grandTotal)
-        
-        
-        const gst=Math.round(grandTotal*0.18)
-        
-        const total=grandTotal+gst
-
-         res.render('userpages/checkout3',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,Gst:gst})
+       
+          console.log(req.query.pm)
+         res.send({success:true})
       }
       catch(error){
         console.log(error)
@@ -241,6 +231,11 @@ const addTocart=async(req,res)=>{
      }
      const checkOut4=async(req,res)=>{
       try{
+        console.log(req.query.pm)
+        if(req.query.pm==='paypal'){
+          
+          res.send({paypal:false})
+        }else{
         const usercart=await cartCollection.find({userId:req.query.id})
         var count=0
         for(let i=0;i<usercart?.length;i++){
@@ -273,7 +268,7 @@ const addTocart=async(req,res)=>{
     
       res.send({success:true})
          
-        
+    } 
          
       }
       catch(error){
@@ -282,7 +277,7 @@ const addTocart=async(req,res)=>{
      }
      const checkOut5=async(req,res)=>{
       try{
-        
+      
       if(req.session.paymentId){
         var usercart=await cartCollection.find({userId:req.session.logged._id})
         const add =await addressCollection.findOne({userId:req.session.logged._id})          
@@ -343,5 +338,27 @@ const addTocart=async(req,res)=>{
         console.log(error)
       }
     } 
+    const Chek3page=async(req,res)=>{
+      try{
+        
+        const useraddress= await addressCollection.findOne({userId:req.query.id})
+        
+      
+        const usercart=await cartCollection.find({userId:req.query.id})
+        const grandTotal=Number(req.session.grandTotal)
+        console.log(usercart)
+        
+        
+        
+        const total=grandTotal
+       
+        res.render('userpages/checkout3',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,pm:req.query.payment})
+         
+      }
+      catch(error){
+        console.log(error)
+      }
+     }
+    
 
-module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4,checkOut5,removeCart}
+module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4,checkOut5,removeCart,Chek3page}
