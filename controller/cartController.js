@@ -283,18 +283,57 @@ const addTocart=async(req,res)=>{
      const checkOut5=async(req,res)=>{
       try{
         
-        //  const orderDet= await orderCollection.findOne({userId:req.session.logged._id})
+      if(req.session.paymentId){
+        var usercart=await cartCollection.find({userId:req.session.logged._id})
+        const add =await addressCollection.findOne({userId:req.session.logged._id})          
+        var count=0
+        for(let i=0;i<usercart?.length;i++){
+         var cartData=usercart[i]?._id
+            count++
+        }         
+                  
+                
+        for (let i = 0; i < usercart?.length; i++) {
+          await productCollection.updateOne(
+            { _id: usercart[i].productId },
+            { $inc: { productStock: -usercart[i].productQuantity } }
+          );
+        }
+        
+        
          
-        //  const address=orderDet.address
+      
+     
+       
          
-        //  const add=await addressCollection.findOne({_id:address})
+       
+       
+        
+        const newOrder = new orderCollection({
+          userId:req.session.logged._id,
+          paymentType:'Online Payment',
+          paymentId:req.session.paymentId,
+          address:add._id,
+          grandTotalCost:req.session.total,
+          cartData:usercart,
+          Items:count,
+         
+        
+          Total:req.session.total
+      })
+      newOrder.save()
+      await cartCollection.deleteMany({userId:req.session.logged._id})
+      res.render('userpages/checkout4',{userLogged:req.session.logged})
+    }else{
          
          res.render('userpages/checkout4',{userLogged:req.session.logged})
+      
       }
+    }
       catch(error){
         console.log(error)
       }
-     }
+     } 
     const removeCart =async(req,res)=>{
       try{
         await cartCollection.deleteOne({_id:req.query.id})

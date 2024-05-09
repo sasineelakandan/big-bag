@@ -5,7 +5,7 @@ const productCollection = require('../model/productmodel')
 const { subscribe } = require('../routes/user route')
 const allOrder = async (req, res) => {
     try {
-        const orderDetails = await orderCollection.find({ userId: req.query.id })
+        const orderDetails = await orderCollection.find({ userId: req.query.id }).sort({_id:-1})
         res.render('userpages/allorders', { userLogged: req.session.logged, orderDet: orderDetails })
     }
     catch (error) {

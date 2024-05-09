@@ -30,7 +30,7 @@ const paymentPage=async(req,res)=>{
     }
 
     const total=card.reduce((acc,val)=>acc+val.totalCostPerProduct ,0)
-    
+    req.session.total=total
 try{
     const create_payment_json = {
         'intent': 'sale',
@@ -58,53 +58,23 @@ try{
             throw error;
         }else{
             
-                const usercart=await cartCollection.find({userId:req.query.id})
-                var count=0
-                for(let i=0;i<usercart?.length;i++){
-                 var cartData=usercart[i]?._id
-                    count++
-                }
+                   
+                
                
-              
+              req.session.paymentId=payment.id
             
-                for (let i = 0; i < usercart?.length; i++) {
-                  await productCollection.updateOne(
-                    { _id: usercart[i].productId },
-                    { $inc: { productStock: -usercart[i].productQuantity } }
-                  );
-                }
-                const add =await addressCollection.findOne({userId:req.query.id})
-                await cartCollection.deleteMany({userId:req.query.id})
-        
-                const newOrder = new orderCollection({
-                  userId:req.query.id,
-                  paymentType:'Online Payment',
-                  paymentId:payment.id,
-                  address:add.id,
-                  grandTotalCost:total,
-                  cartData:usercart,
-                  Items:count,
-                 
-                
-                  Total:total
-              })
-              newOrder.save()
-            
-              
-                 
-                
-                 
-              }
-              
-            console.log(payment)
             for(let i=0;payment.links.length;i++){
                 if(payment.links[i].rel==='approval_url'){
-                   return res.redirect(payment.links[i].href)
-                }
+                   
+                    return res.redirect(payment.links[i].href)
+                    
             }
         }
-   )
+          } 
+         }
+        )
 }
+
 catch(error){
     console.log(error)
 }
