@@ -15,14 +15,14 @@ const transpoter=  nodemailer.createTransport({
 let sendotp = async (user,otp) => {
     try {
         console.log(user);
-         transpoter.sendMail({
+          transpoter.sendMail({
             from: process.env.USER_EMAIL,
             to: user.email,
             subject: 'Registration OTP for bigbag',
             text: `Here is your One Time Password for registration: ${otp}`
         },(err,info)=>{
             if(err){
-                console.log("Eerror in ending the email"+err);
+                console.log("Eerror in sending the email"+err);
             }
             console.log("Email sent succeed"+info);
         })

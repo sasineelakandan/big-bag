@@ -6,6 +6,8 @@ const productCollection = require("../model/productmodel")
 const cartCollection=require('../model/cartmodel')
 const orderCollection=require('../model/ordermodel')
 const addressCollection=require('../model/addressmodel')
+const walletCollection=require('../model/Walletmodel')
+const { orderStatus } = require('./orderController')
 
 const { PAYPALMODE,PAYPAL_CLINT_KEY,PAYPAL_SECRET_KEY}=process.env
 
@@ -80,4 +82,39 @@ catch(error){
 }
 
 }
-module.exports={paymentPage}
+const Wallet=async(req,res)=>{
+    try{
+
+     
+     const WalletOrder=  await orderCollection?.find({paymentType:'Online Payment',orderStatus:'cancel'}).sort({_id:-1})
+     console.log(WalletOrder)
+     
+     if(WalletOrder.length==0){
+        res.render('userpages/Wallet',{userLogged:req.session.logged}) 
+     }
+      const a=WalletOrder.cartData
+    for(i=0;i<WalletOrder.length;i++){
+        const total=WalletOrder.reduce((acc,val)=>acc+val.Total ,0)
+    if(WalletOrder[i]?.orderStatus=='cancel'){
+     
+        var totalamount=WalletOrder[i].Total
+        const walletin= await walletCollection.updateOne({userId:req.query.id},{$set:{
+          userId:req.query.id,
+          walletBalance: total,
+          transactionsDate:new Date(),
+          transactionsId:WalletOrder[i].paymentId,
+          transactionsMethod:'Online payment'
+
+       }},{upsert:true},{new:true})
+         
+       const wallet=await walletCollection.findOne({userId:req.query.id})
+
+       res.render('userpages/Wallet',{userLogged:req.session.logged,walletDet:wallet,orderDet:WalletOrder})
+        }
+   
+    }
+    }catch(error){
+        console.log(error)
+    }
+}
+module.exports={paymentPage,Wallet}

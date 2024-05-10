@@ -64,4 +64,5 @@ Router.get('/googleAuth/googlever',passport.authenticate('google',{scope:['email
 Router.get('/google/callback',passport.authenticate('google'),userConroller.googleCallback)
 //online payment
 Router.get('/pay',paymentcontroller.paymentPage)
+Router.get('/Wallet',paymentcontroller.Wallet)
 module.exports=Router
