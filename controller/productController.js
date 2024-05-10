@@ -8,17 +8,17 @@ const categorycollection=require('../model/categorymodel')
 const productUpdate=async(req,res)=>{
    
     try {
-        if (req.files.length === 0) {
-            const existingProduct = await productCollection.findOne({ _id: req.params.id });
-            var imgFiles = existingProduct.productImage;
-        }else if (req.files.length < 3) {
-            res.send({ noImage: true })
-        } else{
+        // if (req.files.length === 0) {
+        //     const existingProduct = await productCollection.findOne({ _id: req.params.id });
+        //     var imgFiles = existingProduct.productImage;
+        // }else if (req.files.length < 13) {
+        //     res.send({ noImage: true })
+        // } else{
             var imgFiles = []
             for (let i = 0; i < req.files.length; i++) {
-                imgFiles[i] = req.files[i].filename
+                imgFiles.push(req.files[i].filename)
             }
-        }
+        
          
         const productDetails = await productCollection.find({ _id: { $ne: req.params.id }, productName: { $regex: new RegExp('^' + req.body.productName.toLowerCase() + '$', 'i') } })
         if (/^\s*$/.test(req.body.productName) || /^\s*$/.test(req.body.productPrice) || /^\s*$/.test(req.body.productStock)) {

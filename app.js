@@ -33,6 +33,6 @@ app.get('*', function(req, res){
     res.status(404).render('userpages/404');
   });
 
-app.listen(4040,()=>{
+app.listen(8001,()=>{
     console.log('portstarted')
 })

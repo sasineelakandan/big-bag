@@ -38,8 +38,8 @@ try{
             'payment_method': 'paypal'
         },
         'redirect_urls': { // Change made here: redirect_urls instead of redirect_url
-            'return_url': 'http://localhost:4040/checkout5',
-            'cancel_url': 'http://localhost:4040/shop'
+            'return_url': 'http://localhost:8001/checkout5',
+            'cancel_url': 'http://localhost:8001/shop'
         },
         'transactions': [{ // Change made here: transactions instead of transaction
             'item_list': {
