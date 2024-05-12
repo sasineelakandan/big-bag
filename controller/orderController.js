@@ -2,6 +2,7 @@ const orderCollection = require('../model/ordermodel')
 const userCollection = require('../model/usermodel')
 const addressCollection = require('../model/addressmodel')
 const productCollection = require('../model/productmodel')
+const walletCollection=require('../model/Walletmodel')
 const { subscribe } = require('../routes/user route')
 const allOrder = async (req, res) => {
     try {
@@ -83,19 +84,26 @@ const Cancel = async (req, res) => {
 }
 const Cancelall = async (req, res) => {
     try {
+        console.log(req.query.order)
         const orderDet = await orderCollection.findOne({ _id: req.query.order })
+            
+                const wallet=await walletCollection.updateOne({userId:orderDet.userId},{$inc:{walletBalance:+ orderDet.Total}})
+               
+        
         let a = orderDet.cartData
         for (i = 0; i < a.length; i++) {
             a[i].Status='cancel'
             let b = a[i].productId
             let qty = a[i].productQuantity
+          
+            
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
         }
         await orderCollection.updateOne(
             { _id: req.query.order }, 
             { $set: { orderStatus: 'cancel', cartData: a } }
         );
-        
+   
         res.send({ success: true })
     }
     catch (error) {

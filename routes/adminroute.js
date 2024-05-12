@@ -5,6 +5,7 @@ const categoryConroller=require('../controller/categoryConroller')
 const orderConroller=require('../controller/orderController')
 const upload = require('../services/multer')
 const {isadmin}=require('../middlewere/adminver')
+const productOfferController=require('../controller/OfferController')
 
 const Router=express.Router()
 
@@ -49,4 +50,9 @@ Router.get('/orderStatus',orderConroller.orderStatus)
 Router.put('/updateStatus',orderConroller.updateStatus)
 Router.put('/updateStatus2',orderConroller.updateStatus2)
 
+//product offer controller
+
+Router.get('/productOffer',productOfferController.productOfferget)
+Router.post('/productOfferDet',productOfferController.productofferDet)
+Router.put('/productOfferedit',productOfferController.productofferEdit)
 module.exports=Router

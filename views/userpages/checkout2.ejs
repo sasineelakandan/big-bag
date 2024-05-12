@@ -626,6 +626,7 @@
                     <option value="Cash on Deliver">Cash on Delivery</option>
                     <option value="paypal">PayPal</option>
                     <option value="Cash on Delivery">Cash on Delivery</option>
+                    <option value="wallet">Wallet</option>
                   </select>
               
                   <div id="paymentDetails" class="mt-3"></div>
@@ -706,8 +707,11 @@
       } else if (selectedMethod === "paypal") {
         paymentDetailsDiv.innerHTML = "<p> Make payment PayPal account:</p>";
       } else if (selectedMethod === "Cash on Delivery") {
+        paymentDetailsDiv.innerHTML = "<p>Make payment to the cash on delivery :</p>";
+      } else if (selectedMethod === "wallet") {
         paymentDetailsDiv.innerHTML = "<p>Make payment to the wallet :</p>";
       }
+      
 
       let response = await fetch(`/checkout3?Grandtotal=${grandTotal}&total=${Totalprice}&user=${userId}&id=${address}&pid=${productId}&pm=${selectedMethod}`, {
                             method: 'GET',

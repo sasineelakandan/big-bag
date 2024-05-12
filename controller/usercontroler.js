@@ -7,10 +7,15 @@ const auth=require('../middlewere/googleAuth')
 const bcrypt = require('bcryptjs')
 const cartCollection=require('../model/cartmodel')
 const { productList } = require('./productController')
-
+const offer=require('../controller/OfferController')
 
 const whishlistCollection=require('../model/whishlistmodel')
 const { search } = require('../routes/user route')
+
+  offer.productOfferExpiry()
+
+
+ 
 
 const home = async (req, res) => {
     try {
@@ -252,7 +257,7 @@ const shopPage = async (req, res) => {
         products = await productcollection.find({isListed:true,isDelete:false})
           .skip(skip)
           .limit(limit)
-
+        
         
         req.session.page=products
         let pages=(count/limit)
@@ -275,17 +280,7 @@ const shopPage = async (req, res) => {
         }
         
             
-            // if(req.session.category){
-                
-            //     let pages=(count/limit)
-            //     let productDetail = req.session.category
-            //     const find= productDetail._id
-            //     const productDetails=await productcollection.find({parentCategory:find})
-
-            //     req.session.category = null
-            //     req.session.save()
-            //     return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
-            // }
+          
           if(req.session.page){
             
            
@@ -300,10 +295,6 @@ const shopPage = async (req, res) => {
         
         
        
-        // const productDetails = await productcollection.find({isListed:true,isDelete:false}).limit(3)
-      
-        // return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages})
-        
 
     }
 

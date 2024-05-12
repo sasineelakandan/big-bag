@@ -87,32 +87,47 @@ const Wallet=async(req,res)=>{
 
      
      const WalletOrder=  await orderCollection?.find({paymentType:'Online Payment',orderStatus:'cancel'}).sort({_id:-1})
-     console.log(WalletOrder)
+    console.log(WalletOrder)
      
      if(WalletOrder.length==0){
+        console.log('hai')
         res.render('userpages/Wallet',{userLogged:req.session.logged}) 
      }
       const a=WalletOrder.cartData
     for(i=0;i<WalletOrder.length;i++){
+        const wallet2=await walletCollection?.findOne({userId:req.query.id})
+     if(wallet2){
+        console.log('hai')
+        if(wallet2.transactionId!=WalletOrder.paymentId){
+        var total2=WalletOrder.reduce((acc,val)=>acc+val.Total ,0)
+        }
+        await  walletCollection?.updateOne({userId:req.query.id},{$set:{walletBalance:total2}})
+        res.render('userpages/Wallet',{userLogged:req.session.logged,walletDet:wallet2,orderDet:WalletOrder})
+     }
         const total=WalletOrder.reduce((acc,val)=>acc+val.Total ,0)
+        
     if(WalletOrder[i]?.orderStatus=='cancel'){
-     
-        var totalamount=WalletOrder[i].Total
-        const walletin= await walletCollection.updateOne({userId:req.query.id},{$set:{
+      
+        var totalamount=total
+        const walletin= new walletCollection({
           userId:req.query.id,
-          walletBalance: total,
+          walletBalance: totalamount,
           transactionsDate:new Date(),
           transactionsId:WalletOrder[i].paymentId,
           transactionsMethod:'Online payment'
 
-       }},{upsert:true},{new:true})
-         
+       })
+       walletin.save()
        const wallet=await walletCollection.findOne({userId:req.query.id})
 
        res.render('userpages/Wallet',{userLogged:req.session.logged,walletDet:wallet,orderDet:WalletOrder})
-        }
+    }
+
+       
+        
    
     }
+
     }catch(error){
         console.log(error)
     }

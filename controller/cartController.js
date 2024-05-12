@@ -4,7 +4,7 @@ const addressCollection=require('../model/addressmodel')
 const usercollection=require('../model/usermodel')
 const cartCollection=require('../model/cartmodel')
 const orderCollection=require('../model/ordermodel')
-
+const walletCollection=require('../model/Walletmodel')
 
 
 const Cart=async(req,res)=>{
@@ -232,10 +232,50 @@ const addTocart=async(req,res)=>{
      const checkOut4=async(req,res)=>{
       try{
         console.log(req.query.pm)
+        if(req.query.pm==='wallet'){
+          console.log('hai')
+          const usercart=await cartCollection.find({userId:req.query.id})
+          await cartCollection.deleteMany({userId:req.query.id})
+          
+          var count=0
+          for(let i=0;i<usercart?.length;i++){
+           var cartData=usercart[i]?._id
+              count++
+          }
+         
+        
+      
+          for (let i = 0; i < usercart?.length; i++) {
+            await productCollection.updateOne(
+              { _id: usercart[i].productId },
+              { $inc: { productStock: -usercart[i].productQuantity } }
+            );
+          }
+
+        const newOrder = new orderCollection({
+          userId:req.query.id,
+          paymentType:'Wallet',
+          address:req.query.addressId,
+          grandTotalCost:req.query.Grandtotal,
+          cartData:usercart,
+          Items:count,
+        
+        
+          Total:req.query.total
+        
+      })
+      newOrder.save()
+      const total=Number(req.query.total)
+      
+      const wallet2=await walletCollection.updateOne({userId:req.query.id},{$inc:{walletBalance:-total}})
+      res.send({success:true})
+          
+     }
         if(req.query.pm==='paypal'){
           
           res.send({paypal:false})
-        }else{
+
+     }else if(req.query.pm==='Cash on Delivery'){
         const usercart=await cartCollection.find({userId:req.query.id})
         var count=0
         for(let i=0;i<usercart?.length;i++){
@@ -260,7 +300,7 @@ const addTocart=async(req,res)=>{
           grandTotalCost:req.query.Grandtotal,
           cartData:usercart,
           Items:count,
-          Gst:req.query.gst,
+          
         
           Total:req.query.total
       })
@@ -320,7 +360,7 @@ const addTocart=async(req,res)=>{
       await cartCollection.deleteMany({userId:req.session.logged._id})
       res.render('userpages/checkout4',{userLogged:req.session.logged})
     }else{
-         
+      
          res.render('userpages/checkout4',{userLogged:req.session.logged})
       
       }
