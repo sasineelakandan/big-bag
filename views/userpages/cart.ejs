@@ -595,11 +595,11 @@
                             <span class="cartImage"><img style="height: 75px;width: 75px;" src="assets/uploads/<%=cartDet[i].productImage%>" alt="image"></span>
                           </td>
                           <td class=""><%=cartDet[i].productId.productName%></td>
-                          <td class="">₹ <%=cartDet[i].productId.productPrice%></td>
+                          <td class="">₹ <%=cartDet[i].productprice%></td>
                           <td class="count-input">
-						              <button class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','min','<%=userLogged._id%>')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></button>
+						              <button class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productprice %>','min','<%=userLogged._id%>')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></button>
 							              <input id="quantity<%=cartDet[i].productId._id %>" type="number" value="<%=cartDet[i].productQuantity%>">
-							             <button class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productId.productPrice %>','plus','<%=userLogged._id%>')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></button>
+							             <button class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productprice %>','plus','<%=userLogged._id%>')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></button>
                           </td>
                           <td id="total<%=cartDet[i].productId._id %>">₹ <%=cartDet[i].totalCostPerProduct%></td>
                           <td><button type="button" id="delete<%i%>"  onclick="fn2('<%=cartDet[i]._id %>')" class="btn btn-danger">remove</button></td>

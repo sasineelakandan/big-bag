@@ -774,17 +774,28 @@
                 <script>
                     document.getElementById('addtocart').addEventListener('click', async (e) => {
                         e.preventDefault()
+
                         const productId = '<%=productDet._id %>';
                         const productStock = '<%=productDet.productStock %>';
                         const productPrice = '<%=productDet.productPrice %>';
+                        const OfferPrice='<%=productDet.priceBeforeOffer%>'
+                        console.log(OfferPrice)
+                        var bestPrice=0
+                        if(productPrice >= OfferPrice){
+                            console.log('hai')
+                             bestPrice=OfferPrice
+                        }else{
+                             bestPrice=productPrice 
+                        }
+                        console.log(bestPrice)
                         const userId = '<%=userLogged._id%>'
                         const image = '<%=productDet.productImage[0]%>'
                         const productName='<%=productDet.productName%>'
                         const quantityInput = document.getElementById('quantity').value
-                        const Totalprice = Number(productPrice) * Number(quantityInput)
+                        
+                        
 
-
-                        let response = await fetch(`/addtocart?pid=${productId}&stock=${productStock}&quantity=${quantityInput}&productPrice=${productPrice}&user=${userId}&total=${Totalprice}&Img=${image}&productname=${productName}`, {
+                        let response = await fetch(`/addtocart?pid=${productId}&stock=${productStock}&quantity=${quantityInput}&productPrice=${productPrice}&user=${userId}&offer=${OfferPrice}&Img=${image}&productname=${productName}`, {
                             method: 'POST',
                         })
                     

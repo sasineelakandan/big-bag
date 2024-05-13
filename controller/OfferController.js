@@ -25,7 +25,12 @@ const productOfferget=async(req,res)=>{
 }
 const productofferDet=async(req,res)=>{
     try{
-
+        const offer1= await productOfferCollection?.findOne({product:req.body.productId})
+        if(offer1){
+            console.log('hai')
+            res.send({success:false})
+        }else{
+  
         const productOffer=new productOfferCollection({
             product:req.body.productId,
             offerPercentage:req.body.offerPercentage,
@@ -47,6 +52,7 @@ const productofferDet=async(req,res)=>{
          }})
         res.send({success:true})
     }
+}
     catch(error){
         console.log(error)
     }
@@ -80,6 +86,15 @@ const productofferEdit=async(req,res)=>{
     }
 
 }
+const productEditpageget=async(req,res)=>{
+    try{
+        const offerDet= await productOfferCollection.findOne({_id:req.query.id})
+       res.render('adminpages/productOffereditpage',{OfferDet:offerDet})
+     }
+     catch(error){
+         console.log(error)
+     }
+}
 const productOfferExpiry = async (req, res) => {
     try {
         const currentDate = new Date();
@@ -103,4 +118,4 @@ const productOfferExpiry = async (req, res) => {
 };
 
 
-module.exports={productOfferget,productofferDet,productofferEdit,productOfferExpiry}
+module.exports={productOfferget,productofferDet,productofferEdit,productOfferExpiry,productEditpageget}

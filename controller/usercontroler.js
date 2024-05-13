@@ -8,12 +8,12 @@ const bcrypt = require('bcryptjs')
 const cartCollection=require('../model/cartmodel')
 const { productList } = require('./productController')
 const offer=require('../controller/OfferController')
-
+const categoryOffer=require('../controller/categoryOfferController')
 const whishlistCollection=require('../model/whishlistmodel')
 const { search } = require('../routes/user route')
 
   offer.productOfferExpiry()
-
+categoryOffer.categoryOfferExpiry()
 
  
 
@@ -369,7 +369,7 @@ const Whishlist2=async(req,res)=>{
 
    }
  const productDetail=products.flat()
-   
+   console.log(productDetail)
    res.render('userpages/whishlist',{whishlistDet:Whishlist,userLogged:req.session.logged,productDet:productDetail}) 
 
 }
@@ -408,16 +408,24 @@ const Whishlist2=async(req,res)=>{
     res.send({productExist:true})
      }else{
         const qty2=await productcollection.findOne({ _id: req.query.pid})
-        console.log(qty2.productImage[0])
+        const productPrice=parseInt(qty2.productPrice)
+        const offerPrice=parseInt(qty2.priceBeforeOffer)
+        var bestprice=0
+        if(productPrice>=offerPrice){
+          bestprice=offerPrice
+        }else{
+          bestprice=productPrice
+        }
+    console.log(bestprice)
    if(0<qty2.productStock){
      const newcart = new cartCollection({
          userId:req.query.userid,
          productId:req.query.pid ,
          productQuantity:1, 
          productStock:qty2.productStock,
-         productprice:qty2.productPrice,
+         productprice:bestprice,
          Status:'pending',
-         totalCostPerProduct:+qty2.productPrice,
+         totalCostPerProduct:bestprice,
          productImage:qty2.productImage[0],
          productName:qty2.productName,
      })
@@ -430,8 +438,17 @@ const Whishlist2=async(req,res)=>{
     
   
 }
+const removeWish=async(req,res)=>{
+ try{
+    console.log('hai')
+    await whishlistCollection.deleteOne({_id:req.query.id})
+    res.send({success:true})
+ }catch{
+    console.log(error)
+ }
+}
 
 module.exports = {
     home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register, shopPage,
-    singleProduct, logout,Fillters,PageNotfound,googleCallback,notFound,Whishlist,WhishlistRemove,Whishlist2,whishToCart
+    singleProduct, logout,Fillters,PageNotfound,googleCallback,notFound,Whishlist,WhishlistRemove,Whishlist2,whishToCart,removeWish
 }

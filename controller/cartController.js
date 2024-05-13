@@ -60,15 +60,21 @@ const addTocart=async(req,res)=>{
     if(!productExist){
       const qty2=await productCollection.findOne({ _id: req.query.pid})
            const qtyy=Number(req.query.quantity)
+           if(qty2.productPrice>=qty2.priceBeforeOffer){
+                 var productprice=qty2.priceBeforeOffer
+           }else{
+              var productprice=qty2.productPrice
+           }
+          let offerprice= qtyy*productprice
       if(qtyy<=qty2.productStock){
         const newcart = new cartCollection({
             userId:req.query.user,
             productId:req.query.pid ,
             productQuantity:req.query.quantity, 
             productStock:req.query.stock,
-            productprice:req.query.productPrice,
+            productprice:productprice,
             Status:'pending',
-            totalCostPerProduct:req.query.total,
+            totalCostPerProduct:offerprice,
             productImage:req.query.Img,
             productName:req.query.productname
         })
@@ -109,10 +115,17 @@ const addTocart=async(req,res)=>{
       
           const productStock = parseInt(product.productStock);
           const productPrice=parseInt(product.productPrice)
-          
+          const offerPrice=parseInt(product.priceBeforeOffer)
+          var bestprice=0
+          if(productPrice>=offerPrice){
+            bestprice=offerPrice
+          }else{
+            bestprice=productPrice
+          }
+          console.log(bestprice)
           if(action=='plus'){
             if (productStock>quantity) {
-              let total =(1+quantity)*productPrice
+              let total =(1+quantity)*bestprice
               
               
                

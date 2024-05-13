@@ -6,7 +6,7 @@ const orderConroller=require('../controller/orderController')
 const upload = require('../services/multer')
 const {isadmin}=require('../middlewere/adminver')
 const productOfferController=require('../controller/OfferController')
-
+const categoryOfferController=require('../controller/categoryOfferController')
 const Router=express.Router()
 
 
@@ -55,4 +55,10 @@ Router.put('/updateStatus2',orderConroller.updateStatus2)
 Router.get('/productOffer',productOfferController.productOfferget)
 Router.post('/productOfferDet',productOfferController.productofferDet)
 Router.put('/productOfferedit',productOfferController.productofferEdit)
+Router.get('/productOfferedit',productOfferController.productEditpageget)
+//categoryOffer 
+Router.get('/categoryOffer',categoryOfferController.categoryOfferget)
+Router.get('/categoryEditpage',categoryOfferController.categoryOffereditget)
+Router.post('/categoryOfferDet',categoryOfferController.categoryofferDet)
+Router.put('/categoryOfferedit',categoryOfferController.categoryOfferedit)
 module.exports=Router

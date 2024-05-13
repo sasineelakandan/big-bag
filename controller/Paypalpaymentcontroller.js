@@ -64,7 +64,7 @@ try{
                 
                
               req.session.paymentId=payment.id
-            
+            console.log('hai')
             for(let i=0;payment.links.length;i++){
                 if(payment.links[i].rel==='approval_url'){
                    
@@ -84,51 +84,30 @@ catch(error){
 }
 const Wallet=async(req,res)=>{
     try{
-
-     
-     const WalletOrder=  await orderCollection?.find({paymentType:'Online Payment',orderStatus:'cancel'}).sort({_id:-1})
-    console.log(WalletOrder)
-     
-     if(WalletOrder.length==0){
-        console.log('hai')
-        res.render('userpages/Wallet',{userLogged:req.session.logged}) 
-     }
-      const a=WalletOrder.cartData
-    for(i=0;i<WalletOrder.length;i++){
-        const wallet2=await walletCollection?.findOne({userId:req.query.id})
-     if(wallet2){
-        console.log('hai')
-        if(wallet2.transactionId!=WalletOrder.paymentId){
-        var total2=WalletOrder.reduce((acc,val)=>acc+val.Total ,0)
-        }
-        await  walletCollection?.updateOne({userId:req.query.id},{$set:{walletBalance:total2}})
-        res.render('userpages/Wallet',{userLogged:req.session.logged,walletDet:wallet2,orderDet:WalletOrder})
-     }
-        const total=WalletOrder.reduce((acc,val)=>acc+val.Total ,0)
-        
-    if(WalletOrder[i]?.orderStatus=='cancel'){
-      
-        var totalamount=total
-        const walletin= new walletCollection({
+        const wallet=await walletCollection?.findOne({userId:req.query.id})
+     if(wallet){
+        res.render('userpages/Wallet',{userLogged:req.session.logged,walletDet:wallet})
+     }else{
+     const walletin= new walletCollection({
           userId:req.query.id,
-          walletBalance: totalamount,
-          transactionsDate:new Date(),
-          transactionsId:WalletOrder[i].paymentId,
-          transactionsMethod:'Online payment'
+        
+          walletBalance: 0,
+          
+          
+          
 
        })
        walletin.save()
-       const wallet=await walletCollection.findOne({userId:req.query.id})
-
-       res.render('userpages/Wallet',{userLogged:req.session.logged,walletDet:wallet,orderDet:WalletOrder})
-    }
-
        
-        
-   
-    }
 
-    }catch(error){
+       res.render('userpages/Wallet',{userLogged:req.session.logged,walletDet:wallet})
+    }
+    }
+       
+  
+   
+
+    catch(error){
         console.log(error)
     }
 }

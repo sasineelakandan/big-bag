@@ -592,6 +592,7 @@
                           <th>Product Name</th>
                           <th>Unit Price</th>
                           <th>Stock Status</th>
+                          <th>action</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -603,12 +604,26 @@
                             <span class="cartImage d-inline-block"><img  style="height: 75px;width: 75px;"  src="assets/uploads/<%=productDet[i].productImage[0]%>" alt="image"></span>
                           </td>
                           <td><%=productDet[i].productName%></td>
-                          <td><%=productDet[i].productPrice%></td>
+                          <td> 
+                          <% if(productDet[i]?.productPrice >= productDet[i]?.priceBeforeOffer){%>
+                            
+        
+                              ₹ <%=productDet[i]?.priceBeforeOffer%> 
+                             
+                            
+                          <% }else{%>
+                            
+                              
+                              ₹ <%=productDet[i]?.productPrice%>
+                            
+                          <% }%>
+                      </td>
                           <%if(productDet[i].productStock==0){%>
                             <td> <h4 style="color: red;" > Out Of Stock</h4></td>
                          <% }else{%>
                           <td>In Stock</td>
                          <%}%>
+                         <td><button type="button" id="delete<%i%>"  onclick="fn2('<%=whishlistDet[i]._id %>')" class="btn btn-danger">remove</button></td>
                           <td>
                             <button class='btn btn-sm btn-secondary-outlined' onclick="fn('<%=productDet[i]._id%>','<%=userLogged?._id%>')" id="" href=''>Add to cart <i
                                 class="fa fa-angle-right" aria-hidden="true"></i></button>
@@ -662,7 +677,51 @@
                         }
                     }
 </script>
-      
+      <script>
+        async function fn2(cardId){
+          
+          Swal.fire({
+           title: "Are you sure?",
+           icon: "warning",
+           showCancelButton: true,
+           confirmButtonColor: "#3085d6",
+           cancelButtonColor: "#d33",
+           confirmButtonText: "Yes!"
+       }).then(async (result) => {
+           if (result.isConfirmed) {
+              
+               try {
+                    
+                   let response = await fetch(`/removewish?id=${cardId}`, {
+                       method: 'GET'
+                   });
+
+                  
+                   let data = await response.json();
+
+                  
+                   if (data.success) {
+                       await Swal.fire({
+                           icon: "success",
+                           title: "Remove whishlist success",
+                       });
+                       
+                       
+                       window.location.reload();
+                   }
+               } catch (error) {
+                   
+                   Swal.fire({
+                       icon: "error",
+                       title: "Oops...",
+                       text: "Something went wrong!",
+                   });
+               }
+           }
+       });
+            
+          }
+      </script>
       			<!-- FOOTER -->
 			<div class="footer clearfix">
 				<div class="container">
