@@ -35,24 +35,7 @@ const categoryofferDet=async(req,res)=>{
             endDate:new Date(req.body.expiryDate)
         })
         categoryOffer.save()
-        const product=await productcollection.find({parentCategory:req.body.categoryId})
-        console.log(product)
-        const offer= await categoryOfferCollection.findOne({category:req.body.categoryId})
-        const b=Number(offer.offerPercentage)
-        const offerPrice=[]
-        for(i=0;i<product.length;i++){
-            const pprice=product[i].productPrice
-                const a=Math.floor(pprice*b)/100
-                offerPrice.push(pprice-a)
-            
-            
-               const update= await productcollection.updateOne({_id:product[i]._id},{$set:{
-                        productOfferId:offer._id,
-                        productOfferPercentage:b,
-                        priceBeforeOffer:offerPrice[i]
-                     }}) 
-                     console.log(update)
-        }
+     
     
         res.send({success:true})
     }
@@ -82,24 +65,7 @@ const categoryOfferedit=async(req,res)=>{
             startDate:new Date(req.body.startDate),
             endDate:new Date(req.body.expiryDate)
         }})
-        const product=await productcollection.find({parentCategory:req.body.categoryId})
-    
-        const offer= await categoryOfferCollection.findOne({category:req.body.categoryId})
-        const b=Number(offer.offerPercentage)
-        const offerPrice=[]
-        for(i=0;i<product.length;i++){
-            const pprice=product[i].productPrice
-                const a=Math.floor(pprice*b)/100
-                offerPrice.push(pprice-a)
-            
-            
-               const update= await productcollection.updateOne({_id:product[i]._id},{$set:{
-                        productOfferId:offer._id,
-                        productOfferPercentage:b,
-                        priceBeforeOffer:offerPrice[i]
-                     }}) 
-                     
-        }
+        
         
         res.send({success:true})
         
@@ -119,11 +85,11 @@ const categoryOfferExpiry = async (req, res) => {
             const endDate = new Date(expiry[i].endDate); // Ensure endDate is a Date object
             console.log(endDate.getTime())
             if (currentDate.getTime() >= endDate.getTime()) { // Compare time in milliseconds
-                console.log('hai')
+                
                 await categoryOfferCollection.updateOne({ _id: expiry[i]._id }, { $set: { isAvailable: false } });
-                const product = await productcollection.find({ _id: expiry[i].category }); // Use findOne instead of find
+                const product = await productcollection.find({ parentCategory: expiry[i].category }); // Use findOne instead of find
                 if (product) {
-                    await productcollection.updateOne({ _id: product[i]._id }, { $set: { priceBeforeOffer: product[i].productPrice } });
+                    await productcollection.updateOne({ _id: product[i]._id }, { $set: {productPrice: product[i].priceBeforeOffer } });
                 }
             }
         }

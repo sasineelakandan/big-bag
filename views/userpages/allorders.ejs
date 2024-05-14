@@ -572,13 +572,13 @@
           <div class="row">
             <div class="col-md-12">
               <div class="btn-group me-0" role="group" aria-label="...">
-    
-                <a class='btn btn-default' href='/account'><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
+                <a href="/account" class="btn btn-default active"><i class="fa fa-user" aria-hidden="true"></i>Profile</a>
                 <a class='btn btn-default' href='/myaddress/?id=<%=userLogged._id%>'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>My Address</a>
-                <a href="/addaddress" class="btn btn-default active"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>add Address</a>
-                <a href="/allorders" class="btn btn-default active"><i class="fa fa-list" aria-hidden="true"></i>All Orders</a>
-                <a class='btn btn-default' href='/404Page'><i class="fa fa-gift" aria-hidden="true"></i>Wishlist</a>
-                <!-- <a class='btn btn-default me-0' href='my-tickets.html'><i class="fa fa-tag" aria-hidden="true"></i>Tickets</a> -->
+                <a class='btn btn-default' href='/checkout?user=<%=userLogged._id%>'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>Shipping Address</a>
+                <a class='btn btn-default' href='/addaddress'><i class="fas fa-map-marker-alt" aria-hidden="true"></i>Add Address</a>
+                <a class='btn btn-default' href='/allorders?id=<%=userLogged._id%>'><i class="fa fa-list" aria-hidden="true"></i>All Orders</a>
+                <a class='btn btn-default' href='/whishlist2?id=<%=userLogged._id%>'><i class="fa fa-gift" aria-hidden="true"></i>Wishlist</a>
+                <a class='btn btn-default' href='/wallet?id=<%=userLogged._id%>'><i class="fa fa-gift" aria-hidden="true"></i>Wallet</a>
               </div>
             </div>
           </div>

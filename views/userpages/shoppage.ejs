@@ -1298,10 +1298,10 @@
                       <h5>
                         <%=productDet[i]?.productName%>
                       </h5>
-                   <% if(productDet[i]?.productPrice > productDet[i]?.priceBeforeOffer){%>
+                   <% if(productDet[i]?.productPrice < productDet[i]?.priceBeforeOffer){%>
                     <h3>
 
-                      ₹ <%=productDet[i]?.priceBeforeOffer%> <span><h3 style="color: red;" > <strike>₹ <%=productDet[i]?.productPrice%></strike></h3> </span>
+                      ₹ <%=productDet[i]?.productPrice%> <span><h3 style="color: red;" > <strike>₹ <%=productDet[i]?.priceBeforeOffer%></strike></h3> </span>
                      
                     </h3>
                   <% }else{%>

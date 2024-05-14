@@ -38,18 +38,18 @@ const productofferDet=async(req,res)=>{
             endDate:new Date(req.body.expiryDate)
         })
         productOffer.save()
-        const product=await productcollection.findOne({_id:req.body.productId})
-        const offer= await productOfferCollection.findOne({product:req.body.productId})
-        const b=Number(offer.offerPercentage)
+    //     const product=await productcollection.findOne({_id:req.body.productId})
+    //     const offer= await productOfferCollection.findOne({product:req.body.productId})
+    //     const b=Number(offer.offerPercentage)
         
-        const pprice=product.productPrice
-        const a=Math.floor(pprice*b)/100
-       const offerPrice=pprice-a
-         const update= await productcollection.updateOne({_id:req.body.productId},{$set:{
-            productOfferId:offer._id,
-            productOfferPercentage:b,
-            priceBeforeOffer:offerPrice
-         }})
+    //     const pprice=product.productPrice
+    //     const a=Math.floor(pprice*b)/100
+    //    const offerPrice=pprice-a
+    //      const update= await productcollection.updateOne({_id:req.body.productId},{$set:{
+    //         productOfferId:offer._id,
+    //         productOfferPercentage:b,
+    //         priceBeforeOffer:offerPrice
+    //      }})
         res.send({success:true})
     }
 }
@@ -66,18 +66,18 @@ const productofferEdit=async(req,res)=>{
             startDate:new Date(req.body.startDate),
             endDate:new Date(req.body.expiryDate)
         }})
-        const product=await productcollection.findOne({_id:req.body.productId})
-        const offer= await productOfferCollection.findOne({product:req.body.productId})
-        const b=Number(offer.offerPercentage)
+    //     const product=await productcollection.findOne({_id:req.body.productId})
+    //     const offer= await productOfferCollection.findOne({product:req.body.productId})
+    //     const b=Number(offer.offerPercentage)
         
-        const pprice=product.productPrice
-        const a=Math.floor(pprice*b)/100
-       const offerPrice=pprice-a
-         const update= await productcollection.updateOne({_id:req.body.productId},{$set:{
-            productOfferId:offer._id,
-            productOfferPercentage:b,
-            priceBeforeOffer:offerPrice
-         }})
+    //     const pprice=product.productPrice
+    //     const a=Math.floor(pprice*b)/100
+    //    const offerPrice=pprice-a
+    //      const update= await productcollection.updateOne({_id:req.body.productId},{$set:{
+    //         productOfferId:offer._id,
+    //         productOfferPercentage:b,
+    //         priceBeforeOffer:offerPrice
+    //      }})
          
         res.send({success:true})
     }
@@ -108,7 +108,7 @@ const productOfferExpiry = async (req, res) => {
                 await productOfferCollection.updateOne({ _id: expiry[i]._id }, { $set: { isAvailable: false } });
                 const product = await productcollection.findOne({ _id: expiry[i].product }); // Use findOne instead of find
                 if (product) {
-                    await productcollection.updateOne({ _id: expiry[i].product }, { $set: { priceBeforeOffer: product.productPrice } });
+                    await productcollection.updateOne({ _id: expiry[i].product }, { $set: {productPrice: product.priceBeforeOffer } });
                 }
             }
         }

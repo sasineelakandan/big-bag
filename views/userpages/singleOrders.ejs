@@ -729,7 +729,7 @@
                         <div class="col-sm-5 ms-sm-auto">
                           <ul class="list-unstyled">
                             <li>SubTotal <span>₹ <%=orderDet?.grandTotalCost%></span></li>
-                            <li>Gst <span>₹ <%=orderDet?.Gst%></span></li>
+                            <li> <span></span></li>
                             
                             <li>Grand Total <span class="grandTotal">₹ <%=orderDet?.Total%></span></li>
                           </ul>
@@ -777,7 +777,7 @@
                       </div>
                       <div class="panel-body">
                         <address>
-                          <span>Cash On Delivery</span>
+                          <span><%=orderDet?.paymentType%></span>
                         </address>
                       </div>
                     </div>
