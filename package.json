@@ -24,6 +24,8 @@
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
     "paypal-rest-sdk": "^1.8.1",
+    "pdfkit": "^0.15.0",
+    "puppeteer-core": "^22.9.0",
     "sweetalert2": "^11.10.7",
     "view-engine": "^1.1.1"
   },

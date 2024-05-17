@@ -3,30 +3,29 @@ const otpcollections = require('../model/otpmodel')
 const categorycollection = require('../model/categorymodel')
 const productcollection = require("../model/productmodel")
 const sendotp = require("../services/sendotp")
-const auth=require('../middlewere/googleAuth')
+const auth = require('../middlewere/googleAuth')
 const bcrypt = require('bcryptjs')
-const cartCollection=require('../model/cartmodel')
+const cartCollection = require('../model/cartmodel')
 const { productList } = require('./productController')
-const offer=require('../controller/OfferController')
-const categoryOffer=require('../controller/categoryOfferController')
-const whishlistCollection=require('../model/whishlistmodel')
+const offer = require('../controller/OfferController')
+const categoryOffer = require('../controller/categoryOfferController')
+const whishlistCollection = require('../model/whishlistmodel')
 const { search } = require('../routes/user route')
-const BestOffer=require('../services/helpper')
-  offer.productOfferExpiry()
-categoryOffer.categoryOfferExpiry()
-BestOffer.BestOffer()
- 
+const BestOffer = require('../services/helpper')
+const ReferalCode=require('../services/referal')
+
+
 
 const home = async (req, res) => {
     try {
-        const productDetails = await productcollection.find({isListed:true})
-        const categoryDetails=await categorycollection.find({isListed:true})
+        const productDetails = await productcollection.find({ isListed: true })
+        const categoryDetails = await categorycollection.find({ isListed: true })
 
         if (req.session.logged) {
 
-            res.render('userpages/home', { userLogged: req.session.logged, productDetails,categoryDetails })
+            res.render('userpages/home', { userLogged: req.session.logged, productDetails, categoryDetails })
         } else {
-            res.render('userpages/home', { userLogged: null, productDetails ,categoryDetails})
+            res.render('userpages/home', { userLogged: null, productDetails, categoryDetails })
         }
     } catch (err) {
         console.log(err);
@@ -64,11 +63,12 @@ const loginget = async (req, res) => {
 }
 
 const signupget = (req, res) => {
-    try {
+    try { const Referal=req.query.referral
+        
         if (req.session.logged) {
             res.redirect('/')
         } else {
-            res.render('userpages/signup')
+            res.render('userpages/signup',{referral:Referal})
         }
     } catch (err) {
         console.log(err);
@@ -124,20 +124,20 @@ const register = async (req, res) => {
 
 const singleProduct = async (req, res) => {
     try {
-        
+
         const productDetails = await productcollection.findOne({ _id: req.query.id })
         const categoryDetails = await categorycollection.findOne({ _id: req.query.id })
-      
 
-           
-           
-            
-           
-        
-            res.render('userpages/singleProduct', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
-        }
-    
-     catch (err) {
+
+
+
+
+
+
+        res.render('userpages/singleProduct', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails })
+    }
+
+    catch (err) {
         console.log(err);
     }
 }
@@ -146,15 +146,17 @@ const userRegister = async (req, res) => {
 
 
 
+        
 
-
-    try {
+    try { 
+        const refferal = Math.floor(100000 + Math.random() * 900000);
         const bcryptpassword = await bcrypt.hash(req.body.password, 10)
         const user = new usercollection({
             name: req.body.name,
             email: req.body.email,
             phone: req.body.phone,
             password: bcryptpassword,
+            ReferalCode:refferal
         })
         await user.save()
 
@@ -164,6 +166,7 @@ const userRegister = async (req, res) => {
 
             const genratedotp = Math.floor(100000 + Math.random() * 900000).toString()
             await sendotp(req.session.logged, genratedotp)
+            await  ReferalCode.Referal(req.body.ReferalCode,req.body.email)
             const bcryptotp = bcrypt.hashSync(genratedotp, 10)
             const userotp = new otpcollections({
                 userId: req.session.logged._id,
@@ -229,226 +232,275 @@ const resendotp = async (req, res) => {
         console.log(err);
     }
 }
+
+
 const shopPage = async (req, res) => {
-
     try {
-        if (req.session.search) {
-            let pages=(count/limit)
-            let productDetails = req.session.search
-            
-            req.session.search = null
-            req.session.save()
-            return res.render('userpages/shoppage', { productDet: productDetails, userLogged: req.session.logged, categoryDet: categoryDetails ,page:pages})
-        }
+        categoryOffer.categoryOfferExpiry()
+        offer.productOfferExpiry()
+        BestOffer.BestOffer()
+        let productDetails = req.session.productDetail || await productcollection.find({ isListed: true })
+        const categoryDetails = await categorycollection.find({ isListed: true })
+        const productsPerPage = 3
+        const totalPages = productDetails.length / productsPerPage
+        const pageNo = req.query.pages || 1
+        const start = (pageNo - 1) * productsPerPage
+        const end = start + productsPerPage
+        productDetails = productDetails.slice(start, end)
+        if (req.session.logged) {
 
-        let categoryDetails= await categorycollection.find({isListed:true})
-        
-        
-       
-         let products;
-        var count;
-        let page = Number(req.query.pages) || 1;
-        
-        var limit = 3;
-        let skip = (page - 1) * limit;
-        
-        count = await productcollection.find({isListed:true,isDelete:false}).countDocuments()
-       
-        products = await productcollection.find({isListed:true,isDelete:false})
-          .skip(skip)
-          .limit(limit)
-        
-        
-        req.session.page=products
-        let pages=(count/limit)
-        if(req.session.logged){
-            let pages=(count/limit)
-            const {_id}=req.session?.logged
-            let whishlistDet=await whishlistCollection.find({userId:_id})
-            let whishlistarr=[]
-            for(i=0;i<whishlistDet.length;i++){
+            const { _id } = req.session?.logged
+            let whishlistDet = await whishlistCollection.find({ userId: _id })
+            let whishlistarr = []
+            for (i = 0; i < whishlistDet.length; i++) {
                 whishlistarr.push(whishlistDet[i].productId.toString())
             }
 
-           for(i=0;i<products.length;i++){
-                
-             products[i].isWhishlisted=whishlistarr.includes(products[i]._id.toString())
-             console.log(products[i].isWhishlisted)
-           }
-           
-           return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: products, categoryDet: categoryDetails,page:pages})
-        }
-        
-            
-          
-          if(req.session.page){
-            
-           
-             const productDetails=req.session.page
-             
-             req.session.page=null
-             req.session.save()
-             return res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails,page:pages})
-        }
-        
-       
-        
-        
-       
+            for (i = 0; i < productDetails.length; i++) {
 
+                productDetails[i].isWhishlisted = whishlistarr.includes(productDetails[i]._id.toString())
+
+            }
+
+        }
+
+        res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails, totalPages })
+    } catch (err) {
+        console.log(err);
     }
+}
 
-    catch (err) {
+const shopSort = async (req, res) => {
+
+    try {
+        let productDetail = req.session.productDetail || await productcollection.find({ isListed: true })
+        switch (req.body.sortBy) {
+            case 'priceAsc': {
+                productDetail = productDetail.sort((a, b) => a.productPrice - b.productPrice)
+                break;
+            }
+            case 'priceDes': {
+                productDetail = productDetail.sort((a, b) => b.productPrice - a.productPrice)
+                break;
+            }
+            case 'nameAsc': {
+                productDetail = productDetail.sort((a, b) => a.productName.localeCompare(b.productName))
+                break;
+            }
+            case 'nameDes': {
+                productDetail = productDetail.sort((a, b) => b.productName.localeCompare(a.productName))
+                break;
+            }
+            case 'newProduct': {
+                productDetail = productDetail.sort((a, b) => b._id - a._id)
+                break;
+            }
+
+        }
+
+        req.session.productDetail = productDetail
+        res.redirect('/shop')
+
+    } catch (err) {
         console.log(err)
     }
-
 }
+
+const filter = async (req, res) => {
+    try {
+        console.log(req.body)
+        let productDetail = req.session.productDetail || await productcollection.find({ isListed: true })
+        let start = 0, end = Infinity
+
+
+        switch (req.body.sortBy) {
+            case '0': {
+                start = 0; end = 100
+                break
+            }
+            case '1': {
+                start = 100; end = 150
+                break
+            }
+            case '2': {
+                start = 130; end = 220
+                break
+            }
+            case '3': {
+                start = 200; end = Infinity
+                break
+            }
+        }
+
+
+        productDetail = productDetail.filter((val) => {
+            console.log(start, end)
+            return val.productPrice > start && val.productPrice <= end
+        })
+        console.log(productDetail)
+        req.session.productDetail = productDetail
+
+        res.redirect('/shop')
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
+const filter2 = async (req, res) => {
+    try {
+        productDetail = await productcollection.find({ isListed: true, parentCategory: req.body.cid })
+        req.session.productDetail = productDetail
+
+        res.redirect('/shop')
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 const logout = async (req, res) => {
     req.session.logged = false
     res.redirect('/')
 }
 
-const Fillters =async(req,res)=>{
+const Fillters = async (req, res) => {
     console.log(req.body)
-   
-   
+
+
 
 }
-const Whishlist=async(req,res)=>{
+const Whishlist = async (req, res) => {
 
-    try{
-        
-       
-    
-    
-    if(req.query.action){
-    const whishlist = new whishlistCollection({
-        productId:req.query.id,
-        userId:req.query.action,
-        Whishlist:true
-    })
-    req.session.whishlist=whishlist
-    
-    await whishlist.save()
-    
-    res.send({list:true})
-    
-}else{
-    res.send({unlist:false})
-}
-    
-    
- 
-    
-}
+    try {
 
-    catch(error){
+
+
+
+        if (req.query.action) {
+            const whishlist = new whishlistCollection({
+                productId: req.query.id,
+                userId: req.query.action,
+                Whishlist: true
+            })
+            req.session.whishlist = whishlist
+
+            await whishlist.save()
+
+            res.send({ list: true })
+
+        } else {
+            res.send({ unlist: false })
+        }
+
+
+
+
+    }
+
+    catch (error) {
         console.log(error)
     }
 }
-const WhishlistRemove=async(req,res)=>{
-    await whishlistCollection.deleteOne({productId:req.query.id})
-    res.send({list:true})
+const WhishlistRemove = async (req, res) => {
+    await whishlistCollection.deleteOne({ productId: req.query.id })
+    res.send({ list: true })
 }
- const PageNotfound=async(req,res)=>{
-    try{
-      res.render('userpages/404')  
+
+const Whishlist2 = async (req, res) => {
+    const Whishlist = await whishlistCollection.find({ userId: req.query.id })
+    console.log(Whishlist)
+    let products = []
+    for (i = 0; i < Whishlist.length; i++) {
+        Whishlist[i].productId
+        const prod = await productcollection.find({ _id: Whishlist[i].productId })
+        products.push(prod)
+
     }
-    catch(error){
+    const productDetail = products.flat()
+    console.log(productDetail)
+    res.render('userpages/whishlist', { whishlistDet: Whishlist, userLogged: req.session.logged, productDet: productDetail })
+
+}
+
+const googleCallback = async (req, res) => {
+    try {
+        const user = await usercollection.findOneAndUpdate(
+            { email: req.user.email }, // Search condition
+            { $set: { name: req.user.displayName } }, // Update fields
+            { upsert: true, new: true } // Options: upsert (create if not found), new (return updated document)
+        );
+
+        req.session.logged = user
+        res.redirect('/')
+    } catch (error) {
+        console.error("Error updating user:", error);
+        // Handle error
+    }
+}
+const notFound = async (req, res) => {
+    res.status(404).render('userpages/404');
+};
+
+
+const whishToCart = async (req, res) => {
+
+
+    const productExist = await cartCollection.findOne({
+        userId: req.session.logged._id,
+        productId: req.query.pid,
+    });
+
+    if (productExist) {
+
+        res.send({ productExist: true })
+    } else {
+        const qty2 = await productcollection.findOne({ _id: req.query.pid })
+        const productPrice = parseInt(qty2.productPrice)
+        const offerPrice = parseInt(qty2.priceBeforeOffer)
+
+        if (0 < qty2.productStock) {
+            const newcart = new cartCollection({
+                userId: req.query.userid,
+                productId: req.query.pid,
+                productQuantity: 1,
+                productStock: qty2.productStock,
+                productprice: productPrice,
+                Status: 'pending',
+                totalCostPerProduct: productPrice,
+                productImage: qty2.productImage[0],
+                productName: qty2.productName,
+            })
+            newcart.save()
+            res.send({ success: true })
+        } else {
+            res.send({ OutStock: true })
+        }
+    }
+
+
+}
+const removeWish = async (req, res) => {
+    try {
+        console.log('hai')
+        await whishlistCollection.deleteOne({ _id: req.query.id })
+        res.send({ success: true })
+    } catch {
         console.log(error)
     }
- }
-const Whishlist2=async(req,res)=>{
-   const Whishlist=await whishlistCollection.find({userId:req.query.id})
-   console.log(Whishlist)
-   let products=[]
-   for(i=0;i<Whishlist.length;i++){
-    Whishlist[i].productId
-    const prod=await productcollection.find({_id:Whishlist[i].productId})
-     products.push(prod)
-
-   }
- const productDetail=products.flat()
-   console.log(productDetail)
-   res.render('userpages/whishlist',{whishlistDet:Whishlist,userLogged:req.session.logged,productDet:productDetail}) 
-
 }
-
-    const googleCallback = async (req, res) => {
-        try {
-            const user = await usercollection.findOneAndUpdate(
-                { email: req.user.email }, // Search condition
-                { $set: { name: req.user.displayName } }, // Update fields
-                { upsert: true, new: true } // Options: upsert (create if not found), new (return updated document)
-            );
-            
-            req.session.logged=user
-            res.redirect('/')
-        } catch (error) {
-            console.error("Error updating user:", error);
-            // Handle error
-        }
+const removeAllFillters = async (req, res) => {
+    try {
+        req.session.productDetail = null
+        res.redirect('/shop')
+    } catch (error) {
+        console.log(error)
     }
-    const notFound=async(req, res)=>{
-        res.status(404).render('userpages/404') ;
-      };
-
-
-    const whishToCart=async(req,res)=>{
-     
-   
-   const productExist = await cartCollection.findOne({
-    userId: req.session.logged._id,
-    productId: req.query.pid,});
-    
-    if(productExist){
-    //     const update2=await productcollection.findOne({_id:req.query.pid})
-    //    console.log(update2.productPrice)
-    //     const update=await cartCollection.updateOne({ productId: req.query.pid },{$inc:{productQuantity:1,totalCostPerProduct:update2.productPrice}})
-    res.send({productExist:true})
-     }else{
-        const qty2=await productcollection.findOne({ _id: req.query.pid})
-        const productPrice=parseInt(qty2.productPrice)
-        const offerPrice=parseInt(qty2.priceBeforeOffer)
-        var bestprice=0
-        if(productPrice>=offerPrice){
-          bestprice=offerPrice
-        }else{
-          bestprice=productPrice
-        }
-    console.log(bestprice)
-   if(0<qty2.productStock){
-     const newcart = new cartCollection({
-         userId:req.query.userid,
-         productId:req.query.pid ,
-         productQuantity:1, 
-         productStock:qty2.productStock,
-         productprice:bestprice,
-         Status:'pending',
-         totalCostPerProduct:bestprice,
-         productImage:qty2.productImage[0],
-         productName:qty2.productName,
-     })
-     newcart.save()
-     res.send({success:true})
-     }else{
-        res.send({OutStock:true}) 
-     }
-    }
-    
-  
-}
-const removeWish=async(req,res)=>{
- try{
-    console.log('hai')
-    await whishlistCollection.deleteOne({_id:req.query.id})
-    res.send({success:true})
- }catch{
-    console.log(error)
- }
 }
 
 module.exports = {
     home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register, shopPage,
-    singleProduct, logout,Fillters,PageNotfound,googleCallback,notFound,Whishlist,WhishlistRemove,Whishlist2,whishToCart,removeWish
+    singleProduct, logout, Fillters, googleCallback, notFound, Whishlist, WhishlistRemove, Whishlist2, whishToCart, removeWish, shopSort,
+    filter, filter2, removeAllFillters
 }

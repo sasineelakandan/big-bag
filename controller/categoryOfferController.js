@@ -1,3 +1,4 @@
+
 const usercollection = require('../model/usermodel')
 const otpcollections = require('../model/otpmodel')
 const categorycollection = require('../model/categorymodel')
@@ -83,13 +84,15 @@ const categoryOfferExpiry = async (req, res) => {
         const expiry = await categoryOfferCollection.find({isAvailable:true});
         for (let i = 0; i < expiry.length; i++) {
             const endDate = new Date(expiry[i].endDate); // Ensure endDate is a Date object
-            console.log(endDate.getTime())
+            
             if (currentDate.getTime() >= endDate.getTime()) { // Compare time in milliseconds
                 
                 await categoryOfferCollection.updateOne({ _id: expiry[i]._id }, { $set: { isAvailable: false } });
                 const product = await productcollection.find({ parentCategory: expiry[i].category }); // Use findOne instead of find
                 if (product) {
-                    await productcollection.updateOne({ _id: product[i]._id }, { $set: {productPrice: product[i].priceBeforeOffer } });
+                 for (let j=0;i<product.length;j++){
+                    await productcollection.updateOne({ _id: product[j]._id }, { $set: {productPrice: product[j].priceBeforeOffer } });
+                }
                 }
             }
         }

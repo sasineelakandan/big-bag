@@ -617,7 +617,38 @@
                 <div class="page-header">
                   <h4>Billing Information</h4>
                 </div>
+                <style>
+                  div.coupon {
+                    background-color: #f5f5f5;
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    margin-right: 500px;
+                    height: 200px;
+                    ; /* Adjust margin-right as needed */
+                }
                 
+                /* Coupon code style */
+                span.coupon-code {
+                    font-size: large;
+                    /* Add any additional styles for the coupon code here */
+                }
+                </style>
+                      <!-- MAIN CONTENT SECTION -->
+                      <h1 style="margin-bottom: 10px;">Couponcodes</h1>
+                      <div style="margin-top: 20px;" class="coupon">
+                       
+                        <% for(i=0;i<coupenDet.length;i++){%>
+                            <h5>MinimumPurchase 500$ above use This Coupon      <span style="" class="coupon-code"><%=coupenDet[i].couponCode%></span> Copy and Paste</h5>
+                        <% }%>
+                
+                     
+                    </div>
+                    <form id="coupon" style="margin-top: 10px;" >
+                  
+                      <input type="text" class="form-control form-control-lg" name="couponCode" required placeholder="Enter your coupon code">
+
+                      <button type="submit" class="btn btn-primary">Apply Coupon</button>
+                  </form>
               
                 <div class="container mt-5">
                   <h2>Select Payment Method:</h2>
@@ -696,7 +727,7 @@
                       const id='<%=userDet._id%>'
       var selectedMethod = document.getElementById("paymentMethod").value;
       var paymentDetailsDiv = document.getElementById("paymentDetails");
-
+      var DiscountPrice=document.getElementById("Discount")
       
 
       // Clear previous details
@@ -713,7 +744,7 @@
       }
       
 
-      let response = await fetch(`/checkout3?Grandtotal=${grandTotal}&total=${Totalprice}&user=${userId}&id=${address}&pid=${productId}&pm=${selectedMethod}`, {
+      let response = await fetch(`/checkout3?Grandtotal=${grandTotal}&total=${Totalprice}&user=${userId}&id=${address}&pid=${productId}&pm=${selectedMethod}&Discount=${DiscountPrice}`, {
                             method: 'GET',
                         })
                         let result = await response.json()
@@ -724,6 +755,46 @@
     }
   }
   </script>
+         <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('coupon');
+        
+            form.addEventListener('submit', async(event) => {
+                event.preventDefault(); // Prevent the default form submission
+        
+                const formData = new FormData(form); // Get form data
+        
+                // Retrieve the value of the 'couponCode' input field from the FormData object
+                const couponCode = formData.get('couponCode');
+                
+               let response= await fetch(`/applyCoupons?couponCode=${couponCode}`, {
+                    method: 'POST',
+                    body: formData
+                })
+               
+                let result = await response.json()
+                console.log(result)
+                if (result.success) {
+                  document.getElementById('grandTotal').innerHTML=result.grandTotal
+                  document.getElementById('Discount').innerHTML=result.Discount
+                  await Swal.fire({
+                    icon: "success",
+                    title: " Coupon applied SuccessFully",
+                  });
+                  
+                }else{
+                  await Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: " Minimumpurchase 500$ Above ",
+                    });
+                }
+              })
+            })
+          
+        
+        
+               </script>
                  
             <div class="col-md-4">
               <div class="summery-box">
@@ -736,12 +807,12 @@
                   </li>
                   
                   <li class="d-flex justify-content-between">
-                    <span class="tag"></span>
-                    <span class="val"></span>
+                    <span class="tag">Discount Price</span>
+                    <span id="Discount" class="val"> 0</span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="tag">Total</span>
-                    <span class="val">₹ <%=Total%> </span>
+                    <span id="grandTotal" class="val">₹ <%=Total%> </span>
                   </li>
                 </ul>
               </div>

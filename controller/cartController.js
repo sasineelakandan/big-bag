@@ -5,21 +5,22 @@ const usercollection=require('../model/usermodel')
 const cartCollection=require('../model/cartmodel')
 const orderCollection=require('../model/ordermodel')
 const walletCollection=require('../model/Walletmodel')
-
+const couPonCollection=require('../model/Couponmodel')
 
 const Cart=async(req,res)=>{
     try{
         
         const cart= await cartCollection.find({userId:req.query.user}).populate('productId')
-         
+       
          Sum=0
          for(let i=0;i<cart.length;i++){
           Sum=Sum+cart[i].totalCostPerProduct
          }
         
-     
+         req.session.Sum=Sum
+         req.session.grandTotal=Sum
               
-        res.render('userpages/cart',{userLogged:req.session.logged,cartDet:cart,grandTotal:Sum})
+        res.render('userpages/cart',{userLogged:req.session.logged,cartDet:cart,grandTotal:Sum,})
     }
     catch(error){
         console.log(error)
@@ -201,11 +202,7 @@ const addTocart=async(req,res)=>{
       try{
         const cart= await cartCollection.find({userId:req.query.user}).populate('productId')
          
-        Sum=0
-        for(let i=0;i<cart.length;i++){
-         Sum=Sum+cart[i].totalCostPerProduct
-        }
-        req.session.grandTotal=Number(Sum)
+       
         const address= await addressCollection.find({userId:req.query.user})
         
         res.render('userpages/shippingAddress',{userLogged:req.session.logged,grandTotal:req.session.grandTotal,addressDet:address})
@@ -217,7 +214,7 @@ const addTocart=async(req,res)=>{
      const checkOut2=async(req,res)=>{
       try{
         const useraddress= await addressCollection.findOne({_id:req.query.id})
-        
+        const coupon=await couPonCollection.find({})
         const usercart=await cartCollection.find({userId:req.query.user})
         const grandTotal=Number(req.session.grandTotal)
         
@@ -226,7 +223,7 @@ const addTocart=async(req,res)=>{
         
         const total=grandTotal
 
-         res.render('userpages/checkout2',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,})
+         res.render('userpages/checkout2',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,coupenDet:coupon})
       }
       catch(error){
         console.log(error)
@@ -272,15 +269,22 @@ const addTocart=async(req,res)=>{
           grandTotalCost:req.query.Grandtotal,
           cartData:usercart,
           Items:count,
-        
+          UserName:req.session.logged.name,
         
           Total:req.query.total
         
       })
       newOrder.save()
       const total=Number(req.query.total)
+      const wallet3= new walletCollection({
+        userId:req.query.id,
+        walletBalance :req.query.total,
+        transactionsDate:new Date(),
+        transactiontype:'Debited'
+     })
+     wallet3.save()
+      const wallet2=await usercollection.updateOne({_id:req.query.id},{$inc:{walletBalance:-total}})
       
-      const wallet2=await walletCollection.updateOne({userId:req.query.id},{$inc:{walletBalance:-total}})
       res.send({success:true})
           
      }
@@ -314,7 +318,7 @@ const addTocart=async(req,res)=>{
           cartData:usercart,
           Items:count,
           
-        
+          UserName:req.session.logged.name,
           Total:req.query.total
       })
       newOrder.save()
@@ -366,7 +370,7 @@ const addTocart=async(req,res)=>{
           cartData:usercart,
           Items:count,
          
-        
+          UserName:req.session.logged.name,
           Total:req.session.total
       })
       newOrder.save()
@@ -399,19 +403,34 @@ const addTocart=async(req,res)=>{
       
         const usercart=await cartCollection.find({userId:req.query.id})
         const grandTotal=Number(req.session.grandTotal)
-        console.log(usercart)
+        const Discount=Number(req.query.Discount)
         
+        req.session.grandtotal=grandTotal
         
-        
-        const total=grandTotal
+        const total=(req.session.grandtotal)
        
-        res.render('userpages/checkout3',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,pm:req.query.payment})
+        res.render('userpages/checkout3',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,pm:req.query.payment,Discount:Discount})
          
       }
       catch(error){
         console.log(error)
       }
      }
-    
+  const applyCoupon=async(req,res)=>{
+    try{
+      const coupon=await couPonCollection.findOne({couponCode:req.query.couponCode})
+      
+      if(coupon.minimumPurchase<=req.session.Sum){
+           const Total=req.session.Sum-coupon.discountPercentage
+           req.session.grandTotal=Total
+           res.send({success:true,grandTotal:Total,Discount:coupon.discountPercentage})
+      }else{
+        res.send({success:false})
+      }
 
-module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4,checkOut5,removeCart,Chek3page}
+    }catch(error){
+      console.log(error)
+    }
+  }  
+
+module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4,checkOut5,removeCart,Chek3page,applyCoupon}

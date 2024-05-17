@@ -23,9 +23,10 @@ Router.get('/shop',blockedUser,userConroller.shopPage)
 Router.get('/singleProduct',isuser,blockedUser,userConroller.singleProduct)
 Router.get('/logout',userConroller.logout)
 
-Router.post('/filtter',userConroller.Fillters)
-
-
+Router.post('/shopSort',userConroller.shopSort)
+Router.post('/shopSort2',userConroller.filter)
+Router.post('/shopSort3',userConroller.filter2)
+Router.get('/removefiltter',userConroller.removeAllFillters)
 // addressController
 Router.get('/account',isuser,blockedUser,addressController.account)
 Router.get('/addaddress',isuser,blockedUser,addressController.addaddress)
@@ -40,6 +41,7 @@ Router.get('/cart',isuser,blockedUser,cartController.Cart)
 Router.post("/addtocart",isuser,cartController.addTocart)
 Router.get('/cartbutton',cartController.cartbutton)
 Router.get('/removecart',cartController.removeCart)
+Router.post('/applyCoupons',cartController.applyCoupon)
 //checkout
 Router.get('/checkout',blockedUser,cartController.checkOut1)
 Router.get('/checkout2',blockedUser,cartController.checkOut2)

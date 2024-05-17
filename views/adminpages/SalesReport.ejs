@@ -1,0 +1,78 @@
+<%- include('../adminpart/adminhead') %>
+<body>
+    <div class="container">
+        
+        <h2> SalesReport</h2>
+        <div class="container mt-2 d-flex my-5">
+            <a href="/admin/salesReport/download/xlsx"> <button id="downloadExcel" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Download Excel</a>
+            </button>
+            <button id="downloadPdf" class="btn btn-danger ms-3">
+                <i class="fas fa-file-pdf"></i> Download PDF
+            </button>
+            <form id="filtersForm" class="form-inline d-flex mx-4">
+            
+                <label for="filterDateFrom" class="mr-2">Date From:</label>
+                <input style="max-width: fit-content;" type="date" id="filterDateFrom" class="form-control form-control-sm datepicker">
+          
+           
+                <label for="filterDateTo" class="mr-2 ms-3 ">Date To:</label>
+                <input style="max-width: fit-content;" type="date" id="filterDateTo" class="form-control form-control-sm datepicker">
+            
+            <button type="button" class="btn btn-primary btn-sm ms-3" id="applyFilters">Apply Filters</button>
+        </form>
+     </div>
+       
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Order Date</th>
+                    <th>No of Items </th>
+                    <th>TotalCostperProduct</th>
+                    <th>PaymentMethod</th>
+                    <th>Status</th>
+
+                </tr>
+            </thead>
+            <tbody>
+            <%for(i=0;i<Sreports.length;i++){%>
+                <tr>
+                    <td><%=Sreports[i]?.UserName%></td>
+                    <td><%=Sreports[i]?.orderDate%></td>
+                    <td><%=Sreports[i]?.Items%></td>
+                    <td><%=Sreports[i]?.grandTotalCost%></td>
+                    <td><%=Sreports[i]?.paymentType%></td>
+                    <td><%=Sreports[i]?.orderStatus%></td>
+                </tr>
+            <%}%>
+            </tbody>
+        </table>
+    </div>
+   
+        
+    </script>
+    <script>
+        document.getElementById('downloadPdf').addEventListener('click', async () => {
+            console.log('hai')
+          try {
+            const response = await fetch('/salesReport/download/pdf', {
+              method: 'GET'
+            });
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'salesReport.pdf';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a); 
+          } catch (error) {
+            console.error('Error downloading PDF:', error);
+          }
+        });
+      </script>
+</body>
+
+</html>

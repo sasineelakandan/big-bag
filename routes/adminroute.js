@@ -8,8 +8,8 @@ const {isadmin}=require('../middlewere/adminver')
 const productOfferController=require('../controller/OfferController')
 const categoryOfferController=require('../controller/categoryOfferController')
 const Router=express.Router()
-
-
+const couPonController=require('../controller/CouponController')
+const salesConroller=require('../controller/SalesController')
 
 
 
@@ -61,4 +61,17 @@ Router.get('/categoryOffer',categoryOfferController.categoryOfferget)
 Router.get('/categoryEditpage',categoryOfferController.categoryOffereditget)
 Router.post('/categoryOfferDet',categoryOfferController.categoryofferDet)
 Router.put('/categoryOfferedit',categoryOfferController.categoryOfferedit)
+
+//couPon
+Router.get('/coupons',couPonController.Couponget)
+Router.get('/couponEditpage',couPonController.CouponEditget)
+Router.post('/couponDet',couPonController.CouponOffDet)
+Router.put('/couponOfferedit',couPonController.CouponOffEdit)
+
+//salesReport
+Router.get('/Sales',salesConroller.SalesReportGet)
+
+Router.get("/salesReport/download/xlsx",salesConroller.salesReportDownload);
+Router.get('/salesReport/download/pdf',salesConroller.salesReportDownloadPDF)
+
 module.exports=Router

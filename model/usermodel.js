@@ -24,8 +24,8 @@ const userschema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    Whishlist:[ {type: String} ],
+    ReferalCode: {type: Number,required:true} ,
 
-    
+    walletBalance: {type: Number,default:0}
 })
 module.exports=mongoose.model('user',userschema)

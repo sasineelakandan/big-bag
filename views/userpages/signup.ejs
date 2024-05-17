@@ -758,7 +758,16 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                     <label for="">Phone</label>
                     <input type="tel"  name="phone" id="phone" class="form-control"/>
                   </div>
-                  
+                  <div class="form-group">
+                    <label>Do you have an referral code from your acquaintances ?</label>
+                    <% if(referral){ %>
+                    <input minlength="4" name="ReferalCode" id="ReferalCode" type="text" class="form-control"
+                      placeholder="Enter the referral code?" value="<%= referral %>">
+                    <% }else{ %>
+                        <input minlength="4" name="ReferalCode" id="ReferalCode" type="text" class="form-control"
+                      placeholder="Enter the referral code?">
+                    <% } %>
+                </div>
                   
             
                   <div class="form-outline mb-4">
@@ -829,6 +838,7 @@ text-align: center;">
                         name: form.name.value,
                         email: form.email.value,
                         password: form.password.value,
+                        ReferalCode:form.ReferalCode.value,
                         phone: form.phone.value
                     }
                     //fetch only to check both email and number not to save
@@ -852,7 +862,7 @@ text-align: center;">
                             title: "OTP Authentication",
                             showDenyButton: true,
                             // showCancelButton: true,
-                            confirmButtonText: "Continue without OTP",
+                            confirmButtonText: "Cancel",
                             denyButtonText: 'Request OTP'
                         }).then(async (result) => {
                             /* Read more about isConfirmed, isDenied below */

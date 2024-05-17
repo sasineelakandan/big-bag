@@ -1,0 +1,105 @@
+<%- include('../adminpart/adminhead') %>
+
+  <body>
+   
+    <div style="margin-top: 70px;" class="container">
+        <div class="row">
+          <div class="col-md-6 offset-md-3">
+            <h4>Product Details</h4>
+            
+            <form id="productForm2">
+              <div class="form-group">
+                <label for="products">CouponCode:</label>
+                <input class="form-control" name="couponCode" id="ProductName" value="<%=couponDet?.couponCode%>">
+              </div>
+              <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input  class="form-control" name="startDate" id="startDate" value="<%=couponDet?.startDate.toDateString()%>">
+              </div>
+              <div class="form-group">
+                <label for="expiryDate">Minimum Purchase:</label>
+                <input type="number" class="form-control" id="expiryDate" value="<%=couponDet?.minimumPurchase%>" name="MinimumPurchase">
+              </div>
+              <div class="form-group">
+                <label for="expiryDate">Expiry Date:</label>
+                <input  class="form-control" name="expiryDate" id="expiryDate" value="<%=couponDet?.expiryDate.toDateString()%>">
+              </div>
+              <div class="form-group">
+                <label for="offerPercentage">Offer Price:</label>
+                <input type="number" name="offerPrice" class="form-control" id="offerPercentage" value="<%=couponDet?.discountPercentage%>" placeholder="Enter offer percentage">
+              </div>
+              <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary">Close</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <script>
+        $("#productForm2").validate({
+          rules: {
+            productName: "required",
+            startDate: "required",
+            expiryDate: "required",
+            offerPercentage: {
+              required: true,
+              number: true,
+              min: 0,
+              max: 90,
+            }
+          },
+          messages: {
+            productName: "Please enter a category name",
+            startDate: "Please enter a start date",
+            expiryDate: "Please enter an expiry date",
+            offerPercentage: {
+              required: "Please enter an offer percentage",
+              number: "Please enter a valid number",
+              min: "Offer percentage must be greater than or equal to 0",
+              max: "Offer percentage must be less than or equal to 100"
+            }
+          },
+          errorElement: "div",
+          errorPlacement: function (error, element) {
+            error.addClass("invalid-feedback");
+            error.insertAfter(element);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass("is-invalid").removeClass("is-valid");
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass("is-invalid").addClass("is-valid");
+          },
+    
+          submitHandler: async function (form,event) {
+            event.preventDefault()
+            const formData = $(form).serializeArray();
+            const jsonData = {};
+            formData.forEach(field => {
+              jsonData[field.name] = field.value;
+            });
+    
+            // Submit data using Fetch API
+            let response = await fetch('/couponOfferedit', {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(jsonData)
+            });
+    
+            let result = await response.json()
+            if (result.success) {
+              await Swal.fire({
+                icon: "success",
+                title: " categoryOffer eddited",
+              });
+              window.location.reload()
+            }
+          }
+        });
+    
+    
+      </script>
+  </body>

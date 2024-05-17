@@ -588,11 +588,44 @@
                 </div>
                 <h3>Welcome <span><%=userLogged.name%></span></h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <h3> Wallet Balance</h3> <span style="font-size:large"><%=walletDet?.walletBalance%></span>
+                <h3> Wallet Balance</h3> <span style="font-size:large"><%=userDet?.walletBalance%></span>
                 <div class="orderBox text-nowrap">
                   <h4 style="margin-top: 10px;" > </h4>
                   <div class="table-responsive">
-                   
+                    <div class="orderBox text-nowrap">
+                      <h4> Wallet History</h4>
+                      <div class="table-responsive">
+                        <table class="table">
+
+                          <thead>
+                            <tr>
+                              <th>Order ID</th>
+                              <th>TransactionsDate</th>
+                              <th>Transactiontype</th>
+                              <th></th>
+                              
+                            </tr>
+                          </thead>
+                          <tbody>
+
+                          <% for(i=0;i<walletDet?.length;i++){%>
+                            <tr>
+                              <td><%=walletDet[i]?._id%></td>
+                              <td><%=walletDet[i]?.transactionsDate.toDateString()%></td>
+                              <td><%=walletDet[i]?.transactiontype%></td>
+                              <td><%=walletDet[i]?.walletBalance%></td>
+ 
+                            </tr>
+                          <%}%>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
                   </div>
                 </div>
                
@@ -600,6 +633,7 @@
             </div>
           </div>
         </div>
+        
       </section>
 
       			<!-- FOOTER -->

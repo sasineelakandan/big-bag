@@ -1,110 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-  <!-- SITE TITTLE -->
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>big bags-Online Shopping India</title>
-
-  <!-- PLUGINS CSS STYLE -->
-  <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href='assets/plugins/fontawesome-5.15.2/css/all.min.css' rel='stylesheet'>
-  <link href='assets/plugins/fontawesome-5.15.2/css/fontawesome.min.css' rel='stylesheet'>
-  <link href='assets/plugins/material/css/materialdesignicons.min.css' rel='stylesheet' />
-  <link href="assets/plugins/animate/animate.css" rel="stylesheet">
-  <link href='assets/plugins/simplebar/simplebar.css' rel='stylesheet' />
-
-  <link href='assets/plugins/selectbox/select_option1.css' rel='stylesheet'>
-
-
-  <link href='assets/plugins/iziToast/css/iziToast.css' rel='stylesheet'>
-
-
-  <link rel='stylesheet' type='text/css' href='assets/plugins/slick/slick.css' media='screen'>
-  <link rel='stylesheet' type='text/css' href='assets/plugins/slick/slick-theme.css' media='screen'>
-
-  <!-- CUSTOM CSS -->
-  <link href="assets/css/style.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/default.css" id="option_style">
-
-  <!-- Icons -->
-  <!-- <link rel="icon" href="/public/assets/img/favicon.png"> -->
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
-
-
-  <!-- form validate -->
-  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
-    integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
-    integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-</head>
-<!-- TOPBAR -->
-
-
-<!-- NAVBAR -->
-<nav class="navbar navbar-main navbar-default navbar-expand-md navbar-scrollUp navbar-sticky d-none d-md-block"
-  role="navigation">
-  <div class="container">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <img src="assets/img/logo1.png" alt="gg">
-    <h1></h1>
-
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-ex1-collapse"
-      aria-controls="navbar-ex1-collapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="fa fa-bars"></span>
-    </button>
-
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-      <ul class="nav navbar-nav ms-auto">
-        <li class="nav-item dropdown megaDropMenu ">
-          <a href="/admin" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
-            data-delay="300" data-close-others="true" aria-expanded="false">Home</b></a>
-
-        </li>
-        <li class="nav-item dropdown megaDropMenu ">
-          <a href="/usermanagement" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
-            data-delay="300" data-close-others="true" aria-expanded="false">Users</b></a>
-
-        </li>
-        <li class="nav-item dropdown megaDropMenu ">
-          <a href="/category" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
-            data-delay="300" data-close-others="true" aria-expanded="false">Category</b></a>
-
-        </li>
-        <li class="nav-item dropdown megaDropMenu ">
-          <a href="/product" class="dropdown-toggle nav-link" data-toggle="dropdown" data-hover="dropdown"
-            data-delay="300" data-close-others="true" aria-expanded="false">Products</b></a>
-
-        </li>
-        <li class="nav-item ">
-          <form action="/adminlogout" method="post">
-            <button class="btn btn-danger btn-lg px-3" type="submit">Logout</button>
-          </form>
-
-        </li>
-
-      </ul>
-    </div><!-- /.navbar-collapse -->
-
-  </div>
-</nav>
-</div>
-
-
+<%- include('../adminpart/adminhead') %>
 <body>
   <style>
     .error {
@@ -127,7 +21,7 @@
 
     </div>
   </nav>
-  <button style="margin-top: 80px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
     Add ProductOffer
   </button>
   <div class="modal" id="myModal">

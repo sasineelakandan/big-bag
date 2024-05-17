@@ -20,18 +20,9 @@ paypal.configure({
 const paymentPage=async(req,res)=>{
     const card=await cartCollection.find({userId:req.query.id})
     
-    const items=[]
-    for(i=0;i<card.length;i++){
-        items.push({
-            'name':card[i].productName,
-            'price':card[i].productprice,
-            'currency':'USD',
-            'quantity':card[i].productQuantity
-            
-        })
-    }
+   
 
-    const total=card.reduce((acc,val)=>acc+val.totalCostPerProduct ,0)
+    const total=req.session.grandtotal
     req.session.total=total
 try{
     const create_payment_json = {
@@ -43,16 +34,24 @@ try{
             'return_url': 'http://localhost:8001/checkout5',
             'cancel_url': 'http://localhost:8001/shop'
         },
-        'transactions': [{ // Change made here: transactions instead of transaction
-            'item_list': {
-                'items': items
-            },
-            'amount': {
-                'currency': 'USD',
-                'total': total
-            }
-        }]
-    };
+           "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "book",
+                        "sku": "001",
+                        "price":total ,
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
+                    "currency": "USD",
+                    "total": total // Fix the total amount to 2 decimal places
+                },
+                "description": "This is the payment description.",
+
+            }]
+        };
     
 
    paypal.payment.create(create_payment_json,async function(error,payment){
@@ -84,25 +83,17 @@ catch(error){
 }
 const Wallet=async(req,res)=>{
     try{
-        const wallet=await walletCollection?.findOne({userId:req.query.id})
-     if(wallet){
-        res.render('userpages/Wallet',{userLogged:req.session.logged,walletDet:wallet})
-     }else{
-     const walletin= new walletCollection({
-          userId:req.query.id,
+         
+        const userWallet=await userCollection.findOne({_id:req.query.id})
+        const walletHistory=await walletCollection.find({userId:req.query.id})
         
-          walletBalance: 0,
-          
-          
-          
-
-       })
-       walletin.save()
+        res.render('userpages/Wallet',{userLogged:req.session.logged,userDet:userWallet,walletDet:walletHistory})
+     
+    
        
 
-       res.render('userpages/Wallet',{userLogged:req.session.logged,walletDet:wallet})
     }
-    }
+    
        
   
    

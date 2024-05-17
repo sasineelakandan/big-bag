@@ -8,12 +8,12 @@ const categorycollection=require('../model/categorymodel')
 const productUpdate=async(req,res)=>{
    
     try {
-        // if (req.files.length === 0) {
-        //     const existingProduct = await productCollection.findOne({ _id: req.params.id });
-        //     var imgFiles = existingProduct.productImage;
-        // }else if (req.files.length < 13) {
-        //     res.send({ noImage: true })
-        // } else{
+        if (req.files.length === 0) {
+            const existingProduct = await productCollection.findOne({ _id: req.params.id });
+            var imgFiles = existingProduct.productImage;
+        }else if (req.files.length < 13) {
+            res.send({ noImage: true })
+        } else{
             var imgFiles = []
             for (let i = 0; i < req.files.length; i++) {
                 imgFiles.push(req.files[i].filename)
@@ -38,8 +38,8 @@ const productUpdate=async(req,res)=>{
                 }
             })
             res.send({ success: true })
-
         }
+           }   
 
     } catch (err) {
         console.log(err);
@@ -109,7 +109,7 @@ const addProduct=async(req,res)=>{
     }
 }
 const addProduct2=async(req,res)=>{
-    
+          console.log(req.body)
     try {
         let imgFiles = []
         for (let i = 0; i < req.files.length; i++) {

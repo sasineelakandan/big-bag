@@ -1047,145 +1047,104 @@
                                   <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Sport Tops &amp; Shoes <span>(3)</span></a></li>
                                 </ul> -->
                               </li>
-                              <form  action="/filtter" method="post" >
+                              
                               <li>
-                                <ul>
-                                <%for (i=0;i<categoryDet.length;i++){%>
-                                  <li>
-                                    <input type="radio" name="cid" value="<%=categoryDet[i]._id%>" />
-                                    <label for="range-500-1000"><%=categoryDet[i].categoryname%></label>
-                                  </li>
-                                  <%}%>
-                                </ul>
+              
+                                <form action="/shopSort3" method="post">
+                                  <ul>
+                                      <%for (i=0; i<categoryDet.length; i++) {%>
+                                          <li>
+                                              <input type="radio" name="cid" value="<%=categoryDet[i]._id%>" />
+                                              <label for="range-<%=categoryDet[i]._id%>"><%=categoryDet[i].categoryname%></label>
+                                          </li>
+                                      <%}%>
+                                  </ul>
+                                  <!-- Include any additional form elements or buttons here -->
+                                  <button type="submit" class="btn btn-primary ">Submit</button>
+                              </form>
                             
                                 
-                                <!-- <ul id="men" class="collapse collapseItem" role="tabpanel" aria-labelledby="heading2" data-bs-parent="#accordion2">
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Accessories <span>(6)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Bag <span>(6)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Cloths <span>(25)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Bed &amp; Bath <span>(2)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Swimming costume <span>(5)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Sport Tops &amp; Shoes <span>(3)</span></a></li>
-                                </ul> -->
+                               
                               </li>
         
                               <li>
-                                <!-- <div class="" role="tab" id="heading3">
-                                  <a href="javascript:void(0)" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#kids" aria-controls="kids">Laptop Bag<i
-                                      class="fa fa-plus"></i></a>
-                                </div> -->
-<!--         
-                                <ul id="kids" class="collapse collapseItem" role="tabpanel" aria-labelledby="heading3" data-bs-parent="#accordion2">
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Accessories <span>(6)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Bag <span>(6)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Cloths <span>(25)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Bed &amp; Bath <span>(2)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Swimming costume <span>(5)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Sport Tops &amp; Shoes <span>(3)</span></a></li>
-                                </ul> -->
+                   
                               </li>
         
-                              <!-- <li>
-                                <div class="" role="tab" id="heading4">
-                                  <a href="javascript:void(0)" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#accessories" aria-controls="accessories">Accessories <i
-                                      class="fa fa-plus"></i></a>
-                                </div>
-                                
-                                <ul id="accessories" class="collapse collapseItem" role="tabpanel" aria-labelledby="heading4" data-bs-parent="#accordion2">
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Accessories <span>(6)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Bag <span>(6)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Cloths <span>(25)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Bed &amp; Bath <span>(2)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Swimming costume <span>(5)</span></a></li>
-                                  <li><a href="javascript:void(0)"><i class="fa fa-caret-right" aria-hidden="true"></i>Sport Tops &amp; Shoes <span>(3)</span></a></li>
-                                </ul>
-                              </li> -->
+                              
                             </ul>
                           </div>
                         </div>
                       </div>
 
-                      <!-- <div class="panel panel-default priceRange">
-                        <div class="panel-heading">Filter by Price</div>
-                        <div class="panel-body clearfix">
-                          <div class="price-range" id="price-range">
-                            <div class="mb-4" id="slider-non-linear-step"></div>
-                            <div class="price-range-content">
-                              <input class="btn-default bg-primary me-auto" type="submit" value="Filter">
-                              <span class="price-text">Price:</span>
-                              <span class="price-value" id="lower-value"></span>
-                              <strong class="price-icon">-</strong>
-                              <span class="price-value" id="upper-value"></span>
-                            </div>
-                          </div>
-                        </div>
-                      </div> -->
+                     
         
-                      <div class="panel panel-default filterNormal">
-                        <div class="panel-heading">Filter by Price</div>
-                        <div class="panel-body">
-                          <ul class="list-unstyled">
-                            
-                              <ul>
-                                <li>
-                                  <input type="radio" name="range" value="500-1000" />
-                                  <label for="range-500-1000">500-1000</label>
-                                </li>
-                                <li>
-                                  <input type="radio" name="range" value="1000-1500" />
-                                  <label for="range-1000-1500">1000-1500</label>
-                                </li>
-                                <li>
-                                  <input type="radio" name="range" value="1500-2000" />
-                                  <label for="range-1500-2000">1500-2000</label>
-                                </li>
-                              </ul>
-                             
-                           
-                            <!-- <li><a href="javascript:void(0)">Blue<span>(12)</span></a></li>
-                            <li><a href="javascript:void(0)">Orange<span>(12)</span></a></li> -->
-                          </ul>
+                      <form action="/shopSort2" method="post">
+                        <div class="panel panel-default filterNormal">
+                            <div class="panel-heading">Filter by Price</div>
+                            <div class="panel-body">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <input type="radio" name="sortBy" value="0" />
+                                        <label for="range-500-1000">0-100</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="sortBy" value="1" />
+                                        <label for="range-1000-1500">100-150</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="sortBy" value="2" />
+                                        <label for="range-1500-2000">150-200</label>
+                                    </li>
+                                </ul>
+                                <button type="submit" class="btn btn-primary ">Submit</button>
+                            </div>
                         </div>
-                      </div>
-                      <button type="submit"  class="btn btn-primary">Apply filter</button>
-
+                
+                    </form>
+                    
  
-                      </script>
+           <form  action="/shopSort" method="post" >
                       <div style="margin-top: 20px;" class="panel panel-default filterNormal">
                         <div class="panel-heading">filter by product</div>
                         <div class="panel-body">
                           <ul class="list-unstyled clearfix">
                             <li>
-                              <input type="radio" name="NameAssending" value="1" />
+                              <input type="radio" name="sortBy" value="nameAsc" />
                               <label for="range-500-1000">NameAssending</label>
                             </li>
                             <li>
-                              <input type="radio" name="NameDisending" value="-1" />
+                              <input type="radio" name="sortBy" value="nameDes" />
                               <label for="range">NameDisending</label>
                             </li>
                             <li>
-                              <input type="radio" name="PriceAssending" value="1" />
+                              <input type="radio" name="sortBy" value="priceAsc" />
                               <label for="range">PriceAssending</label>
                             </li>
                             <li>
-                              <input type="radio" name="PriceDisending" value="-1" />
+                              <input type="radio" name="sortBy" value="priceDes" />
                               <label for="range">PriceDisending</label>
+                            </li>
+                            <li>
+                              <input type="radio" name="sortBy" value="newProduct" />
+                              <label for="range">New products</label>
                             </li>
                            
                           </ul>
-                         
+                          <button type="submit" class="btn btn-primary ">Submit</button>
                         </div>
                       </div>
-                      <button type="submit"  class="btn btn-primary">Apply filter</button>
+                    </form>
                     </div>
+                    <a href="/removefiltter"><button  class="btn btn-primary ">Remove Filters</button></a>
                   </div>
                 </div>
               </div>
             </div>
-          
-          </form>
 
- 
+          
+
+         
             <div class="col-lg-9 col-md-8">
               <div class="row filterArea">
                 <div class="col-6">
@@ -1194,7 +1153,7 @@
                  <input class="px-4 py-2" style="margin-left: 25px;" type="search" placeholder="search" name="search" ><button class="btn bg-info py-0" type="submit">search</button>
                 </form>
                 </div>
-
+              
                 <div class="col-6">
                   <div class="btn-group float-end" role="group">
                     <button type="button" class="btn btn-default active" onclick="window.location.href='product-grid-left-sidebar-2.html'"><i class="fa fa-th" aria-hidden="true"></i><span>Grid</span></button>
@@ -1262,35 +1221,14 @@
   
 
 </script> 
-<script>
-  async function fn2(productId,userId){
-    
-    let response = await fetch(`/removewhishlist?id=${productId}&action=${userId}`, {
-                      method: 'GET',
-                  })
-                  let result = await response.json()
-                  if (result.list) {
-                      await Swal.fire({
-                          icon: "success",
-                          title: "Product Listed",
-                      });
-                      window.location.reload()
 
-
-                  } else {
-                    
-                        await Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Please Login!",
-                        
-                      });
-                  }
-              }
-               
-</script>                   
+  
+                   
         
-                        
+   <script>
+   
+          
+   </script>                     
                       
                         
                       
@@ -1324,7 +1262,7 @@
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-             <%for(i=0;i<page;i++){%>
+             <%for(i=0;i<totalPages;i++){%>
               <li class="page-item"><a class="page-link" href="/shop?pages=<%=i+1%>"><%=i+1%></a></li>
                      <%}%>
               <li class="page-item">
