@@ -7,6 +7,7 @@ const orderCollection=require('../model/ordermodel')
 const walletCollection=require('../model/Walletmodel')
 const couPonCollection=require('../model/Couponmodel')
 
+
 const Cart=async(req,res)=>{
     try{
         
@@ -232,7 +233,7 @@ const addTocart=async(req,res)=>{
      const checkOut3=async(req,res)=>{
       try{
        
-          console.log(req.query.pm)
+          
          res.send({success:true})
       }
       catch(error){
@@ -241,58 +242,13 @@ const addTocart=async(req,res)=>{
      }
      const checkOut4=async(req,res)=>{
       try{
-        console.log(req.query.pm)
-        if(req.query.pm==='wallet'){
-          console.log('hai')
-          const usercart=await cartCollection.find({userId:req.query.id})
-          await cartCollection.deleteMany({userId:req.query.id})
-          
-          var count=0
-          for(let i=0;i<usercart?.length;i++){
-           var cartData=usercart[i]?._id
-              count++
-          }
-         
         
-      
-          for (let i = 0; i < usercart?.length; i++) {
-            await productCollection.updateOne(
-              { _id: usercart[i].productId },
-              { $inc: { productStock: -usercart[i].productQuantity } }
-            );
-          }
+       
+     if(req.query.pm=='paypal'){
+          
+          res.send({paypal:true})
 
-        const newOrder = new orderCollection({
-          userId:req.query.id,
-          paymentType:'Wallet',
-          address:req.query.addressId,
-          grandTotalCost:req.query.Grandtotal,
-          cartData:usercart,
-          Items:count,
-          UserName:req.session.logged.name,
-        
-          Total:req.query.total
-        
-      })
-      newOrder.save()
-      const total=Number(req.query.total)
-      const wallet3= new walletCollection({
-        userId:req.query.id,
-        walletBalance :req.query.total,
-        transactionsDate:new Date(),
-        transactiontype:'Debited'
-     })
-     wallet3.save()
-      const wallet2=await usercollection.updateOne({_id:req.query.id},{$inc:{walletBalance:-total}})
-      
-      res.send({success:true})
-          
-     }
-        if(req.query.pm==='paypal'){
-          
-          res.send({paypal:false})
-
-     }else if(req.query.pm==='Cash on Delivery'){
+     } if(req.query.pm==='Cash on Delivery'){
         const usercart=await cartCollection.find({userId:req.query.id})
         var count=0
         for(let i=0;i<usercart?.length;i++){
@@ -309,9 +265,11 @@ const addTocart=async(req,res)=>{
           );
         }
         await cartCollection.deleteMany({userId:req.query.id})
-
+        const orderId = Math.floor(100000 + Math.random() * 900000);
         const newOrder = new orderCollection({
+          OrderId:orderId,
           userId:req.query.id,
+          UserName:req.session.logged.name,
           paymentType:'COD',
           address:req.query.addressId,
           grandTotalCost:req.query.Grandtotal,
@@ -326,6 +284,61 @@ const addTocart=async(req,res)=>{
       res.send({success:true})
          
     } 
+    if(req.query.pm==='wallet'){
+      if(req.session.logged.walletBalance<req.query.total){
+        res.send({checkBalance:true})
+        
+      }else{
+          const usercart=await cartCollection.find({userId:req.query.id})
+      await cartCollection.deleteMany({userId:req.query.id})
+      
+      var count=0
+      for(let i=0;i<usercart?.length;i++){
+       var cartData=usercart[i]?._id
+          count++
+      }
+     
+    
+  
+      for (let i = 0; i < usercart?.length; i++) {
+        await productCollection.updateOne(
+          { _id: usercart[i].productId },
+          { $inc: { productStock: -usercart[i].productQuantity } }
+        );
+      }   
+      
+      
+      const orderId = Math.floor(100000 + Math.random() * 900000);
+    const newOrder = new orderCollection({
+      OrderId:orderId,
+      userId:req.query.id,
+      paymentType:'Wallet',
+      UserName:req.session.logged.name,
+      address:req.query.addressId,
+      grandTotalCost:req.query.Grandtotal,
+      cartData:usercart,
+      Items:count,
+      UserName:req.session.logged.name,
+    
+      Total:req.query.total
+    
+  })
+  newOrder.save()
+  const total=Number(req.query.total)
+  const wallet3= new walletCollection({
+    userId:req.query.id,
+    walletBalance :req.query.total,
+    transactionsDate:new Date(),
+    transactiontype:'Debited'
+ })
+ wallet3.save()
+  const wallet2=await usercollection.updateOne({_id:req.query.id},{$inc:{walletBalance:-total}})
+  
+  res.send({success:true})
+      
+ 
+      }
+}
          
       }
       catch(error){
@@ -334,6 +347,7 @@ const addTocart=async(req,res)=>{
      }
      const checkOut5=async(req,res)=>{
       try{
+        const online =await orderCollection.find()
       
       if(req.session.paymentId){
         var usercart=await cartCollection.find({userId:req.session.logged._id})
@@ -360,9 +374,11 @@ const addTocart=async(req,res)=>{
          
        
        
-        
+        const orderId = Math.floor(100000 + Math.random() * 900000);
         const newOrder = new orderCollection({
+          OrderId:orderId,
           userId:req.session.logged._id,
+          UserName:req.session.logged.name,
           paymentType:'Online Payment',
           paymentId:req.session.paymentId,
           address:add._id,
@@ -374,6 +390,7 @@ const addTocart=async(req,res)=>{
           Total:req.session.total
       })
       newOrder.save()
+      req.session.paymentId=null
       await cartCollection.deleteMany({userId:req.session.logged._id})
       res.render('userpages/checkout4',{userLogged:req.session.logged})
     }else{

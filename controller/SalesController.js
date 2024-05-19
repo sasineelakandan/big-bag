@@ -4,7 +4,7 @@ const addressCollection = require('../model/addressmodel')
 const productCollection = require('../model/productmodel')
 const walletCollection=require('../model/Walletmodel')
 const puppeteer = require('puppeteer-core');
-
+const exceljs = require('exceljs');
 
 
 
@@ -12,8 +12,16 @@ const puppeteer = require('puppeteer-core');
 
 const SalesReportGet=async(req,res)=>{
     try{
-        const sales=await orderCollection.find({orderStatus:'Delivered'})
-        res.render('adminpages/SalesReport',{Sreports:sales})
+    var salesDetails = req.session.salesDetails ||await orderCollection.find({orderStatus:'Delivered'}).sort({_id:-1})
+    
+    const productsPerPage = 7
+    const totalPages = salesDetails.length / productsPerPage
+    const pageNo = req.query.pages || 1
+    const start = (pageNo - 1) * productsPerPage
+    const end = start + productsPerPage
+    salesDetails = salesDetails.slice(start, end)
+
+    res.render('adminpages/SalesReport',{Sreports:salesDetails,totalPages})
     }
     catch(error){
         console.log(error)
@@ -36,11 +44,10 @@ const salesReportDownloadPDF = async (req, res) => {
         const salesData = await orderCollection.find({
             orderDate: { $gte: startDate, $lte: endDate },
             orderStatus: "Delivered"
-        }); // Make sure to use .toArray() if you're using MongoDB
+        });
 
         const browser = await puppeteer.launch({
-            // Specify the correct executablePath if needed
-            // executablePath: '/path/to/your/chrome'
+         
             channel: 'chrome'
         });
 
@@ -51,6 +58,7 @@ const salesReportDownloadPDF = async (req, res) => {
             <table style="width:100%; border-collapse: collapse;" border="1">
               <tr>
                 <th>Order Number</th>
+                <th>UserName</th>
                 <th>Order Date</th>
                 <th>Products</th>
                 <th>Quantity</th>
@@ -62,7 +70,8 @@ const salesReportDownloadPDF = async (req, res) => {
         salesData.forEach((order) => {
             htmlContent += `
               <tr>
-                <td>${order._id}</td>
+                <td>${order.OrderId}</td>
+                <td>${order.UserName}</td>
                 <td>${formatDate(order.orderDate)}</td>
                 <td>${order.cartData.map((item) => item.productName).join(", ")}</td>
                 <td>${order.cartData.map((item) => item.productQuantity).join(", ")}</td>
@@ -92,6 +101,38 @@ const formatDate = (date) => {
     // Implement your date formatting function here
     return date.toISOString().split('T')[0]; // Example implementation
 };
+
+const filterDate=async(req,res)=>{
+  try{
+    
+    const startOfDay = (date) => {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+  };
+
+  const endOfDay = (date) => {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
+  };
+;
+
+ 
+    if (req.body.filterDateFrom && req.body.filterDateTo) {
+      startDate = new Date(req.body.filterDateFrom);
+      endDate = new Date(req.body.filterDateTo);
+      startDate = startOfDay(new Date(startDate));
+      endDate = endOfDay(new Date(endDate));
+    const salesData = await orderCollection.find({
+      orderDate: { $gte: startDate, $lte: endDate },
+      orderStatus: "Delivered"
+      
+  });
+  req.session.salesDetails=salesData
+   res.send({success:true})
+  }
+}
+  catch(error){
+    console.log(error)
+  }
+}
 const salesReportDownload = async (req, res) => {
     try {
       const workBook = new exceljs.Workbook();
@@ -106,9 +147,7 @@ const salesReportDownload = async (req, res) => {
         { header: "Status", key: "status", width: 20 },
       ];
   
-      let salesData = req.session?.admin?.dateValues
-        ? req.session.admin.salesData
-        : await orderCollection.find().populate("userId");
+      let salesData = await orderCollection.find({orderStatus:'Delivered'})
   
       salesData = salesData.map((v) => {
         v.orderDateFormatted = formatDate(v.orderDate);
@@ -117,10 +156,10 @@ const salesReportDownload = async (req, res) => {
   
       salesData.forEach((v) => {
         sheet.addRow({
-          no: v.orderNumber,
-          username: v.userId.username,
+          no: v.OrderId,
+          username: v.UserName,
           orderDate: v.orderDateFormatted,
-          products: v.cartData.map((v) => v.productId.productName).join(", "),
+          products: v.cartData.map((v) => v.productName).join(", "),
           noOfItems: v.cartData.map((v) => v.productQuantity).join(", "),
           totalCost: "₹" + v.grandTotalCost,
           paymentMethod: v.paymentType,
@@ -168,5 +207,12 @@ const salesReportDownload = async (req, res) => {
     }
   };
   
-  
-module.exports={SalesReportGet,salesReportDownloadPDF,salesReportDownload}
+  const removeAllFillters = async (req, res) => {
+    try {
+      req.session.salesDetails  = null
+        res.redirect('/Sales')
+    } catch (error) {
+        console.log(error)
+    }
+}
+module.exports={SalesReportGet,salesReportDownloadPDF,salesReportDownload,filterDate,removeAllFillters}

@@ -53,7 +53,7 @@ const havingBothOffers = async (productId, categoryId, prod) => {
 
     
     try {
-      console.log('ha')
+      
       let prodOffer = await productOfferCollection.findOne({ product:productId });
       let catOffer = await categoryOfferCollection.findOne({
         category:categoryId,

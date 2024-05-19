@@ -605,16 +605,16 @@
                           </td>
                           <td><%=productDet[i].productName%></td>
                           <td> 
-                          <% if(productDet[i]?.productPrice >= productDet[i]?.priceBeforeOffer){%>
+                          <% if(productDet[i]?.productPrice < productDet[i]?.priceBeforeOffer){%>
                             
         
-                              ₹ <%=productDet[i]?.priceBeforeOffer%> 
+                            <span>$</span><span> <%=productDet[i]?.productPrice%></span>
                              
                             
                           <% }else{%>
                             
+                            <span>$</span><span> <%=productDet[i]?.productPrice%></span> 
                               
-                              ₹ <%=productDet[i]?.productPrice%>
                             
                           <% }%>
                       </td>

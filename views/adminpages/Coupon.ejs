@@ -37,8 +37,8 @@
         <form id="productForm">
           <div class="modal-body">
             <div class="form-group">
-                <label for="startDate">Coupon Name:</label>
-                <input type="text" class="form-control" id="startDate" name="name">
+              <label for="productName">Coupon Name:</label>
+              <input type="text" class="form-control" id="productName" name="name">
             </div>
             <div class="form-group">
               <label for="startDate">Start Date:</label>
@@ -49,12 +49,11 @@
               <input type="date" class="form-control" id="expiryDate" name="expiryDate">
             </div>
             <div class="form-group">
-                <label for="expiryDate">Minimum Purchase:</label>
-                <input type="number" class="form-control" id="expiryDate" name="MinimumPurchase">
-              </div>
-             
+              <label for="minimumPurchase">Minimum Purchase:</label>
+              <input type="number" class="form-control" id="minimumPurchase" name="minimumPurchase">
+            </div>
             <div class="form-group">
-              <label for="offerPercentage">Offer Perice:</label>
+              <label for="offerPercentage">Offer Percentage:</label>
               <input type="number" class="form-control" id="offerPercentage" name="offerPrice"
                 placeholder="Enter offer percentage">
             </div>
@@ -68,6 +67,7 @@
       </div>
     </div>
   </div>
+  
   <table class="table">
     <thead>
       <tr>
@@ -103,6 +103,9 @@
             Edit
           </button></a>
           
+          <a href="/coupondelete?id=<%=couponDet[i]._id%>"><button   type="button" class="btn btn-danger" data-toggle="" data-target="">
+            Delete
+          </button></a>
             
         </td>
         
@@ -113,75 +116,109 @@
     </tbody>
   </table>
   <script>
+$("#productForm").validate({
+  rules: {
+    name: {
+      required: true,
+      minlength: 3,
+      maxlength: 50
+    },
+    startDate: "required",
+    expiryDate: "required",
+    offerPrice: {
+      required: true,
+      number: true,
+      min: 0,
+      max: 90
+    },
+    minimumPurchase: {
+      required: true,
+      number: true,
+      min: 0
+    }
+  },
+  messages: {
+    name: {
+      required: "Please enter a coupon code",
+                        minlength: "Coupon code must be at least 5 characters long"
+    },
+    startDate: "Please enter a start date",
+    expiryDate: "Please enter an expiry date",
+    offerPrice: {
+      required: "Please enter an offer price",
+                        number: "Please enter a valid number",
+                        min: "Offer price cannot be less than 0",
+    },
+    minimumPurchase: {
+      required: "Please enter a minimum purchase amount",
+      number: "Please enter a valid number",
+      min: "Minimum purchase must be greater than or equal to 0"
+    }
+  },
+  errorElement: "div",
+  errorPlacement: function (error, element) {
+    error.addClass("invalid-feedback");
+    error.insertAfter(element);
+  },
+  highlight: function (element, errorClass, validClass) {
+    $(element).addClass("is-invalid").removeClass("is-valid");
+  },
+  unhighlight: function (element, errorClass, validClass) {
+    $(element).removeClass("is-invalid").addClass("is-valid");
+  },
+  submitHandler: async function (form, event) {
+    event.preventDefault();
+    
+    // Prevent multiple submissions
+    if (form.beingSubmitted) {
+      return false;
+    }
+    form.beingSubmitted = true;
 
-    $("#productForm").validate({
-      rules: {
-        productName: "required",
-        startDate: "required",
-        expiryDate: "required",
-        offerPercentage: {
-          required: true,
-          number: true,
-          min: 0,
-          max: 90,
-        }
-      },
-      messages: {
-        productName: "Please enter a category name",
-        startDate: "Please enter a start date",
-        expiryDate: "Please enter an expiry date",
-        offerPercentage: {
-          required: "Please enter an offer percentage",
-          number: "Please enter a valid number",
-          min: "Offer percentage must be greater than or equal to 0",
-          max: "Offer percentage must be less than or equal to 100"
-        }
-      },
-      errorElement: "div",
-      errorPlacement: function (error, element) {
-        error.addClass("invalid-feedback");
-        error.insertAfter(element);
-      },
-      highlight: function (element, errorClass, validClass) {
-        $(element).addClass("is-invalid").removeClass("is-valid");
-      },
-      unhighlight: function (element, errorClass, validClass) {
-        $(element).removeClass("is-invalid").addClass("is-valid");
-      },
-
-      submitHandler: async function (form,event) {
-        event.preventDefault()
-        const formData = $(form).serializeArray();
-        const jsonData = {};
-        formData.forEach(field => {
-          jsonData[field.name] = field.value;
-        });
-
-        // Submit data using Fetch API
-        let response = await fetch('/couponDet', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(jsonData)
-        });
-
-        let result = await response.json()
-        if (result.success) {
-          await Swal.fire({
-            icon: "success",
-            title: " categoryOffer added",
-          });
-          window.location.reload()
-        }else{
-          await Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Offer Allredy Exits",
-            });
-        }
-      }
+    const formData = $(form).serializeArray();
+    const jsonData = {};
+    formData.forEach(field => {
+      jsonData[field.name] = field.value;
     });
+
+    try {
+      let response = await fetch('/couponDet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+      });
+
+      let result = await response.json();
+      if (result.success) {
+        await Swal.fire({
+          icon: "success",
+          title: "Coupon offer added",
+        });
+        form.reset();  // Clear the form
+        $('#myModal').modal('hide');  // Hide the modal
+        window.location.reload();
+      } else {
+        await Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Coupon already exists",
+        });
+      }
+    } catch (error) {
+      await Swal.fire({
+        icon: "error",
+        title: "Submission failed",
+        text: "An error occurred while submitting the form."
+      });
+    } finally {
+      form.beingSubmitted = false;
+    }
+  }
+});
+
+
 
 
   </script>

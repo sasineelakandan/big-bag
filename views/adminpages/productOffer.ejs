@@ -42,7 +42,7 @@
               <select name="productId" class="form-control" style="max-width: 450px;">
                 <option disabled selected>Select Productname</option>
                 <% for(let i=0;i<productDet?.length;i++){ %>
-                  <option value="<%=productDet[i]?._id%>">
+                  <option value="<%=productDet[i]?.productName%>">
                     <%=productDet[i]?.productName%>
                   </option>
                   <% } %>
@@ -85,7 +85,7 @@
       <% for (let i=0; i<OfferDet.length;i++){ %>
       <tr>
         <th scope="row">
-          <span class="lead"><%=productDet2[i]?.productName%></span>
+          <span class="lead"><%=OfferDet[i]?.productName%></span>
         </th>
         <td>
           <span class="lead">%<%=OfferDet[i].offerPercentage%></span>
@@ -97,7 +97,7 @@
           <span class="lead"><%=OfferDet[i].endDate.toDateString()%></span>
         </td>
         <td>
-          <a href="/productOfferedit?id=<%=OfferDet[i]._id%>"><button   type="button" class="btn btn-primary" data-toggle="modal" data-target="#my2Modal<%= i %>">
+          <a href="/productOfferedit?id=<%=OfferDet[i]._id%>&pn=<%=productDet2[i]?.productName%>"><button   type="button" class="btn btn-primary" data-toggle="modal" data-target="#my2Modal<%= i %>">
             Edit
           </button></a>
           

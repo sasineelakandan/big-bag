@@ -1,31 +1,64 @@
 <%- include('../adminpart/adminhead') %>
-<body>
-    <div class="container">
-        
-        <h2> SalesReport</h2>
-        <div class="container mt-2 d-flex my-5">
-            <a href="/admin/salesReport/download/xlsx"> <button id="downloadExcel" class="btn btn-success">
-                <i class="fas fa-file-excel"></i> Download Excel</a>
-            </button>
-            <button id="downloadPdf" class="btn btn-danger ms-3">
-                <i class="fas fa-file-pdf"></i> Download PDF
-            </button>
-            <form id="filtersForm" class="form-inline d-flex mx-4">
-            
-                <label for="filterDateFrom" class="mr-2">Date From:</label>
-                <input style="max-width: fit-content;" type="date" id="filterDateFrom" class="form-control form-control-sm datepicker">
-          
-           
-                <label for="filterDateTo" class="mr-2 ms-3 ">Date To:</label>
-                <input style="max-width: fit-content;" type="date" id="filterDateTo" class="form-control form-control-sm datepicker">
-            
-            <button type="button" class="btn btn-primary btn-sm ms-3" id="applyFilters">Apply Filters</button>
-        </form>
-     </div>
-       
+
+    <body>
+        <style>
+            .btn-custom {
+                height: 38px;
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            /* Ensuring button margin consistency */
+            .btn-custom+.btn-custom {
+                margin-left: 10px;
+            }
+        </style>
+        <div class="container">
+            <h2>Sales Report</h2>
+            <div class="container mt-2 d-flex my-5">
+                <a href="/salesReport/download/xlsx">
+                    <button id="downloadExcel" class="btn btn-success btn-custom">
+                        <i style="color: aliceblue;" class="fas fa-file-excel"></i> Download Excel
+                    </button>
+                </a>
+                <button id="downloadPdf" class="btn btn-danger btn-custom ms-3">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </button>
+                <form id="filtersForm" class="form-inline d-flex mx-4">
+                    <label for="filterDateFrom" class="mr-2">Date From:</label>
+                    <input style="max-width: fit-content;" type="date" id="filterDateFrom"
+                        class="form-control form-control-sm datepicker">
+
+                    <label for="filterDateTo" class="mr-2 ms-3">Date To:</label>
+                    <input style="max-width: fit-content;" type="date" id="filterDateTo"
+                        class="form-control form-control-sm datepicker">
+
+                    <button type="button" class="btn btn-primary btn-sm ms-3 btn-custom" id="applyFilters">Apply
+                        Filters</button>
+                    <a href="/removefilter">
+                        <button type="button" class="btn btn-primary btn-sm ms-3 btn-custom">Remove Filters</button>
+                    </a>
+                </form>
+                <select id="filterOption" class="ms-5"
+                    style="width: 100px; height: 40px; padding: 5px; font-size: 16px; border: 2px solid #ccc; border-radius: 5px;">
+                    <option value="month">Month</option>
+                    <option value="week">Week</option>
+                    <option value="year">Year</option>
+                </select>
+                <button id="filterBtn" class="btn btn-success ms-3 btn-custom">Filter</button>
+                <br />
+                <br />
+            </div>
+        </div>
+
+
         <table class="table">
             <thead>
                 <tr>
+                    <th>OrderID</th>
                     <th>Name</th>
                     <th>Order Date</th>
                     <th>No of Items </th>
@@ -36,43 +69,137 @@
                 </tr>
             </thead>
             <tbody>
-            <%for(i=0;i<Sreports.length;i++){%>
-                <tr>
-                    <td><%=Sreports[i]?.UserName%></td>
-                    <td><%=Sreports[i]?.orderDate%></td>
-                    <td><%=Sreports[i]?.Items%></td>
-                    <td><%=Sreports[i]?.grandTotalCost%></td>
-                    <td><%=Sreports[i]?.paymentType%></td>
-                    <td><%=Sreports[i]?.orderStatus%></td>
-                </tr>
-            <%}%>
+                <%for(i=0;i<Sreports.length;i++){%>
+                    <tr>
+                        <td>
+                            <%=Sreports[i]?.OrderId%>
+                        </td>
+                        <td>
+                            <%=Sreports[i]?.UserName%>
+                        </td>
+                        <td>
+                            <%= new Date(Sreports[i]?.orderDate).toLocaleDateString('en-GB', { day: '2-digit' ,
+                                month: '2-digit' , year: 'numeric' }).replace(/\//g, '-' ) %>
+                        </td>
+                        <td>
+                            <%=Sreports[i]?.Items%>
+                        </td>
+                        <td>
+                            <%=Sreports[i]?.grandTotalCost%>
+                        </td>
+                        <td>
+                            <%=Sreports[i]?.paymentType%>
+                        </td>
+                        <td>
+                            <%=Sreports[i]?.orderStatus%>
+                        </td>
+                    </tr>
+                    <%}%>
             </tbody>
         </table>
-    </div>
-   
-        
-    </script>
-    <script>
-        document.getElementById('downloadPdf').addEventListener('click', async () => {
-            console.log('hai')
-          try {
-            const response = await fetch('/salesReport/download/pdf', {
-              method: 'GET'
-            });
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'salesReport.pdf';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a); 
-          } catch (error) {
-            console.error('Error downloading PDF:', error);
-          }
-        });
-      </script>
-</body>
+        </div>
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <%for(i=0;i<totalPages;i++){%>
+                    <li class="page-item"><a class="page-link" href="/Sales?pages=<%=i+1%>">
+                            <%=i+1%>
+                        </a></li>
+                    <%}%>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+            </ul>
+        </nav>
 
-</html>
+        </script>
+
+        <script>
+            document.getElementById('applyFilters').addEventListener('click', async () => {
+                // Get values from date inputs
+                const filterDateFrom = document.getElementById('filterDateFrom').value;
+                const filterDateTo = document.getElementById('filterDateTo').value;
+
+                // Construct the data object to send
+                const formData = {
+                    filterDateFrom,
+                    filterDateTo
+                };
+
+                try {
+                    // Send the data using fetch
+                    const response = await fetch('/filterdate', {
+                        method: 'POST', // Use 'POST' to send data to the server
+                        headers: {
+                            'Content-Type': 'application/json' // Specify the content type as JSON
+                        },
+                        body: JSON.stringify(formData) // Convert the data object to a JSON string
+                    });
+
+                    let data = await response.json();
+
+
+                    if (data.success) {
+                        window.location.reload()
+                        // Check if the response is successful
+                    }
+                        // Handle the response data
+
+                        // Log the data to the console
+                        // Do something with the data, e.g., update the UI
+                    } catch (error) {
+                        console.error('There was a problem with the fetch operation:', error); // Log any errors to the console
+                    }
+                });
+
+        </script>
+        <script>
+            document.getElementById('downloadPdf').addEventListener('click', async () => {
+                console.log('hai')
+                try {
+                    const response = await fetch('/salesReport/download/pdf', {
+                        method: 'GET'
+                    });
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'salesReport.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } catch (error) {
+                    console.error('Error downloading PDF:', error);
+                }
+            });
+        </script>
+    </body>
+
+    <script>
+        let filterBtn = document.getElementById('filterBtn')
+        filterBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            let filterOption = document.getElementById('filterOption').value;
+            let formData = { filterOption };
+
+            let response = await fetch('/salesReport/filter', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+            let result = await response.json();
+
+            if (result.success) {
+                location.reload();
+            }
+        });
+    </script>
+
+    </html>

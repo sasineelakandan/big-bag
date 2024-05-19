@@ -85,7 +85,7 @@ const Wallet=async(req,res)=>{
     try{
          
         const userWallet=await userCollection.findOne({_id:req.query.id})
-        const walletHistory=await walletCollection.find({userId:req.query.id})
+        const walletHistory=await walletCollection.find({userId:req.query.id}).sort({_id:-1})
         
         res.render('userpages/Wallet',{userLogged:req.session.logged,userDet:userWallet,walletDet:walletHistory})
      

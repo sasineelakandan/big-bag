@@ -1,7 +1,11 @@
 <%- include('../adminpart/adminhead') %>
 
   <body>
-   
+    <style>
+      .error {
+        color: red;
+      }
+    </style>
     <div style="margin-top: 70px;" class="container">
         <div class="row">
           <div class="col-md-6 offset-md-3">
@@ -18,7 +22,7 @@
               </div>
               <div class="form-group">
                 <label for="expiryDate">Minimum Purchase:</label>
-                <input type="number" class="form-control" id="expiryDate" value="<%=couponDet?.minimumPurchase%>" name="MinimumPurchase">
+                <input type="number" class="form-control" id="minimumPurchase" value="<%=couponDet?.minimumPurchase%>" name="MinimumPurchase">
               </div>
               <div class="form-group">
                 <label for="expiryDate">Expiry Date:</label>
@@ -30,7 +34,7 @@
               </div>
               <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-secondary">Close</button>
+               
               </div>
             </form>
           </div>
@@ -39,46 +43,67 @@
       <script>
         $("#productForm2").validate({
           rules: {
-            productName: "required",
-            startDate: "required",
-            expiryDate: "required",
-            offerPercentage: {
-              required: true,
-              number: true,
-              min: 0,
-              max: 90,
-            }
-          },
-          messages: {
-            productName: "Please enter a category name",
-            startDate: "Please enter a start date",
-            expiryDate: "Please enter an expiry date",
-            offerPercentage: {
-              required: "Please enter an offer percentage",
-              number: "Please enter a valid number",
-              min: "Offer percentage must be greater than or equal to 0",
-              max: "Offer percentage must be less than or equal to 100"
-            }
-          },
-          errorElement: "div",
-          errorPlacement: function (error, element) {
-            error.addClass("invalid-feedback");
-            error.insertAfter(element);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass("is-invalid").removeClass("is-valid");
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass("is-invalid").addClass("is-valid");
-          },
+                    couponCode: {
+                        required: true,
+                        minlength: 5
+                    },
+                    startDate: {
+                        required: true,
+                        date: true
+                    },
+                    MinimumPurchase: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    expiryDate: {
+                        required: true,
+                        date: true
+                    },
+                    offerPrice: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    }
+                },
+                messages: {
+                    couponCode: {
+                        required: "Please enter a coupon code",
+                        minlength: "Coupon code must be at least 5 characters long"
+                    },
+                    startDate: {
+                        required: "Please enter a start date",
+                        date: "Please enter a valid date"
+                    },
+                    MinimumPurchase: {
+                        required: "Please enter a minimum purchase amount",
+                        number: "Please enter a valid number",
+                        min: "Minimum purchase cannot be less than 0"
+                    },
+                    expiryDate: {
+                        required: "Please enter an expiry date",
+                        date: "Please enter a valid date"
+                    },
+                    offerPrice: {
+                        required: "Please enter an offer price",
+                        number: "Please enter a valid number",
+                        min: "Offer price cannot be less than 0"
+                    }
+                },
     
           submitHandler: async function (form,event) {
             event.preventDefault()
-            const formData = $(form).serializeArray();
-            const jsonData = {};
-            formData.forEach(field => {
-              jsonData[field.name] = field.value;
-            });
+          const formData = {
+             categoryname:form.couponCode.value,
+              startDate:form.startDate.value,
+              expiryDate:form.expiryDate.value,
+              offerPercentage:form.offerPercentage.value,
+              MinimumPurchase:form.MinimumPurchase.value,
+              offerPrice:form.offerPrice.value,
+              offerid:'<%=couponDet._id%>',
+            }
+          
+            
     
             // Submit data using Fetch API
             let response = await fetch('/couponOfferedit', {
@@ -86,14 +111,14 @@
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(jsonData)
+              body: JSON.stringify(formData)
             });
     
             let result = await response.json()
             if (result.success) {
               await Swal.fire({
                 icon: "success",
-                title: " categoryOffer eddited",
+                title: " Coupon eddited",
               });
               window.location.reload()
             }

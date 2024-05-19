@@ -6,7 +6,7 @@ const couponSchema= new mongoose.Schema({
     startDate: { type: Date, required: true, default: new Date().toLocaleString() },
     expiryDate: { type: Date, required: true },
     minimumPurchase: { type: Number, required: true },
-   
+    isDelete:{type:Boolean,default:false},
 })
 
 module.exports=  mongoose.model('coupons', couponSchema )

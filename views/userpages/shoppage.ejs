@@ -1203,7 +1203,7 @@
                           if (result.list) {
                               await Swal.fire({
                                   icon: "success",
-                                  title: "Product Listed",
+                                  title: "Add to whishListe",
                               });
                               window.location.reload()
 
@@ -1239,13 +1239,13 @@
                    <% if(productDet[i]?.productPrice < productDet[i]?.priceBeforeOffer){%>
                     <h3>
 
-                      ₹ <%=productDet[i]?.productPrice%> <span><h3 style="color: red;" > <strike>₹ <%=productDet[i]?.priceBeforeOffer%></strike></h3> </span>
+                      <span>$</span><span> <%=productDet[i]?.productPrice%></span> <span><h3 style="color: red;" > <strike>₹ <%=productDet[i]?.priceBeforeOffer%></strike></h3> </span>
                      
                     </h3>
                   <% }else{%>
                     <h3>
                       
-                      ₹ <%=productDet[i]?.productPrice%>
+                      <span>$</span><span> <%=productDet[i]?.productPrice%></span>
                     </h3>
                 <% }%>
                   </div>

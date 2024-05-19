@@ -323,7 +323,7 @@ const filter = async (req, res) => {
                 break
             }
             case '2': {
-                start = 130; end = 220
+                start = 150; end = 200
                 break
             }
             case '3': {
@@ -366,7 +366,13 @@ const logout = async (req, res) => {
 }
 
 const Fillters = async (req, res) => {
-    console.log(req.body)
+    try{
+        const searchuser = await productcollection.find({ productName: { $regex: req.body.search, $options: 'i' } })
+        req.session.productDetail=searchuser
+        res.redirect('/shop')
+    }catch(error){
+        console.log(error)
+    }
 
 
 

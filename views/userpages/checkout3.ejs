@@ -623,7 +623,7 @@
                               <input class="quantity" type="text" value="<%=usercartDet[i]?.productQuantity%>" disabled>
                               
                             </td>
-                            <td class=""><%=usercartDet[i]?.totalCostPerProduct%></td>
+                            <td class="">$<%=usercartDet[i]?.totalCostPerProduct%></td>
                           </tr>
                          
                           <% } %>
@@ -679,17 +679,23 @@
                         let response = await fetch(`/checkout4?Grandtotal=${grandTotal}&total=${Totalprice}&id=${userId}&addressId=${address}&pm=${pm}`, {
                             method: 'POST',
                         })
-                        console.log("response"+response);
+                        
                         let result = await response.json()
                       
-                       
+                        if(result.checkBalance){
+                          await Swal.fire({
+                                icon: "error",
+                                title: " check your Wallet Balance",
+                            });
+                            window.location.href='/Wallet?id=<%=userLogged._id%>'
+                        }
                         if(result.success){
                           await Swal.fire({
                                 icon: "success",
                                 title: " Order Placed",
                             });
                             window.location.href='/checkout5'
-                        }else{
+                        }else if(result.paypal){
                           
                             
                             window.location.href='/pay?id=<%=userLogged._id%>'
@@ -711,7 +717,7 @@
                 <ul class="list-unstyled">
                   <li class="d-flex justify-content-between">
                     <span class="tag">Subtotal</span>
-                    <span class="val">₹ <%=grandTotal%></span>
+                    <span class="val">$ <%=grandTotal%></span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="tag"></span>
@@ -722,7 +728,7 @@
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="tag">Total</span>
-                    <span class="val">₹ <%=Total%> </span>
+                    <span class="val">$ <%=Total%> </span>
                   </li>
                 </ul>
               </div>

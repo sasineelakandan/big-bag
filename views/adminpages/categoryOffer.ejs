@@ -37,10 +37,10 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="products">category Name:</label>
-              <select name="categoryId" class="form-control" style="max-width: 450px;">
+              <select name="categoryname" class="form-control" style="max-width: 450px;">
                 <option disabled selected>Select Productname</option>
                  <% for(i=0;i<categoryDet.length;i++){%>
-                  <option value="<%=categoryDet[i]._id%>">
+                  <option value="<%=categoryDet[i].categoryname%>">
                   <%= categoryDet[i].categoryname%>
                   </option>
                  <%}%>
@@ -83,7 +83,7 @@
     <%for(i=0;i<categoryOfferDet?.length;i++){%>
       <tr>
         <th scope="row">
-          <span class="lead"><%=categoryDet2[i]?.categoryname%></span>
+          <span class="lead"><%=categoryOfferDet[i].categoryname%></span>
         </th>
         <td>
           <span class="lead">% <%=categoryOfferDet[i]?.offerPercentage%></span>
@@ -96,7 +96,7 @@
         </td>
         <td>
 
-          <a href="/categoryEditpage?id=<%=categoryOfferDet[i]?._id%>"><button   type="button" class="btn btn-primary" data-toggle="" data-target="">
+          <a href="/categoryEditpage?id=<%=categoryOfferDet[i]?._id%>&cn=<%=categoryDet2[i]?.categoryname%>"><button   type="button" class="btn btn-primary" data-toggle="" data-target="">
             Edit
           </button></a>
           
@@ -154,7 +154,7 @@
         formData.forEach(field => {
           jsonData[field.name] = field.value;
         });
-
+        
         // Submit data using Fetch API
         let response = await fetch('/categoryOfferDet', {
           method: 'POST',

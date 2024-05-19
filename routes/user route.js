@@ -22,7 +22,7 @@ Router.post('/register',userConroller.register)
 Router.get('/shop',blockedUser,userConroller.shopPage)
 Router.get('/singleProduct',isuser,blockedUser,userConroller.singleProduct)
 Router.get('/logout',userConroller.logout)
-
+Router.post('/Filtter',userConroller.Fillters)
 Router.post('/shopSort',userConroller.shopSort)
 Router.post('/shopSort2',userConroller.filter)
 Router.post('/shopSort3',userConroller.filter2)

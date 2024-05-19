@@ -2,8 +2,13 @@ const mongoose = require("mongoose");
 
 const categoryOfferSchema = new mongoose.Schema({
   category: {
-    type: mongoose.Schema.Types.ObjectId,
+    type:String,
     ref:"category",
+    required: true,
+  },
+  categoryname: {
+    type:String,
+   
     required: true,
   },
   startDate: {

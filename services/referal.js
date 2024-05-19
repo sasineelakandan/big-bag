@@ -9,6 +9,13 @@ const Referal= async(referalCode,Newuser)=>{
        
        if(referalUser){
          const update=await usercollection.updateOne({_id:referalUser._id},{$inc:{walletBalance:+100}})
+         const wallet1= new walletCollection({
+            userId:referalUser._id,
+            walletBalance :user.walletBalance,
+            transactionsDate:new Date(),
+            transactiontype:'credited'
+         })
+         wallet1.save()
          const update2=await usercollection.updateOne({email:Newuser},{$inc:{walletBalance:+100}})
          const user=await usercollection.findOne({email:Newuser})
          const wallet= new walletCollection({

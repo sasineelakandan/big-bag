@@ -7,7 +7,7 @@ const couPonCollection=require('../model/Couponmodel')
 
 const Couponget=async(req,res)=>{
     try{
-        const coupons=await couPonCollection.find({})
+        const coupons=await couPonCollection.find({isDelete:false})
         res.render('adminpages/Coupon',{userLogged:req.session.logged,couponDet:coupons})
     }
     catch(error){
@@ -24,8 +24,10 @@ const CouponEditget=async(req,res)=>{
     }
 }
 const CouponOffDet=async(req,res)=>{
+
     try{
-        const coupons=await couPonCollection?.findOne({couponCode:req.body.name})
+        console.log(req.body)
+        const coupons=await couPonCollection?.findOne({couponCode:{ $regex: new RegExp('^' + req.body.name + '$', 'i')}})
         if(coupons){
             res.send({success:false})
         }else{
@@ -34,7 +36,7 @@ const CouponOffDet=async(req,res)=>{
         discountPercentage:req.body.offerPrice,
         startDate:req.body.startDate,
         expiryDate:req.body.expiryDate,
-        minimumPurchase:req.body.MinimumPurchase
+        minimumPurchase:req.body.minimumPurchase
        })
        coupon.save()
        res.send({success:true})
@@ -46,8 +48,9 @@ const CouponOffDet=async(req,res)=>{
 }
 const CouponOffEdit=async(req,res)=>{
     try{
-        
-    const update=await couPonCollection.updateOne({couponCode:req.body.couponCode},{$set:{
+         
+    const update=await couPonCollection.updateOne({_id:req.body.offerid},{$set:{
+        couponCode:req.body.categoryname,
         discountPercentage:req.body.offerPrice,
         startDate:req.body.startDate,
         expiryDate:req.body.expiryDate,
@@ -60,5 +63,14 @@ const CouponOffEdit=async(req,res)=>{
     }
     
 }
+const couponDelete=async(req,res)=>{
+    try{
+    const update=  await couPonCollection.updateOne({_id:req.query.id},{$set:{isDelete:true}})
+      res.redirect('/coupons')
+    }
+    catch(error){
+        console.log(error)
+    }
+}
 
-module.exports={Couponget,CouponOffDet,CouponOffEdit,CouponEditget}
+module.exports={Couponget,CouponOffDet,CouponOffEdit,CouponEditget,couponDelete}

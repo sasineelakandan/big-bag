@@ -8,11 +8,11 @@
             
             <form id="productForm2">
               <div class="form-group">
-                <label for="products">Product ID:</label>
-                <input class="form-control" name="productId" id="ProductName" value="<%=OfferDet?.product%>">
+                <label for="products">ProductName:</label>
+                <input class="form-control" name="productId" id="productName" value="<%=OfferDet?.productName%>"  >
               </div>
               <div class="form-group">
-                <label for="startDate">Start Date</label>
+                <label for="startDate">Start Date:</label>
                 <input  class="form-control" name="startDate" id="startDate" value="<%=OfferDet?.startDate.toDateString()%>">
               </div>
               <div class="form-group">
@@ -25,7 +25,7 @@
               </div>
               <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-secondary">Close</button>
+               
               </div>
             </form>
           </div>
@@ -45,7 +45,7 @@
             }
           },
           messages: {
-            productName: "Please enter a category name",
+            productName: "Please enter a product name",
             startDate: "Please enter a start date",
             expiryDate: "Please enter an expiry date",
             offerPercentage: {
@@ -69,19 +69,23 @@
     
           submitHandler: async function (form,event) {
             event.preventDefault()
-            const formData = $(form).serializeArray();
-            const jsonData = {};
-            formData.forEach(field => {
-              jsonData[field.name] = field.value;
-            });
-    
+            
+              const formData ={
+              categoryname:form.productId.value,
+              startDate:form.startDate.value,
+              expiryDate:form.expiryDate.value,
+              offerPercentage:form.offerPercentage.value,
+              offerid:'<%=OfferDet._id%>',
+            }
+            
+            
             // Submit data using Fetch API
             let response = await fetch('/productOfferedit', {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(jsonData)
+              body: JSON.stringify(formData)
             });
     
             let result = await response.json()

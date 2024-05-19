@@ -67,11 +67,12 @@ Router.get('/coupons',couPonController.Couponget)
 Router.get('/couponEditpage',couPonController.CouponEditget)
 Router.post('/couponDet',couPonController.CouponOffDet)
 Router.put('/couponOfferedit',couPonController.CouponOffEdit)
+Router.get('/coupondelete',couPonController.couponDelete)
 
 //salesReport
 Router.get('/Sales',salesConroller.SalesReportGet)
-
+Router.post('/filterdate',salesConroller.filterDate)
 Router.get("/salesReport/download/xlsx",salesConroller.salesReportDownload);
 Router.get('/salesReport/download/pdf',salesConroller.salesReportDownloadPDF)
-
+Router.get('/removefilter',salesConroller.removeAllFillters)
 module.exports=Router
