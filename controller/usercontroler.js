@@ -239,6 +239,7 @@ const shopPage = async (req, res) => {
         categoryOffer.categoryOfferExpiry()
         offer.productOfferExpiry()
         BestOffer.BestOffer()
+        
         let productDetails = req.session.productDetail || await productcollection.find({ isListed: true })
         const categoryDetails = await categorycollection.find({ isListed: true })
         const productsPerPage = 3
@@ -259,7 +260,7 @@ const shopPage = async (req, res) => {
             for (i = 0; i < productDetails.length; i++) {
 
                 productDetails[i].isWhishlisted = whishlistarr.includes(productDetails[i]._id.toString())
-
+               console.log(productDetails[i].isWhishlisted)
             }
 
         }
@@ -382,7 +383,7 @@ const Whishlist = async (req, res) => {
     try {
 
 
-
+        console.log(req.query.action)
 
         if (req.query.action) {
             const whishlist = new whishlistCollection({

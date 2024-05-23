@@ -104,6 +104,7 @@ const Cancelall = async (req, res) => {
           const wallet=await userCollection.updateOne({_id:orderDet.userId},{$inc:{walletBalance:+ orderDet.Total}})
           const wallet2= new walletCollection({
             userId:orderDet.userId,
+            PaymentType:'wallet',
             walletBalance :orderDet.Total,
             transactionsDate:new Date(),
             transactiontype:'credited'
@@ -114,6 +115,7 @@ const Cancelall = async (req, res) => {
             const wallet=await userCollection.updateOne({_id:orderDet.userId},{$inc:{walletBalance:+ orderDet.Total}})
             const wallet2= new walletCollection({
                 userId:orderDet.userId,
+                PaymentType:'Online Pay',
                 walletBalance :orderDet.Total,
                 transactionsDate:new Date(),
                 transactiontype:'credited'

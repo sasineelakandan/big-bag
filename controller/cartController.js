@@ -91,113 +91,106 @@ const addTocart=async(req,res)=>{
         console.log(error)
     }
 }
- const cartbutton=async(req,res)=>{
+const cartbutton=async(req,res)=>{
    
-        try {
-          
-          const user=req.query.user
-      
-          const productId = req.query.id;
-          const action=req.query.action
-          const index=req.query.index
-         
-        
-          const quantity = Number(req.query.quantity);
-          
+  try {
+    
+    const user=req.query.user
+
+    const productId = req.query.id;
+    const action=req.query.action
+    const index=req.query.index
+   
   
-
-
-          // Retrieve the product from the database
-          const product = await productCollection.findOne({ _id: productId });
-          if (!product) {
-            return res
-              .status(404)
-              .send({ success: false, message: "Product not found" });
-          }
-      
-          const productStock = parseInt(product.productStock);
-          const productPrice=parseInt(product.productPrice)
-          const offerPrice=parseInt(product.priceBeforeOffer)
-          var bestprice=0
-          if(productPrice>=offerPrice){
-            bestprice=offerPrice
-          }else{
-            bestprice=productPrice
-          }
-          console.log(bestprice)
-          if(action=='plus'){
-            if (productStock>quantity) {
-              let total =(1+quantity)*bestprice
-              
-              
-               
-                 const cartProduct = await cartCollection.findOneAndUpdate(
-                  { productId },
-                  { 
-                      $inc: { productQuantity: 1 },
-                      $set: { totalCostPerProduct: total }
-                  },
-                  { 
-                      new: true // Return the updated document
-                  }
-                );
-              
-                const cart= await cartCollection.find({userId:user}).populate('productId')
-         
-                Sum=0
-                for(let i=0;i<cart.length;i++){
-                 Sum=Sum+cart[i].totalCostPerProduct
-                }
-               
-                  
-                // Send success response with updated cart product
-                res.send({ success: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:total,grandTotal:Sum});
+    const quantity = Number(req.query.quantity);
     
-              }else {
-                res.status(400).send({ success: false, exceed: true });
-              }
-            
-         }
-         if(action=='min'){
-            if (quantity >1 ) {
-                // If quantity is less than productStock, update the cart
-               
-               const productprice=((quantity-1)*productPrice)
-               const cartProduct = await cartCollection.findOneAndUpdate(
-                { productId },
-                { 
-                    $inc: { productQuantity: -1 },
-                    $set: { totalCostPerProduct: productprice }
-                },
-                { 
-                    new: true // Return the updated document
-                }
-            );
-            const cart= await cartCollection.find({userId:user}).populate('productId')
+
+
+
+    // Retrieve the product from the database
+    const product = await productCollection.findOne({ _id: productId });
+    if (!product) {
+      return res
+        .status(404)
+        .send({ success: false, message: "Product not found" });
+    }
+
+    const productStock = parseInt(product.productStock);
+    const productPrice=parseInt(product.productPrice)
+    
+    if(action=='plus'){
+      if (productStock>quantity) {
+        let total =(1+quantity)*productPrice
+        
+        
          
-            Sum=0
-            for(let i=0;i<cart.length;i++){
-             Sum=Sum+cart[i].totalCostPerProduct
+           const cartProduct = await cartCollection.findOneAndUpdate(
+            { productId },
+            { 
+                $inc: { productQuantity: 1 },
+                $set: { totalCostPerProduct: total }
+            },
+            { 
+                new: true // Return the updated document
             }
-           
-               
-                   // Return the updated document
-                
-                // Send success response with updated cart product
-                res.send({ min: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:cartProduct.totalCostPerProduct,grandTotal:Sum});
-    
-              }else {
-                res.status(400).send({ success: false, exp: true });
-              }
-            
-         }
+          );
+        
+          const cart= await cartCollection.find({userId:user}).populate('productId')
+   
+          Sum=0
+          for(let i=0;i<cart.length;i++){
+           Sum=Sum+cart[i].totalCostPerProduct
+          }
          
-          
-        } catch (error) {
-          console.log("Error while clicking the Cart Increment Button:", error);
-          res.status(500).send({ success: false, message: "Internal server error" });
+            
+          // Send success response with updated cart product
+          res.send({ success: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:total,grandTotal:Sum});
+
+        }else {
+          res.status(400).send({ success: false, exceed: true });
         }
-      };
+      
+   }
+   if(action=='min'){
+      if (quantity >1 ) {
+          // If quantity is less than productStock, update the cart
+         
+         const productprice=((quantity-1)*productPrice)
+         const cartProduct = await cartCollection.findOneAndUpdate(
+          { productId },
+          { 
+              $inc: { productQuantity: -1 },
+              $set: { totalCostPerProduct: productprice }
+          },
+          { 
+              new: true // Return the updated document
+          }
+      );
+      const cart= await cartCollection.find({userId:user}).populate('productId')
+   
+      Sum=0
+      for(let i=0;i<cart.length;i++){
+       Sum=Sum+cart[i].totalCostPerProduct
+      }
+     
+         
+             // Return the updated document
+          
+          // Send success response with updated cart product
+          res.send({ min: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:cartProduct.totalCostPerProduct,grandTotal:Sum});
+
+        }else {
+          res.status(400).send({ success: false, exp: true });
+        }
+      
+   }
+   
+    
+  } catch (error) {
+    console.log("Error while clicking the Cart Increment Button:", error);
+    res.status(500).send({ success: false, message: "Internal server error" });
+  }
+};
      const checkOut1=async(req,res)=>{
 
       try{
@@ -224,7 +217,7 @@ const addTocart=async(req,res)=>{
         
         const total=grandTotal
 
-         res.render('userpages/checkout2',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,coupenDet:coupon})
+         res.render('userpages/checkout2',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,couponDet:coupon,Discount:req.session.copponAplied,subTotal: req.session.Sum})
       }
       catch(error){
         console.log(error)
@@ -327,6 +320,7 @@ const addTocart=async(req,res)=>{
   const total=Number(req.query.total)
   const wallet3= new walletCollection({
     userId:req.query.id,
+    PaymentType:'wallet',
     walletBalance :req.query.total,
     transactionsDate:new Date(),
     transactiontype:'Debited'
@@ -426,7 +420,7 @@ const addTocart=async(req,res)=>{
         
         const total=(req.session.grandtotal)
        
-        res.render('userpages/checkout3',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,pm:req.query.payment,Discount:Discount})
+        res.render('userpages/checkout3',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,pm:req.query.payment})
          
       }
       catch(error){
@@ -438,8 +432,11 @@ const addTocart=async(req,res)=>{
       const coupon=await couPonCollection.findOne({couponCode:req.query.couponCode})
       
       if(coupon.minimumPurchase<=req.session.Sum){
+       
            const Total=req.session.Sum-coupon.discountPercentage
            req.session.grandTotal=Total
+           req.session.copponAplied=coupon.discountPercentage
+        
            res.send({success:true,grandTotal:Total,Discount:coupon.discountPercentage})
       }else{
         res.send({success:false})
@@ -450,4 +447,18 @@ const addTocart=async(req,res)=>{
     }
   }  
 
-module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4,checkOut5,removeCart,Chek3page,applyCoupon}
+  const removeCoupan=async(req,res)=>{
+    try{
+      req.session.copponAplied=null
+      const Total=req.session.Sum
+           req.session.grandTotal=Total
+          
+        
+           res.send({success:true,grandTotal:Total})
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+module.exports={Cart, addTocart,cartbutton,checkOut1,checkOut2,checkOut3,checkOut4,checkOut5,removeCart,Chek3page,applyCoupon,removeCoupan}

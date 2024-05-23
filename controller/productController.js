@@ -8,18 +8,18 @@ const categorycollection=require('../model/categorymodel')
 const productUpdate=async(req,res)=>{
    
     try {
-        if (req.files.length === 0) {
+        const croppedImages = req.files.filter(file => file.fieldname.startsWith('croppedImage'));
+        const images = croppedImages.map(file => file.filename); 
+            console.log(images)
             const existingProduct = await productCollection.findOne({ _id: req.params.id });
             var imgFiles = existingProduct.productImage;
-        }else if (req.files.length < 13) {
-            res.send({ noImage: true })
-        } else{
-            var imgFiles = []
-            for (let i = 0; i < req.files.length; i++) {
-                imgFiles.push(req.files[i].filename)
-            }
         
-         
+        
+            for (let i = 0; i <images.length; i++) {
+            
+                imgFiles.push(images[i]);
+              } 
+       
         const productDetails = await productCollection.find({ _id: { $ne: req.params.id }, productName: { $regex: new RegExp('^' + req.body.productName.toLowerCase() + '$', 'i') } })
         if (/^\s*$/.test(req.body.productName) || /^\s*$/.test(req.body.productPrice) || /^\s*$/.test(req.body.productStock)) {
             res.send({ noValue: true })
@@ -39,7 +39,7 @@ const productUpdate=async(req,res)=>{
             })
             res.send({ success: true })
         }
-           }   
+              
 
     } catch (err) {
         console.log(err);
@@ -109,17 +109,14 @@ const addProduct=async(req,res)=>{
     }
 }
 const addProduct2=async(req,res)=>{
-          console.log(req.body)
+    
     try {
-        let imgFiles = []
-        for (let i = 0; i < req.files.length; i++) {
-            imgFiles[i] = req.files[i].filename
-        }
-
+        const croppedImages = req.files.filter(file => file.fieldname.startsWith('croppedImage'));
+        const images = croppedImages.map(file => file.filename); 
         const addproduct = new productCollection({
             productName: req.body.productName,
             parentCategory: req.body.parentCategory,
-            productImage: imgFiles,
+            productImage: images,
             productPrice: req.body.productPrice,
             productStock: req.body.productStock,
             productDiscription:req.body.productdes
@@ -141,26 +138,21 @@ const addProduct2=async(req,res)=>{
 }
 const deleteImage = async (req, res) => {
     try {
-    
-      const updatedProduct = await productCollection.findOne({
-        _id: req.body.productId,
-      });
-      if (!updatedProduct) {
-        return res.status(404).json({ error: "Product not found" }); // Remove the first element
-      }
-      if (
-        req.body.index >= 0 &&
-        req.body.index < updatedProduct.productImage.length
-      ) {
-        updatedProduct.productImage[req.body.index] = null
-        await updatedProduct.save();
-        res.status(200).json({
-          message: "Image deleted successfully",
-          product: updatedProduct,
-        });
-      } else {
-        res.status(400).json({ error: "Invalid image index" })
-      }
+        
+   const  deletedProduct= await productCollection.findOne({_id:req.body.productId})
+   if (
+    req.body.index >= 0 &&
+    req.body.index < deletedProduct.productImage.length
+  ) {
+    deletedProduct.productImage.splice(req.body.index, 1);
+    await deletedProduct.save();
+    res.status(200).json({
+      message: "Image deleted successfully",
+      product: deletedProduct,
+    });;
+  } else {
+    res.status(400).json({ error: "Invalid image index" })
+  }
     } catch (error) {
       console.log(
         "Error in deleteing the Image through the Edit product delete button " +

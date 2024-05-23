@@ -18,16 +18,16 @@ Router.get('/admin',adminConroller.loginpage)
 Router.post('/adminlogin',adminConroller.adminlogin)
 Router.post('/adminlogout',adminConroller.adminlogout)
 Router.get('/usermanagement',isadmin,adminConroller.usermanagement)
-Router.get('/userblock',adminConroller.userblock)
-Router.post('/adminsearch',adminConroller.usersearch)
+Router.get('/userblock',isadmin,adminConroller.userblock)
+Router.post('/adminsearch',isadmin,adminConroller.usersearch)
 
 
 
 // CATEGORY CONROLLER
 Router.get('/category',isadmin,categoryConroller.categoryManagement)
-Router.post('/addcategory',categoryConroller.addCategory)
-Router.get('/categorylist',categoryConroller.categoryList)
-Router.get('/adminedit/:id',categoryConroller.editCategory)
+Router.post('/addcategory',isadmin,categoryConroller.addCategory)
+Router.get('/categorylist',isadmin,categoryConroller.categoryList)
+Router.get('/adminedit/:id',isadmin,categoryConroller.editCategory)
 Router.post('/updatecategory',categoryConroller.updateCategory)
 
 
@@ -36,41 +36,42 @@ Router.post('/updatecategory',categoryConroller.updateCategory)
 
 //PRODUCT CONTROLLER
 Router.get('/product',isadmin,productConroller.Product)
-Router.get('/addproduct',productConroller.addProduct)
+Router.get('/addproduct',isadmin,productConroller.addProduct)
 Router.post('/addproduct2',upload.any(),productConroller.addProduct2)
 Router.get('/productlist',productConroller.productList)
-Router.get('/productedit',productConroller.productEdit)
+Router.get('/productedit',isadmin,productConroller.productEdit)
 Router.post('/productupdate/:id',upload.any(),productConroller.productUpdate)
 Router.post("/delete-image", productConroller.deleteImage);
 Router.get('/productdelete',productConroller.deleteProduct)
 
 //Order Controller
-Router.get('/order',orderConroller.adminOrder)
-Router.get('/orderStatus',orderConroller.orderStatus)
+Router.get('/order',isadmin,orderConroller.adminOrder)
+Router.get('/orderStatus',isadmin,orderConroller.orderStatus)
 Router.put('/updateStatus',orderConroller.updateStatus)
 Router.put('/updateStatus2',orderConroller.updateStatus2)
 
 //product offer controller
 
-Router.get('/productOffer',productOfferController.productOfferget)
+Router.get('/productOffer',isadmin,productOfferController.productOfferget)
 Router.post('/productOfferDet',productOfferController.productofferDet)
 Router.put('/productOfferedit',productOfferController.productofferEdit)
-Router.get('/productOfferedit',productOfferController.productEditpageget)
+Router.get('/productOfferedit',isadmin,productOfferController.productEditpageget)
+Router.get('/productDel',productOfferController.ProductDel)
 //categoryOffer 
-Router.get('/categoryOffer',categoryOfferController.categoryOfferget)
-Router.get('/categoryEditpage',categoryOfferController.categoryOffereditget)
+Router.get('/categoryOffer',isadmin,categoryOfferController.categoryOfferget)
+Router.get('/categoryEditpage',isadmin,categoryOfferController.categoryOffereditget)
 Router.post('/categoryOfferDet',categoryOfferController.categoryofferDet)
 Router.put('/categoryOfferedit',categoryOfferController.categoryOfferedit)
-
+Router.get('/categoryDel',categoryOfferController.catOffDel)
 //couPon
-Router.get('/coupons',couPonController.Couponget)
-Router.get('/couponEditpage',couPonController.CouponEditget)
+Router.get('/coupons',isadmin,couPonController.Couponget)
+Router.get('/couponEditpage',isadmin,couPonController.CouponEditget)
 Router.post('/couponDet',couPonController.CouponOffDet)
 Router.put('/couponOfferedit',couPonController.CouponOffEdit)
 Router.get('/coupondelete',couPonController.couponDelete)
 
 //salesReport
-Router.get('/Sales',salesConroller.SalesReportGet)
+Router.get('/Sales',isadmin,salesConroller.SalesReportGet)
 Router.post('/filterdate',salesConroller.filterDate)
 Router.get("/salesReport/download/xlsx",salesConroller.salesReportDownload);
 Router.get('/salesReport/download/pdf',salesConroller.salesReportDownloadPDF)

@@ -8,7 +8,7 @@ const categoryOfferCollection=require('../model/categoryOffer')
 
 const categoryOfferget=async(req,res)=>{
     try{
-       const category2=await categoryOfferCollection?.find()
+       const category2=await categoryOfferCollection?.find({isAvailable:true})
        let categoryOffer=[]
        for(i=0;i<category2?.length;i++){
         categoryOffer.push(await categorycollection.find({_id:category2[i].category}))
@@ -70,7 +70,8 @@ const categoryOfferedit=async(req,res)=>{
             categoryname:req.body.categoryname,
             offerPercentage:Number(req.body.offerPercentage),
             startDate:new Date(req.body.startDate),
-            endDate:new Date(req.body.expiryDate)
+            endDate:new Date(req.body.expiryDate),
+            isAvailable:true,
         }})
         
         
@@ -106,5 +107,14 @@ const categoryOfferExpiry = async (req, res) => {
         console.log(error);
     }
 };
+const catOffDel=async(req,res)=>{
+    try{
+       const update=await categoryOfferCollection.updateOne({_id:req.query.id},{$set:{isAvailable:false}})
+       res.redirect('/categoryOffer')
+    }
+    catch(error){
+        console.log(error)
+    }
+}
 
-module.exports={categoryOfferget,categoryofferDet,categoryOfferedit,categoryOfferExpiry,categoryOffereditget}
+module.exports={categoryOfferget,categoryofferDet,categoryOfferedit,categoryOfferExpiry,categoryOffereditget,catOffDel}

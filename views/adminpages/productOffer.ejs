@@ -23,7 +23,7 @@
 
     </div>
   </nav>
-  <button style="" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
     Add productOffer
   </button>
   <div class="modal" id="myModal">
@@ -97,10 +97,12 @@
           <span class="lead"><%=OfferDet[i].endDate.toDateString()%></span>
         </td>
         <td>
-          <a href="/productOfferedit?id=<%=OfferDet[i]._id%>&pn=<%=productDet2[i]?.productName%>"><button   type="button" class="btn btn-primary" data-toggle="modal" data-target="#my2Modal<%= i %>">
+          <a href="/productOfferedit?id=<%=OfferDet[i]._id%>"><button   type="button" class="btn btn-primary" data-toggle="modal" data-target="#my2Modal<%= i %>">
             Edit
           </button></a>
-          
+          <a href="/productDel?id=<%=OfferDet[i]._id%>"><button   type="button" class="btn btn-danger" data-toggle="modal" data-target="#my2Modal<%= i %>">
+            Delete
+          </button></a>
         </td> 
           
         </tr>

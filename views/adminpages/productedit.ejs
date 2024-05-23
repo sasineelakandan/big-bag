@@ -1,166 +1,334 @@
 <%- include('../adminpart/adminhead') %>
 
-<body>
-  <style>
-    .error {
-      color: red;
-    }
-  </style>
-  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
-    integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
-    integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <style>
+      .error {
+        color: red;
+      }
+    </style>
+    <style>
+      .preview-image {
+        height: 100px;
+        width: 100px;
+      }
 
- 
+      .crop-img-container {
+        height: 300px;
+        width: 300px;
+        margin-bottom: 60px;
+      }
+
+      .add-product {
+        margin-top: 300px;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+      integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+      integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
     <div class="container mt-5">
       <h1 class="text-center">Edit Product</h1>
       <div class="my-5 d-flex justify-content-center">
-          <form id="editproduct" enctype="multipart/form-data" class="border border-2 p-5">
-  
-              <div class="form-group">
-                  <label for="exampleFormControlInput1">Product Name</label>
-                  <input type="text" value="<%=productDet.productName%>" name="productName" class="form-control" id="exampleFormControlInput1" placeholder="" maxlength="50" style="max-width: 300px;">
+        <form id="editproduct" enctype="multipart/form-data" class="border border-2 p-5">
+
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Product Name</label>
+            <input type="text" value="<%=productDet.productName%>" name="productName" class="form-control"
+              id="exampleFormControlInput1" placeholder="" maxlength="50" style="max-width: 300px;">
+          </div>
+
+          <div class="form-group">
+            <label for="parentCategory">Parent Category</label>
+            <select name="parentCategory" class="form-control" style="max-width: 300px;">
+              <option disabled selected>
+                <%= categoryDet.categoryname %>
+              </option>
+              <% for(let i=0;i<categoryDetail.length;i++){ %>
+                <option value="<%=categoryDetail[i]._id%>">
+                  <%=categoryDetail[i].categoryname%>
+                </option>
+                <% } %>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <span id="imageCount">
+              <% if (productDet.productImage.length> 0) { %>
+                <%=productDet.productImage.length%> images exist
+                  <% } else if(productDet.productImage===null){ %>
+                    No images exist
+                    <% } %>
+            </span>
+          </div>
+
+          <div class="d-flex flex-wrap align-items-start " style="max-width: 350px;">
+            <% for(let i=0;i<productDet?.productImage.length;i++){ %>
+              <div class="position-relative m-2">
+                <img src="assets/uploads/<%=productDet.productImage[i]%>"
+                  style="height: 60px; width: 60px; border-radius: 0;" alt="">
+                <button type="button" class="btn btn-danger delete-image" data-id="<%=productDet._id%>"
+                  data-index="<%=i%>">Delete</button>
               </div>
-  
-              <div class="form-group">
-                  <label for="parentCategory">Parent Category</label>
-                  <select name="parentCategory" class="form-control" style="max-width: 300px;">
-                      <option disabled selected><%= categoryDet.categoryname %></option>
-                      <% for(let i=0;i<categoryDetail.length;i++){ %>
-                      <option value="<%=categoryDetail[i]._id%>"><%=categoryDetail[i].categoryname%></option>
-                      <% } %>
-                  </select>
-              </div>
-  
-              <div class="form-group">
-                  <span id="imageCount">
-                      <% if (productDet.productImage.length> 0) { %>
-                      <%=productDet.productImage.length%> images exist
-                      <% } else if(productDet.productImage===null){ %>
-                      No images exist
-                      <% } %>
-                  </span>
-              </div>
-  
-              <div class="d-flex flex-column align-items-start">
-                  <% for(let i=0;i<productDet?.productImage.length;i++){ %>
-                  <div class="position-relative m-2">
-                      <img src="assets/uploads/<%=productDet.productImage[i]%>" style="height: 60px; width: 60px; border-radius: 0;" alt="">
-                      <button type="button" class="btn btn-danger delete-image" data-id="<%=productDet._id%>" data-index="<%=i%>">Delete</button>
-                  </div>
-                  <% } %>
-              </div>
-  
-              <div class="form-group">
-                  <label for="images">Add image</label>
-                  <input type="file" name="images" value="productDet.productImages[i]" accept="image/*" class="form-control-file" id="images" multiple>
-              </div>
-  
-              <div class="form-group">
-                  <label for="exampleFormControlInput1">Product Description</label>
-                  <input type="text" placeholder="Product Description" name="productdes" id="productdes" class="form-control" value="<%=productDet.productDiscription%>" style="max-width: 300px;">
-              </div>
-  
-              <div class="form-group">
-                  <label for="exampleFormControlInput1">Product Price</label>
-                  <input class="form-control" value="<%=productDet.productPrice%>" name="productPrice" type="text" placeholder="" maxlength="50" style="max-width: 300px;">
-              </div>
-  
-              <div class="form-group">
-                  <label for="exampleFormControlInput1">Product Stock</label>
-                  <input class="form-control" value="<%=productDet.productStock%>" name="productStock" type="text" placeholder="" maxlength="50" style="max-width: 300px;">
-              </div>
-  
-              <button type="submit" class="btn btn-success">Save</button>
-          </form>
+              <% } %>
+          </div>
+          <div class="form-group">
+            <label for="images">Add image</label>
+            <input type="file" accept="image/*" name="images" class="form-control-file" id="images" multiple />
+            <!-- Image preview container -->
+            <div id="image-preview" style="width: 350px;"></div>
+            <div id="imagePreview" class="mt-3"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Product Description</label>
+            <input type="text" placeholder="Product Description" name="productdes" id="productdes" class="form-control"
+              value="<%=productDet.productDiscription%>" style="max-width: 300px;">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Product Price</label>
+            <input class="form-control" value="<%=productDet.productPrice%>" name="productPrice" type="text"
+              placeholder="" maxlength="50" style="max-width: 300px;">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Product Stock</label>
+            <input class="form-control" value="<%=productDet.productStock%>" name="productStock" type="text"
+              placeholder="" maxlength="50" style="max-width: 300px;">
+          </div>
+
+          <button type="submit" class="btn btn-success">Save</button>
+        </form>
       </div>
-  </div>
-  
-  <script>
-    $('#editproduct').validate({
-      rules: {
-        productName: {
-          required: true,
-        },
-        
-        productPrice: {
-          required: true,
-          pattern: "[0-9]+"
-        },
-        productStock: {
-          required: true,
-          pattern: "[0-9]+"
-        },
-        productdes: {
-           required: true,
-        },
-      },
-      submitHandler: async (form, event) => {
+    </div>
+    <script>
+      const aaaaaaaaaa = [];
+      // Function to handle file input change event and display image previews
+      function previewImages() {
+        var preview = document.getElementById("image-preview");
+        preview.innerHTML = ""; // Clear previous preview
 
-        event.preventDefault()
-       
-        const formData = new FormData(form);
-        console.log(formData);
+        var files = document.getElementById("images").files;
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          var reader = new FileReader();
 
+          reader.onload = function (event) {
+            var img = document.createElement("img");
+            var div = document.createElement("div");
+            div.className = "crop-img-container";
+            img.className = "canvas-image";
+            img.src = event.target.result;
+            // console.log(event.target.result);
+            // image.push(event.target.result)
+            div.appendChild(img);
+            preview.appendChild(div);
 
-        let response = await fetch('/productupdate/<%=productDet._id%>', {
-          method: 'POST',
-          body: formData
-        })
+            // Initialize cropper for the image
+            initializeCropper(img);
+          };
 
-        let result = await response.json()
-        if (result.exists) {
-          await Swal.fire({
-            icon: "error",
-            title: "Product Already exists"
-          })
-        }
-        if (result.success) {
-          await Swal.fire({
-            icon: "success",
-            title: "Product Edited"
-          })
-          window.location.href = '/product'
-        }
-        if (result.noValue) {
-          await Swal.fire({
-            icon: "error",
-            title: "No Value in Product Name"
-          })
-        }
-        if (result.noImage) {
-          await Swal.fire({
-            icon: "error",
-            title: "Select atleast 3 images"
-          })
+          reader.readAsDataURL(file);
         }
       }
-    })
-    $('.delete-image').click(function () {
-            // Get the product id and index of the image to be deleted
-            var productId = $(this).data('id');
-            var index = $(this).data('index');
 
-            // Send an AJAX request to delete the image
-            $.ajax({
-                url: '/delete-image',
-                method: 'POST',
-                data: {
-                    productId: productId,
-                    index: index
-                },
-                success: function (response) {
-                    // Remove the image element from the DOM
-                    $('.position-relative').eq(index).remove();
-                }
-            });
+      function initializeCropper(image) {
+        var cropper = new Cropper(image, {
+          aspectRatio: NaN,
+          viewMode: 1,
+          autoCropArea: 1,
+          cropBoxResizable: false,
+          preview: ".preview",
         });
 
-  </script>
-</body>
+        // Add a button to crop the image
+        var cropButton = document.createElement("button");
+        cropButton.className = "btn btn-primary";
+        cropButton.innerText = "Crop";
+        cropButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          cropper.getCroppedCanvas().toBlob(function (blob) {
+            // Show the cropped image preview
+            var previewImage = document.createElement("img");
+            var deleteButton = document.createElement('button');
 
-</html>
+            previewImage.className = "preview-image";
+            deleteButton.textContent = 'Drop';
+            deleteButton.className = 'btn btn-sm btn-danger';
+            deleteButton.style.marginTop = '10px';
+            deleteButton.addEventListener('click', () => {
+              previewImage.parentNode.removeChild(previewImage);
+              deleteButton.parentNode.removeChild(deleteButton);
+              const index = aaaaaaaaaa.indexOf(blob);
+              console.log(index);
+              if (index !== -1) {
+                console.log(index);
+                aaaaaaaaaa.splice(index, 1);
+              }
+            
+            });
+
+            aaaaaaaaaa.push(blob);
+            previewImage.src = URL.createObjectURL(blob); // Create a URL for the blob
+
+            document.getElementById("image-preview").appendChild(previewImage);
+            document.getElementById("image-preview").appendChild(deleteButton);
+          });
+        });
+        image.parentNode.appendChild(cropButton);
+      }
+
+      // Attach the previewImages function to the change event of the file input
+      document
+        .getElementById("images")
+        .addEventListener("change", previewImages);
+    </script>
+
+    <script>
+      $('#editproduct').validate({
+        rules: {
+          productName: {
+            required: true,
+          },
+
+          productPrice: {
+            required: true,
+            pattern: "[0-9]+"
+          },
+          productStock: {
+            required: true,
+            pattern: "[0-9]+"
+          },
+          productdes: {
+            required: true,
+          },
+        },
+        submitHandler: async (form, event, blob) => {
+
+          event.preventDefault()
+
+          const formData = new FormData(form);
+          var previewImages = document.querySelectorAll(".preview-image");
+          console.log("preview", previewImages);
+
+          // Loop through each preview image
+          aaaaaaaaaa.forEach(function (previewImage, index) {
+
+
+            formData.append("croppedImage" + index, previewImage);
+          });
+
+          // Append the original image Blob to FormData
+          formData.append("originalImage", blob);
+
+
+          let response = await fetch('/productupdate/<%=productDet._id%>', {
+            method: 'POST',
+            body: formData
+          })
+
+          let result = await response.json()
+          if (result.exists) {
+            await Swal.fire({
+              icon: "error",
+              title: "Product Already exists"
+            })
+          }
+          if (result.success) {
+            await Swal.fire({
+              icon: "success",
+              title: "Product Edited"
+            })
+            window.location.href = '/product'
+          }
+          if (result.noValue) {
+            await Swal.fire({
+              icon: "error",
+              title: "No Value in Product Name"
+            })
+          }
+          if (result.noImage) {
+            await Swal.fire({
+              icon: "error",
+              title: "Select atleast 3 images"
+            })
+          }
+        }
+      })
+      function dataURItoBlob(dataURI) {
+        console.log("Data URI:", dataURI);
+
+        // Check if dataURI is in the correct format
+        if (!dataURI.startsWith("data:image/png;base64,")) {
+          console.error("Invalid data URI format");
+          return null;
+        }
+
+        // Extract base64 string
+        var base64String = dataURI.split(",")[1];
+
+        // Decode base64 string
+        var byteString;
+        try {
+          byteString = atob(base64String);
+        } catch (error) {
+          console.error("Error decoding base64 string:", error);
+          return null;
+        }
+
+        console.log("Byte String:", byteString);
+
+        // Extract MIME type
+        var mimeString = "image/png"; // Force PNG format
+        console.log("MIME String:", mimeString);
+
+        // Convert to ArrayBuffer
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+
+        // Create Blob object
+        var blob;
+        try {
+          blob = new Blob([ab], { type: mimeString });
+        } catch (error) {
+          console.error("Error creating Blob:", error);
+          return null;
+        }
+
+        return blob;
+      }
+      $('.delete-image').click(function () {
+        // Get the product id and index of the image to be deleted
+        var productId = $(this).data('id');
+        var index = $(this).data('index');
+
+        // Send an AJAX request to delete the image
+        $.ajax({
+          url: '/delete-image',
+          method: 'POST',
+          data: {
+            productId: productId,
+            index: index
+          },
+          success: function (response) {
+            // Remove the image element from the DOM
+            $('.position-relative').eq(index).remove();
+          }
+        });
+      });
+
+    </script>
+  </body>
+
+  </html>

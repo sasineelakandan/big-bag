@@ -599,9 +599,11 @@
 
                           <thead>
                             <tr>
-                              <th>Order ID</th>
+                              <th> Transactions ID</th>
                               <th>TransactionsDate</th>
+                              <th>PaymentType</th>
                               <th>Transactiontype</th>
+                              
                               <th></th>
                               
                             </tr>
@@ -612,6 +614,7 @@
                             <tr>
                               <td><%=walletDet[i]?._id%></td>
                               <td><%=walletDet[i]?.transactionsDate.toDateString()%></td>
+                              <td><%=walletDet[i]?.PaymentType%></td>
                               <td><%=walletDet[i]?.transactiontype%></td>
                               <td><%=walletDet[i]?.walletBalance%></td>
  

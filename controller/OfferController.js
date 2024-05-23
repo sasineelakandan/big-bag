@@ -11,8 +11,9 @@ const productOfferget=async(req,res)=>{
        
 
        
-       
-        res.render('adminpages/productOffer',{OfferDet:offers,})
+       const productDetails=await productcollection.find({})
+      
+        res.render('adminpages/productOffer',{OfferDet:offers,productDet:productDetails})
     }
     catch(error){
         console.log(error)
@@ -74,6 +75,18 @@ const productEditpageget=async(req,res)=>{
          console.log(error)
      }
 }
+
+const ProductDel=async(req,res)=>{
+    try{
+        const update=await productOfferCollection.updateOne({_id:req.query.id},{$set:{isAvailable:false}})
+        res.redirect('/productOffer')
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+
+
 const productOfferExpiry = async (req, res) => {
     try {
         const currentDate = new Date();
@@ -97,4 +110,4 @@ const productOfferExpiry = async (req, res) => {
 };
 
 
-module.exports={productOfferget,productofferDet,productofferEdit,productOfferExpiry,productEditpageget}
+module.exports={productOfferget,productofferDet,productofferEdit,productOfferExpiry,productEditpageget,ProductDel}

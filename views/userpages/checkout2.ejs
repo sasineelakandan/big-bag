@@ -1,6 +1,61 @@
 
 <%- include('../userpart/header') %>
+<style>
+  .coupon-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
 
+  .coupon {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+  }
+
+  .coupon h4 {
+    margin: 0;
+    color: #333;
+  }
+
+  .expiry {
+    color: #888;
+    font-size: 0.9em;
+  }
+
+  .coupon-form {
+    margin-top: 20px;
+  }
+
+  .coupon-form input {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+  }
+
+
+  .coupon-form button {
+    width: 30%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2599b2;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    /* Add flexbox */
+    justify-content: center;
+    /* Horizontally center */
+    align-items: center;
+    /* Vertically center */
+    transition: background-color 0.3s;
+  }
+
+  .coupon-form button:hover {
+    background-color: #2599b2;
+  }
+</style>
         <!-- ====================================
           ——— LEFT SIDEBAR WITH OUT FOOTER
         ===================================== -->
@@ -617,39 +672,38 @@
                 <div class="page-header">
                   <h4>Billing Information</h4>
                 </div>
-                <style>
-                  div.coupon {
-                    background-color: #f5f5f5;
-                    padding: 10px;
-                    border: 1px solid #ccc;
-                    margin-right: 500px;
-                    height: 200px;
-                    ; /* Adjust margin-right as needed */
-                }
-                
-                /* Coupon code style */
-                span.coupon-code {
-                    font-size: large;
-                    /* Add any additional styles for the coupon code here */
-                }
-                </style>
-                      <!-- MAIN CONTENT SECTION -->
-                      <h1 style="margin-bottom: 10px;">Couponcodes</h1>
-                      <div style="margin-top: 20px;" class="coupon">
-                       
-                        <% for(i=0;i<coupenDet.length;i++){%>
-                            <h5>MinimumPurchase 500$ above use This Coupon      <span style="" class="coupon-code"><%=coupenDet[i].couponCode%></span> Copy and Paste</h5>
-                        <% }%>
-                
+                <div class="coupon-container">
+                  <% const currentDate=new Date(); for (let i=0; i < couponDet.length; i++) { if (currentDate>=
+                    couponDet[i].startDate && currentDate <= couponDet[i].expiryDate) { %>
+                      <div class="coupon">
+                        <h4>Coupon Code: <%= couponDet[i].couponCode %> for every purchase above $ <%=
+                              couponDet[i].minimumPurchase %>
+                        </h4>
+                        <br>
+                        <h5>Discount Price : <%= couponDet[i].discountPercentage %>
+                        </h5>
+                        <p>Coupon Valid until <%= couponDet[i].expiryDate.toDateString() %>
+                        </p>
+                      </div>
+                      <% } %>
+                        <% } %>
+    
                      
-                    </div>
                     <form id="coupon" style="margin-top: 10px;" >
                   
                       <input type="text" class="form-control form-control-lg" name="couponCode" required placeholder="Enter your coupon code">
-
-                      <button type="submit" class="btn btn-primary">Apply Coupon</button>
+                     <%if(Discount){%>
+                      <button id="btn2" onclick="fn()" type="submit" class="btn btn-primary">Remove Coupon</button>
+                     <%}else{%>
+                      <button id="btn1" type="submit" class="btn btn-primary">Apply Coupon</button>
+                    <% }%>
                   </form>
-              
+            
+
+    <script>
+     
+    </script>
+              </scrip>
                 <div class="container mt-5">
                   <h2>Select Payment Method:</h2>
                   
@@ -775,12 +829,14 @@
                 let result = await response.json()
                 console.log(result)
                 if (result.success) {
+                
                   document.getElementById('grandTotal').innerHTML=result.grandTotal
                   document.getElementById('Discount').innerHTML=result.Discount
                   await Swal.fire({
                     icon: "success",
                     title: " Coupon applied SuccessFully",
                   });
+                  window.location.reload()
                   
                 }else{
                   await Swal.fire({
@@ -803,16 +859,16 @@
                 <ul class="list-unstyled">
                   <li class="d-flex justify-content-between">
                     <span class="tag">Subtotal</span>
-                    <span class="val">$ <%=grandTotal%></span>
+                    $  <span class="val"><%=subTotal%></span>
                   </li>
                   
                   <li class="d-flex justify-content-between">
-                    <span class="tag">Discount Price</span>
-                    <span id="Discount" class="val">$ 0</span>
+                    <span class="tag">Discount Price </span>
+                    $ <span id="Discount" class="val"><%=Discount%></span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="tag">Total</span>
-                    <span id="grandTotal" class="val">$ <%=Total%> </span>
+                    $ <span id="grandTotal" class="val"> <%=Total%> </span>
                   </li>
                 </ul>
               </div>
@@ -831,16 +887,29 @@
       </div>  
     </div> 
       </section>
-      <script>
-  //  async function changePaymentMethod(productId,user,id) {
-  //     var selectedMethod = document.getElementById("paymentMethod").value; 
-  //    let response = await fetch(`/checkout3?productId=${productId}&user=${user}&id=${id}&pay=${selectedMethod}`, {
-  //       method: 'GET'
-  //   });
-
+      
+  
+<script>
+  async function fn(){
+    let response= await fetch('/removeCoupon',{
+      method:'POST'
+    })
+    let result = await response.json()
+                console.log(result)
+                if (result.success) {
+                
+                  document.getElementById('grandTotal').innerHTML=result.grandTotal
+                  document.getElementById('Discount').innerHTML=result.Discount
+                  await Swal.fire({
+                    icon: "success",
+                    title: " Coupon Removed SuccessFully",
+                  });
+                  window.location.reload()
+  }
+}
+</script>
         
     
-        // Call fn() with parameters for Online Payment option
       
     
 
@@ -1173,3 +1242,11 @@
     </div>
   </div>
 </footer>
+
+
+if(succes){
+  btn.style.display = none
+}else{
+  btn.style.display = block
+
+}

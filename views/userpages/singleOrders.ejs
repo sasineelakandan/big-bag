@@ -584,7 +584,7 @@
             <div class="col-12">
               <div class="innerWrapper singleOrder">
                 <div class="orderBox d-flex align-items-center mb-4">
-                  <h2 class="orderBoxContent mb-0">Order ID:<%=orderDet?._id%></h2>
+                  <h2 class="orderBoxContent mb-0">Order ID:<%=orderDet?.OrderId%></h2>
                   <div class="ms-3">
                     <% if ('Pending'==orderDet?.orderStatus) { %>
                       <a class='btn btn-sm btn-primary' href=''><%=orderDet?.orderStatus%></a>
@@ -789,7 +789,7 @@
                       </div>
                       <div class="panel-body">
                         <address>
-                          <span>Door Delivery</span>
+                          <span>Door delivery</span>
                         </address>
                       </div>
                     </div>

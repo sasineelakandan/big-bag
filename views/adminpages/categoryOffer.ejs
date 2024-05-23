@@ -22,7 +22,7 @@
     </div>
   </nav>
   <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-    Add ProductOffer
+    Add CatgoryOffer
   </button>
   <div class="modal" id="myModal">
     <div class="modal-dialog">
@@ -98,6 +98,10 @@
 
           <a href="/categoryEditpage?id=<%=categoryOfferDet[i]?._id%>&cn=<%=categoryDet2[i]?.categoryname%>"><button   type="button" class="btn btn-primary" data-toggle="" data-target="">
             Edit
+          </button></a>
+
+          <a href="/categoryDel?id=<%=categoryOfferDet[i]?._id%>"><button   type="button" class="btn btn-danger" data-toggle="" data-target="">
+            Delete
           </button></a>
           
             

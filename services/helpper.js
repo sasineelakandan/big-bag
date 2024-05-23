@@ -27,7 +27,7 @@ const BestOffer = async (req, res) => {
            
             let isInProdOffer = productOfferset.has(productId)
             let isInCatOffer = categoryOfferset.has(categoryId)
-        
+          
         
         
 
@@ -125,12 +125,15 @@ const havingSingleOffer = async (
       } else if (availOffer === "categoryOffer") {
         let catOffer = await categoryOfferCollection.findOne({
          category :categoryId,
+
         });
+        
         if (prod.productOfferPercentage !== catOffer.offerPercentage) {
+          
           let productPrice = Math.round(
             prod.priceBeforeOffer * (1 - catOffer.offerPercentage * 0.01)
           );
-  
+          console.log(productPrice)
           result = await productcollection.updateOne(
             { _id: prod._id },
             {

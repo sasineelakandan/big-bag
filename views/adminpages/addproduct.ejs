@@ -1,120 +1,362 @@
 <%- include('../adminpart/adminhead') %>
-<body>
-  <style>
-    .error {
-      color: red;
-    }
-  </style>
-  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
-    integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
-    integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <div class="container-fluid d-flex justify-content-center align-items-center" style="height: 100vh;">
-      <div class="border border-2 p-5" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-          <h1 class="my-5 text-center">Add Product</h1>
-          <form id="addproduct" enctype="multipart/form-data">
-              <div class="form-group mt-3">
-                <label for="exampleFormControlInput1">Product Name</label>
-                <input type="text" name="productName" class="form-control" id="exampleFormControlInput1" placeholder="" maxlength="50" style="max-width: 325px;">
-            </div>
-            <div class="form-group mt-3">
-                <label for="parentCategory">Parent Category</label>
-                <select name="parentCategory" class="form-control" id="parentCategory" style="max-width: 325px;">
-                    <option disabled selected>Select Parent Category</option>
-                    <% for(let i=0;i<categorydet.length;i++){ %>
 
-                      <option value="<%=categorydet[i]._id%>">
-                        <%=categorydet[i].categoryname%>
-                      </option>
-            
-                      <% } %>
-                </select>
+<!-- Include Cropper.js CSS and JS -->
+
+<!-- Add the Cropper.js library -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+<style>
+  .preview-image{
+    height: 100px;
+    width: 100px;
+  }
+  .crop-img-container {
+    height: 300px;
+    width: 300px;
+    margin-bottom: 60px;
+  }
+  .add-product {
+    margin-top: 300px;
+  }
+</style>
+
+<!-- <div class="add-product"> -->
+  <!-- Your main content goes here -->
+<!-- </div> -->
+
+<!-- Cropper Modal -->
+<!-- <div class="modal fade" id="cropModal" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="cropContainer">
+                        <img id="cropImage" src="" alt="Image to crop">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="cropButton">Crop</button>
+                </div>
             </div>
-            <div class="form-group mt-3">
-                <label for="productdes">Product Description</label>
-                <input type="text" placeholder="Product Description" name="productdes" id="productdes" class="form-control" style="max-width: 325px;">
-            </div>
-            <div class="form-group mt-3">
-                <label for="images">Add image</label>
-                <input type="file" name="images" class="form-control-file" id="images" accept="image/*" multiple>
-            </div>
-            <div class="form-group mt-3">
-                <label for="productPrice">Product Price</label>
-                <input class="form-control" name="productPrice" type="text" placeholder="" maxlength="50" style="max-width: 325px;">
-            </div>
-            <div class="form-group mt-3">
-                <label for="productStock">Product Stock</label>
-                <input class="form-control" name="productStock" type="text" placeholder="" maxlength="50" style="max-width: 325px;">
-            </div>
-            <button type="submit" class="btn btn-success mt-3">Add</button>
-          </form>
+        </div>
+    </div> -->
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+  integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+  integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<div
+  class="container-fluid d-flex justify-content-center align-items-center mt-3 "
+>
+  <div
+    class="border border-2 px-5 py-2 rounded"
+   
+  >
+    <h1 class="my-2 text-center">Add Product</h1>
+    <form id="addProductForm" enctype="multipart/form-data">
+      <div class="form-group mt-3">
+        <label for="exampleFormControlInput1">Product Name</label>
+        <input
+          type="text"
+          name="productName"
+          class="form-control"
+          id="productName"
+          placeholder=""
+          maxlength="50"
+          style="max-width: 325px"
+        />
       </div>
-  </div>
-  <script>
-    $('#addproduct').validate({
-      rules: {
-        productName: {
-          required: true,
-        },
-        images:{
-          required: true,
-        },
-        productPrice: {
-          required: true,
-          pattern: "[0-9]+"
-        },
-        productStock: {
-          required: true,
-          pattern: "[0-9]+"
-        },
-        parentCategory: {
-          required: true,
+      <div class="form-group mt-3">
+        <label for="parentCategory">Parent Category</label>
+        <select
+          name="parentCategory"
+          class="form-control"
+          id="parentCategory"
+          style="max-width: 325px"
+        >
+          <option disabled selected>Select Parent Category</option>
+          <% for(let i = 0; i < categorydet.length; i++) { %>
+          <option value="<%= categorydet[i]._id %>">
+            <%= categorydet[i].categoryname %>
+          </option>
+          <% } %>
+        </select>
+      </div>
+      <div class="form-group mt-3">
+        <label for="productdes">Product Description</label>
+        <input
+          type="text"
+          placeholder="Product Description"
+          name="productdes"
+          id="productdes"
+          class="form-control"
+          style="max-width: 325px"
+        />
+      </div>
+      <div class="form-group">
+        <label for="images">Add image</label>
+        <input
+          type="file"
+          accept="image/*"
+          name="images"
+          class="form-control-file"
+          id="images"
+          multiple
+        />
+        <!-- Image preview container -->
+        <div id="image-preview"style="width: 350px;"></div>
+        <div id="imagePreview" class="mt-3"></div>
+      </div>
+      <!-- Container to display image previews -->
+      <div class="form-group mt-3">
+        <label for="productPrice">Product Price</label>
+        <input
+          class="form-control"
+          name="productPrice"
+          type="text"
+          placeholder=""
+          maxlength="50"
+          style="max-width: 325px"
+        />
+      </div>
+      <div class="form-group mt-3">
+        <label for="productStock">Product Stock</label>
+        <input
+          class="form-control"
+          name="productStock"
+          type="text"
+          placeholder=""
+          maxlength="50"
+          style="max-width: 325px"
+        />
+      </div>
 
-        },
-        productdes: {
-           required: true,
-        },
-      },
+      <button type="submit" class="btn btn-success mt-3">Add</button>
+    </form>
+    <script>
+      const aaaaaaaaaa = [];
+      // Function to handle file input change event and display image previews
+      function previewImages() {
+        var preview = document.getElementById("image-preview");
+        preview.innerHTML = ""; // Clear previous preview
 
-      submitHandler: async (form, event) => {
+        var files = document.getElementById("images").files;
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          var reader = new FileReader();
 
-        event.preventDefault()
-        
-        const formData = new FormData(form)
-        
-        let response = await fetch('/addproduct2', {
-          method: 'POST',
-          body: formData 
-         
-        })
-        let result = await response.json()
-        if(result.exists) {
+          reader.onload = function (event) {
+            var img = document.createElement("img");
+            var div = document.createElement("div");
+            div.className = "crop-img-container";
+            img.className = "canvas-image";
+            img.src = event.target.result;
+            // console.log(event.target.result);
+            // image.push(event.target.result)
+            div.appendChild(img);
+            preview.appendChild(div);
+
+            // Initialize cropper for the image
+            initializeCropper(img);
+          };
+
+          reader.readAsDataURL(file);
+        }
+      }
+
+      function initializeCropper(image) {
+        var cropper = new Cropper(image, {
+          aspectRatio: NaN,
+          viewMode: 1,
+          autoCropArea: 1,
+          cropBoxResizable: false,
+          preview: ".preview",
+        });
+
+        // Add a button to crop the image
+        var cropButton = document.createElement("button");
+        cropButton.className = "btn btn-primary";
+        cropButton.innerText = "Crop";
+        cropButton.addEventListener("click", function (event) {
+          event.preventDefault()
+          cropper.getCroppedCanvas().toBlob(function (blob) {
+            // Show the cropped image preview
+            var previewImage = document.createElement("img");
+            var deleteButton = document.createElement('button');
+            previewImage.className = "preview-image";
+            deleteButton.textContent = 'Drop';
+            deleteButton.className = 'btn btn-sm btn-danger';
+            deleteButton.style.marginTop = '10px';
+            deleteButton.addEventListener('click', () => {
+              previewImage.parentNode.removeChild(previewImage);
+              deleteButton.parentNode.removeChild(deleteButton);
+              const index = aaaaaaaaaa.indexOf(blob);
+              console.log(index);
+              if (index !== -1) {
+                console.log(index);
+                aaaaaaaaaa.splice(index, 1);
+              }
+            
+            });
+            aaaaaaaaaa.push(blob);
+            previewImage.src = URL.createObjectURL(blob); // Create a URL for the blob
+            document.getElementById("image-preview").appendChild(previewImage);
+            document.getElementById("image-preview").appendChild(deleteButton);
+          });
+        });
+        image.parentNode.appendChild(cropButton);
+      }
+
+      // Attach the previewImages function to the change event of the file input
+      document
+        .getElementById("images")
+        .addEventListener("change", previewImages);
+    </script>
+
+    <script>
+      $("#addProductForm").validate({
+        rules: {
+          productName: {
+            required: true,
+          },
+          images: {
+            required: true,
+          },
+          productPrice: {
+            required: true,
+            pattern: "[0-9]+",
+          },
+          productStock: {
+            required: true,
+            pattern: "[0-9]+",
+          },
+          parentCategory: {
+            required: true,
+          },
+          productdes: {
+            required: true,
+          },
+        },
+
+        submitHandler: async (form, event,blob) => {
+          event.preventDefault();
+
+          const formData = new FormData(form);
+
+          // Select the preview images
+          var previewImages = document.querySelectorAll(".preview-image");
+          console.log("preview", previewImages);
+
+          // Loop through each preview image
+          aaaaaaaaaa.forEach(function (previewImage, index) {
+            console.log("imageeeeee", previewImage);
+
+            formData.append("croppedImage" + index, previewImage);
+          });
+
+          // Append the original image Blob to FormData
+          formData.append("originalImage", blob);
+
+          let response = await fetch("/addproduct2", {
+            method: "POST",
+            body: formData,
+          });
+          let result = await response.json();
+          if (result.exists) {
             await Swal.fire({
               icon: "error",
-              title: "Product Already exists"
-            })
-    }
-        if (result.success) {
-      await Swal.fire({
-        icon: "success",
-        title: "Product Added"
-      })
-      window.location.href = '/product'
-    }
-    if (result.noValue) {
-      await Swal.fire({
-        icon: "error",
-        title: "No Value in Product Name"
-      })
-    }
-      }
-    })
-    
-  </script>
-</body>
+              title: "Product Already exists",
+            });
+          }
+          if (result.success) {
+            await Swal.fire({
+              icon: "success",
+              title: "Product Added",
+            });
+            window.location.href = "/product";
+          }
+          if (result.noValue) {
+            await Swal.fire({
+              icon: "error",
+              title: "No Value in Product Name",
+            });
+          }
+        },
+      });
+      function dataURItoBlob(dataURI) {
+        console.log("Data URI:", dataURI);
 
+        // Check if dataURI is in the correct format
+        if (!dataURI.startsWith("data:image/png;base64,")) {
+          console.error("Invalid data URI format");
+          return null;
+        }
+
+        // Extract base64 string
+        var base64String = dataURI.split(",")[1];
+
+        // Decode base64 string
+        var byteString;
+        try {
+          byteString = atob(base64String);
+        } catch (error) {
+          console.error("Error decoding base64 string:", error);
+          return null;
+        }
+
+        console.log("Byte String:", byteString);
+
+        // Extract MIME type
+        var mimeString = "image/png"; // Force PNG format
+        console.log("MIME String:", mimeString);
+
+        // Convert to ArrayBuffer
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+
+        // Create Blob object
+        var blob;
+        try {
+          blob = new Blob([ab], { type: mimeString });
+        } catch (error) {
+          console.error("Error creating Blob:", error);
+          return null;
+        }
+
+        return blob;
+      }
+    </script>
+  </div>
+</div>
+</body>
 </html>
