@@ -78,7 +78,7 @@ const productEditpageget=async(req,res)=>{
 
 const ProductDel=async(req,res)=>{
     try{
-        const update=await productOfferCollection.updateOne({_id:req.query.id},{$set:{isAvailable:false}})
+        const update=await productOfferCollection.deleteOne({_id:req.query.id})
         res.redirect('/productOffer')
     }
     catch(error){
@@ -96,11 +96,11 @@ const productOfferExpiry = async (req, res) => {
             const endDate = new Date(expiry[i].endDate); // Ensure endDate is a Date object
             console.log(endDate.getTime())
             if (currentDate.getTime() >= endDate.getTime()) { // Compare time in milliseconds
-                console.log('hai')
+        
                 await productOfferCollection.updateOne({ _id: expiry[i]._id }, { $set: { isAvailable: false } });
                 const product = await productcollection.findOne({ _id: expiry[i].product }); // Use findOne instead of find
                 if (product) {
-                    await productcollection.updateOne({ _id: expiry[i].product }, { $set: {productPrice: product.priceBeforeOffer } });
+                    await productcollection.updateOne({ _id: expiry[i].product }, { $set: {productPrice: product.priceBeforeOffer,productOfferPercentage:0 } });
                 }
             }
         }

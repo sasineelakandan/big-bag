@@ -23,7 +23,7 @@ const orderSchema = new mongoose.Schema(
     OrderId:{type: Number, required: true},
     Total:{type: Number, required: true},
     couponApplied: {
-      type: mongoose.Types.ObjectId,
+      type: Number,
       default: null,
       ref: "coupons",
     },

@@ -38,7 +38,7 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="productName">Coupon Name:</label>
-              <input type="text" class="form-control" id="productName" name="name">
+              <input type="text" class="form-control" id="productName" name="name" placeholder="Enter CouponCode " >
             </div>
             <div class="form-group">
               <label for="startDate">Start Date:</label>
@@ -50,12 +50,12 @@
             </div>
             <div class="form-group">
               <label for="minimumPurchase">Minimum Purchase:</label>
-              <input type="number" class="form-control" id="minimumPurchase" name="minimumPurchase">
+              <input type="number" class="form-control" id="minimumPurchase" name="minimumPurchase"  placeholder="Enter minimumPurchase" >
             </div>
             <div class="form-group">
-              <label for="offerPercentage">Offer Percentage:</label>
+              <label for="offerPercentage">Offer Price:</label>
               <input type="number" class="form-control" id="offerPercentage" name="offerPrice"
-                placeholder="Enter offer percentage">
+                placeholder="Enter offer price">
             </div>
           </div>
           <!-- Modal Footer -->
@@ -86,10 +86,10 @@
           <span class="lead"><%=couponDet[i].couponCode%></span>
         </th>
         <td>
-          <span class="lead"><%=couponDet[i].discountPercentage%></span>
+         $ <span class="lead"><%=couponDet[i].discountPercentage%></span>
         </td>
         <td>
-          <span class="lead"><%=couponDet[i].minimumPurchase%></span>
+         $ <span class="lead"><%=couponDet[i].minimumPurchase%></span>
         </td>
         <td>
           <span class="lead"><%=couponDet[i].startDate.toDateString()%></span>
@@ -129,25 +129,27 @@ $("#productForm").validate({
       required: true,
       number: true,
       min: 0,
-      max: 90
+      max:100
+      
     },
     minimumPurchase: {
       required: true,
       number: true,
-      min: 0
+      min: 0,
+      
     }
   },
   messages: {
     name: {
       required: "Please enter a coupon code",
-                        minlength: "Coupon code must be at least 5 characters long"
+      minlength: "Coupon code must be at least 5 characters long"
     },
     startDate: "Please enter a start date",
     expiryDate: "Please enter an expiry date",
     offerPrice: {
       required: "Please enter an offer price",
-                        number: "Please enter a valid number",
-                        min: "Offer price cannot be less than 0",
+      number: "Please enter a valid number",
+       min: "Offer price cannot be less than 5$",
     },
     minimumPurchase: {
       required: "Please enter a minimum purchase amount",
@@ -234,7 +236,7 @@ $(document).on('click', '#unblock', function() {
 
  </script>
 
-  // </script>
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js"></script>

@@ -13,11 +13,11 @@
               </div>
               <div class="form-group">
                 <label for="startDate">Start Date:</label>
-                <input  class="form-control" name="startDate" id="startDate" value="<%=OfferDet?.startDate.toDateString()%>">
+                <input type="date" class="form-control" name="startDate" id="startDate" value="<%=OfferDet?.startDate.toISOString().split('T')[0]%>">
               </div>
               <div class="form-group">
                 <label for="expiryDate">Expiry Date:</label>
-                <input  class="form-control" name="expiryDate" id="expiryDate" value="<%=OfferDet?.endDate.toDateString()%>">
+                <input type="date" class="form-control" name="expiryDate" id="expiryDate" value="<%=OfferDet?.endDate.toISOString().split('T')[0]%>">
               </div>
               <div class="form-group">
                 <label for="offerPercentage">Offer Percentage:</label>

@@ -566,10 +566,7 @@
         </div>
       </section>
 
-    
-     
-  
-
+      <!-- MAIN CONTENT SECTION -->
       <section class="mainContent clearfix cartListWrapper">
         <div class="container">
           <div class="row">
@@ -590,22 +587,22 @@
                         </tr>
                  
                       </thead>
-                      <% for(let i=0;i<cartDet.length;i++){ %>
+                      <% for(let i=0;i<cartDet?.length;i++){ %>
                       <tbody>
                         <tr class="alert alert-dismissible fade show p-0 mb-0" role="alert">
                           <td class="">
                             <button type="button" class="close me-4 p-0 top-0" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <span class="cartImage"><img style="height: 75px;width: 75px;" src="assets/uploads/<%=cartDet[i].productImage%>" alt="image"></span>
+                            <span class="cartImage"><img style="height: 75px;width: 75px;" src="assets/uploads/<%=cartDet[i]?.productImage%>" alt="image"></span>
                           </td>
-                          <td class=""><%=cartDet[i].productId.productName%></td>
-                          <td class="">$ <%=cartDet[i].productprice%></td>
+                          <td class=""><%=cartDet[i]?.productId?.productName%></td>
+                         <td class=""><span>$</span> <%=cartDet[i]?.productId?.productPrice%></td>
                           <td class="count-input">
-						              <button class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productprice %>','min','<%=userLogged._id%>')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></button>
-							              <input id="quantity<%=cartDet[i].productId._id %>" type="number" value="<%=cartDet[i].productQuantity%>">
-							             <button class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i].productId._id %>','<%=cartDet[i].productprice %>','plus','<%=userLogged._id%>')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></button>
+						              <button class="incr-btn" id="dec<%i%>" onclick="fn('<%=cartDet[i]?.productId?._id %>','<%=cartDet[i]?.productId?.productPrice %>','min','<%=userLogged._id%>')" data-action="decrease" href="javascript:void(0)"><i class="fa fa-minus"></i></button>
+							              <input id="quantity<%=cartDet[i]?.productId?._id %>" type="number" value="<%=cartDet[i]?.productQuantity%>">
+							             <button class="incr-btn" id="inc<%i%>" onclick="fn('<%=cartDet[i]?.productId?._id %>','<%=cartDet[i]?.productId?.productPrice %>','plus','<%=userLogged._id%>')" data-action="increase" href="javascript:void(0)"><i class="fa fa-plus"></i></button>
                           </td>
-                          <td id="total<%=cartDet[i].productId._id %>">$ <%=cartDet[i].totalCostPerProduct%></td>
-                          <td><button type="button" id="delete<%i%>"  onclick="fn2('<%=cartDet[i]._id %>')" class="btn btn-danger">remove</button></td>
+                           <td id="total<%=cartDet[i]?.productId?._id %>"> $<%=cartDet[i]?.totalCostPerProduct%></td>
+                          <td><button type="button" id="delete<%i%>"  onclick="fn2('<%=cartDet[i]?._id %>')" class="btn btn-danger">remove</button></td>
                         </tr>
                         <% } %>
                          
@@ -613,14 +610,16 @@
                     </table>
                   </div>
 
-                
-               
-        
+                  <div class="updateArea">
+                    
+                  
+                  </div>
+
                   <div class="row totalAmountArea">
                     <div class="col-sm-5 ms-sm-auto">
                       <ul class="list-unstyled">
-                       
-                        <li>Grand Total <span id="grandTotal">$ <%=grandTotal%></span></li>
+                        
+                        <li>Grand Total  <span id="grandTotal"> $ <%=grandTotal%></span></li>
                       </ul>
                     </div>
                   </div>
@@ -731,7 +730,6 @@
               
             }
        </script>
-
        <!-- LIGHT SECTION -->
       <section class="lightSection clearfix">
         <div class="container">

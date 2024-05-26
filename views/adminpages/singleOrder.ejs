@@ -891,9 +891,9 @@
                                 <span class="cartImage"><img style="height: 75px; width: 75px;" src="assets/uploads/<%=orderDet?.cartData[i]?.productImage%>" alt="image"></span>
                               </td>
                               <td class=""><%=orderDet?.cartData[i]?.productName%></td>
-                              <td class="">₹ <%=orderDet?.cartData[i]?.productprice%></td>
+                              <td class="">$ <%=orderDet?.cartData[i]?.productprice%></td>
                               <td class=""><%=orderDet?.cartData[i]?.productQuantity%></td>
-                              <td class="">₹ <%=orderDet?.cartData[i]?.totalCostPerProduct%></td>
+                              <td class="">$ <%=orderDet?.cartData[i]?.totalCostPerProduct%></td>
                               <% if ('cancel'==orderDet?.cartData[i]?.Status) { %> 
                               <td class="" style="color: red;" > <%=orderDet?.cartData[i]?.Status%></td>
                               <% }else { %>
@@ -976,7 +976,7 @@
                         <div class="col-sm-5 ms-sm-auto">
                           <ul class="list-unstyled">
                             <li>SubTotal <span> $ <%=orderDet?.grandTotalCost%></span></li>
-                            <li><span></span></li>
+                            <li>Discount<span>$<%=orderDet?.couponApplied%></span></li>
                             
                             <li>Grand Total <span class="grandTotal"> $ <%=orderDet?.Total%></span></li>
                           </ul>

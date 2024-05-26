@@ -75,6 +75,8 @@ const addTocart=async(req,res)=>{
             productQuantity:req.query.quantity, 
             productStock:req.query.stock,
             productprice:productprice,
+            priceBeforeOffer:qty2.priceBeforeOffer,
+            productOfferPercentage:qty2.productOfferPercentage,
             Status:'pending',
             totalCostPerProduct:offerprice,
             productImage:req.query.Img,
@@ -208,7 +210,7 @@ const cartbutton=async(req,res)=>{
      const checkOut2=async(req,res)=>{
       try{
         const useraddress= await addressCollection.findOne({_id:req.query.id})
-        const coupon=await couPonCollection.find({})
+        const coupon=await couPonCollection.find({isDelete:false})
         const usercart=await cartCollection.find({userId:req.query.user})
         const grandTotal=Number(req.session.grandTotal)
         
@@ -257,6 +259,7 @@ const cartbutton=async(req,res)=>{
             { $inc: { productStock: -usercart[i].productQuantity } }
           );
         }
+        const coupan=await couPonCollection.findOne({discountPercentage:req.session.copponAplied})
         await cartCollection.deleteMany({userId:req.query.id})
         const orderId = Math.floor(100000 + Math.random() * 900000);
         const newOrder = new orderCollection({
@@ -265,10 +268,10 @@ const cartbutton=async(req,res)=>{
           UserName:req.session.logged.name,
           paymentType:'COD',
           address:req.query.addressId,
-          grandTotalCost:req.query.Grandtotal,
+          grandTotalCost:req.session.Sum,
           cartData:usercart,
           Items:count,
-          
+          couponApplied:coupan?.discountPercentage,
           UserName:req.session.logged.name,
           Total:req.query.total
       })
@@ -308,11 +311,11 @@ const cartbutton=async(req,res)=>{
       paymentType:'Wallet',
       UserName:req.session.logged.name,
       address:req.query.addressId,
-      grandTotalCost:req.query.Grandtotal,
+      grandTotalCost:req.session.Sum,
       cartData:usercart,
       Items:count,
       UserName:req.session.logged.name,
-    
+      couponApplied:req.session?.copponAplied,
       Total:req.query.total
     
   })
@@ -376,10 +379,10 @@ const cartbutton=async(req,res)=>{
           paymentType:'Online Payment',
           paymentId:req.session.paymentId,
           address:add._id,
-          grandTotalCost:req.session.total,
+          grandTotalCost:req.session.Sum,
           cartData:usercart,
           Items:count,
-         
+          couponApplied:req.session.copponAplied,
           UserName:req.session.logged.name,
           Total:req.session.total
       })
@@ -414,7 +417,7 @@ const cartbutton=async(req,res)=>{
       
         const usercart=await cartCollection.find({userId:req.query.id})
         const grandTotal=Number(req.session.grandTotal)
-        const Discount=Number(req.query.Discount)
+        
         
         req.session.grandtotal=grandTotal
         

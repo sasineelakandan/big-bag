@@ -18,7 +18,7 @@
               </div>
               <div class="form-group">
                 <label for="startDate">Start Date</label>
-                <input  class="form-control" name="startDate" id="startDate" value="<%=couponDet?.startDate.toDateString()%>">
+                <input type="date" class="form-control" name="startDate" id="startDate" value="<%=couponDet?.startDate.toISOString().split('T')[0]%>">
               </div>
               <div class="form-group">
                 <label for="expiryDate">Minimum Purchase:</label>
@@ -26,7 +26,7 @@
               </div>
               <div class="form-group">
                 <label for="expiryDate">Expiry Date:</label>
-                <input  class="form-control" name="expiryDate" id="expiryDate" value="<%=couponDet?.expiryDate.toDateString()%>">
+                <input type="date" class="form-control" name="expiryDate" id="expiryDate" value="<%=couponDet?.expiryDate.toISOString().split('T')[0]%>">
               </div>
               <div class="form-group">
                 <label for="offerPercentage">Offer Price:</label>

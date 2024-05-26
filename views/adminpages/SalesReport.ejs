@@ -16,54 +16,117 @@
                 margin-left: 10px;
             }
         </style>
-        <div class="container">
-            <h2>Sales Report</h2>
-            <div class="container mt-2 d-flex my-5">
-                <a href="/salesReport/download/xlsx">
-                    <button id="downloadExcel" class="btn btn-success btn-custom">
-                        <i style="color: aliceblue;" class="fas fa-file-excel"></i> Download Excel
-                    </button>
-                </a>
-                <button id="downloadPdf" class="btn btn-danger btn-custom ms-3">
-                    <i class="fas fa-file-pdf"></i> Download PDF
+       <div class="container">
+        <h2>Sales Report</h2>
+        <div class="d-flex align-items-center my-5">
+            <a href="/salesReport/download/xlsx?startDate=<%= Dates?.startDate1?.split('T')[0] %>&endDate=<%= Dates?.endDate2?.split('T')[0] %>">
+                <button id="downloadExcel" class="btn btn-success btn-custom">
+                    <i style="color: aliceblue;" class="fas fa-file-excel"></i> Download Excel
                 </button>
-                <form id="filtersForm" class="form-inline d-flex mx-4">
-                    <label for="filterDateFrom" class="mr-2">Date From:</label>
-                    <input style="max-width: fit-content;" type="date" id="filterDateFrom"
-                        class="form-control form-control-sm datepicker">
-
-                    <label for="filterDateTo" class="mr-2 ms-3">Date To:</label>
-                    <input style="max-width: fit-content;" type="date" id="filterDateTo"
-                        class="form-control form-control-sm datepicker">
-
-                    <button type="button" class="btn btn-primary btn-sm ms-3 btn-custom" id="applyFilters">Apply
-                        Filters</button>
-                    <a href="/removefilter">
-                        <button type="button" class="btn btn-primary btn-sm ms-3 btn-custom">Remove Filters</button>
-                    </a>
-                </form>
-                <select id="filterOption" class="ms-5"
-                    style="width: 100px; height: 40px; padding: 5px; font-size: 16px; border: 2px solid #ccc; border-radius: 5px;">
-                    <option value="month">Month</option>
-                    <option value="week">Week</option>
-                    <option value="year">Year</option>
-                </select>
-                <button id="filterBtn" class="btn btn-success ms-3 btn-custom">Filter</button>
-                <br />
-                <br />
-            </div>
+            </a>
+            <button id="downloadPdf" class="btn btn-danger btn-custom ms-3">
+                <i class="fas fa-file-pdf"></i> Download PDF
+            </button>
+            <% if(Dates) { %>
+            <form id="filtersForm" class="d-flex align-items-center mx-4">
+                <label for="startDate" class="form-label me-2">From:</label>
+                <input id="startDate" type="date" class="form-control me-2" value="<%= Dates.startDate1.split('T')[0] %>">
+                <label for="endDate" class="form-label me-2">To:</label>
+                <input id="endDate" type="date" class="form-control me-2" value="<%= Dates.endDate2.split('T')[0] %>">
+                <button type="button" class="btn btn-primary btn-sm ms-3 btn-custom" id="applyFilters">Apply Filters</button>
+                <a href="/removefilter" class="ms-3">
+                    <button type="button" class="btn btn-primary btn-sm btn-custom">Remove Filters</button>
+                </a>
+            </form>
+            <% } else { %>
+            <form id="filtersForm" class="d-flex align-items-center mx-4">
+                <label for="startDate" class="form-label me-2">From:</label>
+                <input id="startDate" type="date" class="form-control me-2">
+                <label for="endDate" class="form-label me-2">To:</label>
+                <input id="endDate" type="date" class="form-control me-2">
+                <button type="button" class="btn btn-primary btn-sm ms-3 btn-custom" id="applyFilters">Apply Filters</button>
+                <a href="/removefilter" class="ms-3">
+                    <button type="button" class="btn btn-primary btn-sm btn-custom">Remove Filters</button>
+                </a>
+            </form>
+            <% } %>
+            <select id="filterOption" class="ms-5"
+                style="width: 100px; height: 40px; padding: 5px; font-size: 16px; border: 2px solid #ccc; border-radius: 5px;">
+                <option value="month">Month</option>
+                <option value="week">Week</option>
+                <option value="year">Year</option>
+            </select>
+            <button id="filterBtn" class="btn btn-success ms-3 btn-custom">Filter</button>
         </div>
-
+        <script>
+            let filterBtn2 = document.getElementById('filterBtn')
+        filterBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          let filterOption = document.getElementById('filterOption').value;
+          let formData = { filterOption };
+          console.log(formData)
+          let response = await fetch('/admin/salesReport/filter', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+          });
+          let result = await response.json();
+      
+          if (result.success) {
+               window.location.reload(); 
+          }
+        });
+          </script>
+    </div>
+    
+    <tr>
+        <td colspan="4" class="total-header">
+          <strong style="color: red;" >Total Orders:</strong>
+        </td>
+        <td colspan="3" class="total-value">
+          <%= Sreports.length %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4" class="total-header">
+          <strong style="color: red;" >Total Sales:</strong>
+        </td>
+        <td colspan="3" class="total-value">
+          <% let totalSales = Sreports.reduce((total, sale) => total + sale.Total, 0); %>   $<%= totalSales %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4" class="total-header">
+          <strong style="color: red;" >Total Discount:</strong>
+        </td>
+        <td colspan="3" class="total-value">
+          $<%= TotalDiscount %>
+        </td>
+      </tr>
+      
+     
+        
+     
+    
 
         <table class="table">
             <thead>
                 <tr>
                     <th>OrderID</th>
                     <th>Name</th>
-                    <th>Order Date</th>
-                    <th>No of Items </th>
-                    <th>TotalCostperProduct</th>
-                    <th>PaymentMethod</th>
+                    <th>OrderDate</th>
+                    <th>ProductNames</th>
+                    <th> Quantity </th>
+                    
+                    
+                    <th>OfferPercentage</th>
+                    <th>ProductPrice</th>
+                   
+                    
+                   
+                    <th>CoupanAmount</th>
+                    <th>Total</th>
+                    <th>PayMethod</th>
                     <th>Status</th>
 
                 </tr>
@@ -82,10 +145,26 @@
                                 month: '2-digit' , year: 'numeric' }).replace(/\//g, '-' ) %>
                         </td>
                         <td>
-                            <%=Sreports[i]?.Items%>
+                            <%=Sreports[i].cartData.map((item) => item.productName).join(", ")%>
                         </td>
                         <td>
-                            $  <%=Sreports[i]?.grandTotalCost%>
+                            <%=Sreports[i].cartData.map((item) => item.productQuantity).join(", ")%>
+                        </td>
+                        
+                        
+                       
+                        <td>
+                            <%=Sreports[i].cartData.map((item) => item.productOfferPercentage).join("%, ")%>
+                        </td>
+                        <td>
+                            <%=Sreports[i].cartData.map((item) => item.productprice).join("$, ")%>
+                        </td>
+                       
+                        <td>
+                            $  <%=Sreports[i]?.couponApplied%>
+                        </td>
+                        <td>
+                           $<%=Sreports[i]?.Total%>
                         </td>
                         <td>
                             <%=Sreports[i]?.paymentType%>
@@ -123,9 +202,10 @@
         <script>
             document.getElementById('applyFilters').addEventListener('click', async () => {
                 // Get values from date inputs
-                const filterDateFrom = document.getElementById('filterDateFrom').value;
-                const filterDateTo = document.getElementById('filterDateTo').value;
-
+                
+                const filterDateFrom = document.getElementById('startDate').value;
+                const filterDateTo = document.getElementById('endDate').value;
+                
                 // Construct the data object to send
                 const formData = {
                     filterDateFrom,
@@ -161,9 +241,13 @@
         </script>
         <script>
             document.getElementById('downloadPdf').addEventListener('click', async () => {
-                console.log('hai')
+                    
+                     const startDate=document.getElementById('startDate').value
+                     const endDate=document.getElementById('endDate').value
+                     console.log(startDate)
+                    console.log(endDate)
                 try {
-                    const response = await fetch('/salesReport/download/pdf', {
+                    const response = await fetch(`/salesReport/download/pdf?startDate=${startDate}&endDate=${endDate}`, {
                         method: 'GET'
                     });
                     const blob = await response.blob();

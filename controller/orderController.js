@@ -6,7 +6,7 @@ const walletCollection=require('../model/Walletmodel')
 const { subscribe } = require('../routes/user route')
 const allOrder = async (req, res) => {
     try {
-        const orderDetails = await orderCollection.find({ userId: req.query.id }).sort({_id:-1})
+        const orderDetails = await orderCollection.find({ userId: req.query.id })
         res.render('userpages/allorders', { userLogged: req.session.logged, orderDet: orderDetails })
     }
     catch (error) {
@@ -47,18 +47,28 @@ const Cancel = async (req, res) => {
         let b = a[i].productId
             let qty = a[i].productQuantity
             let price=a[i].totalCostPerProduct
-            console.log(price)
-            if(order.paymentType=='Wallet'||order.paymentType=='Online payment'){
-                console.log('hai')
-            const wallet=userCollection.updateOne({_id:order.userId},{$inc:{walletBalance:+a[i].totalCostPerProduct}})
-            console.log(wallet)
-            const wallet2= new walletCollection({
-                userId:order.userId,
-                walletBalance :a[i].totalCostPerProduct,
-                transactionsDate:new Date(),
-                transactiontype:'credited'
-             })
-             wallet2.save()
+            if (order.paymentType == 'Wallet' || order.paymentType == 'Online Payment') {
+                console.log('online')
+                
+                
+                const walletUpdateResult = await userCollection.updateOne(
+                    { _id: order.userId },
+                    { $inc: { walletBalance: +a[i].totalCostPerProduct } }
+                );
+                console.log(walletUpdateResult);
+                
+                
+                const walletTransaction =new walletCollection({
+                    userId: order.userId,
+                    walletBalance: a[i].totalCostPerProduct,
+                    PaymentType: order.paymentType,
+                    transactionsDate: new Date(),
+                    transactiontype: 'credited'
+                });
+                
+                const saveResult = await walletTransaction.save();
+                console.log('Transaction saved:', saveResult);
+            }
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
 
       }  
@@ -73,11 +83,8 @@ const Cancel = async (req, res) => {
           flag=0
         }
     }if(flag==1){
-        await orderCollection.updateOne({ _id:orderId }, { $set: { orderStatus: 'cancel' } }) 
-
-        
+        await orderCollection.updateOne({ _id:orderId }, { $set: { orderStatus: 'cancel' } })  
     }
-}
    
      res.send({success:true})
 
@@ -96,47 +103,19 @@ const Cancel = async (req, res) => {
 }
 const Cancelall = async (req, res) => {
     try {
-        
         const orderDet = await orderCollection.findOne({ _id: req.query.order })
-        console.log(orderDet)
-        if(orderDet.paymentType==='Wallet'){ 
-             
-          const wallet=await userCollection.updateOne({_id:orderDet.userId},{$inc:{walletBalance:+ orderDet.Total}})
-          const wallet2= new walletCollection({
-            userId:orderDet.userId,
-            PaymentType:'wallet',
-            walletBalance :orderDet.Total,
-            transactionsDate:new Date(),
-            transactiontype:'credited'
-         })
-         wallet2.save()
-         
-        } else if(orderDet.paymentType==='Online Payment'){
-            const wallet=await userCollection.updateOne({_id:orderDet.userId},{$inc:{walletBalance:+ orderDet.Total}})
-            const wallet2= new walletCollection({
-                userId:orderDet.userId,
-                PaymentType:'Online Pay',
-                walletBalance :orderDet.Total,
-                transactionsDate:new Date(),
-                transactiontype:'credited'
-             })
-             wallet2.save()
-        }      
-        
         let a = orderDet.cartData
         for (i = 0; i < a.length; i++) {
             a[i].Status='cancel'
             let b = a[i].productId
             let qty = a[i].productQuantity
-          
-            
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
         }
         await orderCollection.updateOne(
             { _id: req.query.order }, 
             { $set: { orderStatus: 'cancel', cartData: a } }
         );
-   
+        
         res.send({ success: true })
     }
     catch (error) {
@@ -145,23 +124,24 @@ const Cancelall = async (req, res) => {
 }
 const adminOrder=async(req,res)=>{
     try{
-      var orderDetails=await orderCollection.find({}).sort({_id:-1})
-    
+        var orderDetails=await orderCollection.find({}).sort({_id:-1})
+      
+          
+      const productsPerPage = 7
+      const totalPages = orderDetails.length / productsPerPage
+      const pageNo = req.query.pages || 1
+      const start = (pageNo - 1) * productsPerPage
+      const end = start + productsPerPage
+      orderDetails = orderDetails.slice(start, end)
         
-    const productsPerPage = 7
-    const totalPages = orderDetails.length / productsPerPage
-    const pageNo = req.query.pages || 1
-    const start = (pageNo - 1) * productsPerPage
-    const end = start + productsPerPage
-    orderDetails = orderDetails.slice(start, end)
-      
-      
-      res.render('adminpages/ordermanagement',{orderDet:orderDetails,totalPages:totalPages})
-    }
-    catch(error){
-        console.log(error)
-    }
-}
+        
+        res.render('adminpages/ordermanagement',{orderDet:orderDetails,totalPages:totalPages})
+      }
+      catch(error){
+          console.log(error)
+      }
+  }
+
 const orderStatus=async(req,res)=>{
     
     const orderDetails=await orderCollection.findOne({_id:req.query.orderId})
@@ -239,26 +219,7 @@ const updateStatus2=async(req,res)=>{
             }
         
             await orderCollection.updateOne({ _id: req.query.id }, { $set: {cartData:a} })
-            if(order.paymentType==='Wallet'){ 
-                const wallet2= new walletCollection({
-                    userId:order.userId,
-                    walletBalance :order.Total,
-                    transactionsDate:new Date(),
-                    transactiontype:'credited'
-                 })
-                 wallet2.save()
-                const wallet=await userCollection.updateOne({_id:order.userId},{$inc:{walletBalance:+ order.Total}})
-               
-              } if(order.paymentType==='Online Payment'){
-                const wallet=await userCollection.updateOne({_id:order.userId},{$inc:{walletBalance:+ order.Total}})
-                const wallet2= new walletCollection({
-                    userId:order.userId,
-                    walletBalance :order.Total,
-                    transactionsDate:new Date(),
-                    transactiontype:'credited'
-                 })
-                 wallet2.save() 
-              } 
+      
        res.send({success:true})
    }       
    catch(error){
@@ -281,7 +242,6 @@ const updateStatus2=async(req,res)=>{
             { _id: orderId }
              
           );
-          
 
   const a=order.cartData
   for(let i=0;i<a.length;i++){
@@ -291,26 +251,29 @@ const updateStatus2=async(req,res)=>{
         let b = a[i].productId
             let qty = a[i].productQuantity
             let price=a[i].totalCostPerProduct
-            if(order.paymentType==='Wallet'){ 
-             
-                const wallet=await userCollection.updateOne({_id:order.userId},{$inc:{walletBalance:+a[i].totalCostPerProduct }})
-                const wallet2= new walletCollection({
-                    userId:order.userId,
-                    walletBalance :order.Total,
-                    transactionsDate:new Date(),
-                    transactiontype:'credited'
-                 })
-                 wallet2.save()
-              } if(order.paymentType==='Online Payment'){
-                const wallet=await userCollection.updateOne({_id:order.userId},{$inc:{walletBalance:+ a[i].totalCostPerProduct}})
-                const wallet2= new walletCollection({
-                    userId:order.userId,
-                    walletBalance :order.Total,
-                    transactionsDate:new Date(),
-                    transactiontype:'credited'
-                 })
-                 wallet2.save()  
-              } 
+            if (order.paymentType == 'Wallet' || order.paymentType == 'Online Payment') {
+                
+                
+                
+                const walletUpdateResult = await userCollection.updateOne(
+                    { _id: order.userId },
+                    { $inc: { walletBalance: +a[i].totalCostPerProduct } }
+                );
+                console.log(walletUpdateResult);
+                
+                
+                const walletTransaction =new walletCollection({
+                    userId: order.userId,
+                    walletBalance: a[i].totalCostPerProduct,
+                    PaymentType: order.paymentType,
+                    transactionsDate: new Date(),
+                    transactiontype: 'credited'
+                });
+                
+                const saveResult = await walletTransaction.save();
+                console.log('Transaction saved:', saveResult);
+            
+            }
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
            
       }  
@@ -325,8 +288,7 @@ const updateStatus2=async(req,res)=>{
           flag=0
         }
     }if(flag==1){
-        await orderCollection.updateOne({ _id:orderId }, { $set: { orderStatus: 'Return' } })
-       
+        await orderCollection.updateOne({ _id:orderId }, { $set: { orderStatus: 'Return' } })  
     }
    res.send({success:true})
   

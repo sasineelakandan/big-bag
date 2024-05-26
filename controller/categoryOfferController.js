@@ -98,7 +98,7 @@ const categoryOfferExpiry = async (req, res) => {
                 const product = await productcollection.find({ parentCategory: expiry[i].category }); // Use findOne instead of find
                 if (product) {
                  for (let j=0;i<product.length;j++){
-                    await productcollection.updateOne({ _id: product[j]._id }, { $set: {productPrice: product[j].priceBeforeOffer } });
+                    await productcollection.updateOne({ _id: product[j]._id }, { $set: {productPrice: product[j].priceBeforeOffer ,productOfferPercentage:0} });
                 }
                 }
             }
@@ -109,7 +109,7 @@ const categoryOfferExpiry = async (req, res) => {
 };
 const catOffDel=async(req,res)=>{
     try{
-       const update=await categoryOfferCollection.updateOne({_id:req.query.id},{$set:{isAvailable:false}})
+       const update=await categoryOfferCollection.deleteOne({_id:req.query.id})
        res.redirect('/categoryOffer')
     }
     catch(error){

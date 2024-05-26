@@ -76,4 +76,5 @@ Router.post('/filterdate',salesConroller.filterDate)
 Router.get("/salesReport/download/xlsx",salesConroller.salesReportDownload);
 Router.get('/salesReport/download/pdf',salesConroller.salesReportDownloadPDF)
 Router.get('/removefilter',salesConroller.removeAllFillters)
+Router.post('/admin/salesReport/filter',salesConroller.filterDates)
 module.exports=Router
