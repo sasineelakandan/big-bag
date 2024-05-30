@@ -680,7 +680,7 @@
                               couponDet[i].minimumPurchase %>
                         </h4>
                         <br>
-                        <h5>Discount Price : <%= couponDet[i].discountPercentage %>
+                        <h5>Discount Price :$ <%= couponDet[i].discountPercentage %>
                         </h5>
                         <p>Coupon Valid until <%= couponDet[i].expiryDate.toDateString() %>
                         </p>
@@ -842,7 +842,7 @@
                   await Swal.fire({
                         icon: "error",
                         title: "Oops...",
-                        text: " Minimumpurchase 500$ Above ",
+                        text: " Minimumpurchase Not Much ",
                     });
                 }
               })

@@ -588,7 +588,7 @@
                 </div>
                 <h3>Welcome <span><%=userLogged.name%></span></h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <h3> Wallet Balance</h3> <span style="font-size:large"><%=userDet?.walletBalance%></span>
+                <h3> Wallet Balance</h3> <span style="font-size:large">$ <%=userDet?.walletBalance%></span>
                 <div class="orderBox text-nowrap">
                   <h4 style="margin-top: 10px;" > </h4>
                   <div class="table-responsive">
@@ -616,7 +616,7 @@
                               <td><%=walletDet[i]?.transactionsDate.toDateString()%></td>
                               <td><%=walletDet[i]?.PaymentType%></td>
                               <td><%=walletDet[i]?.transactiontype%></td>
-                              <td><%=walletDet[i]?.walletBalance%></td>
+                              <td>$<%=walletDet[i]?.walletBalance%></td>
  
                             </tr>
                           <%}%>

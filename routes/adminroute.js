@@ -21,6 +21,8 @@ Router.get('/usermanagement',isadmin,adminConroller.usermanagement)
 Router.get('/userblock',isadmin,adminConroller.userblock)
 Router.post('/adminsearch',isadmin,adminConroller.usersearch)
 
+Router.get('/dashboardData',isadmin,adminConroller.dashboardData)
+
 
 
 // CATEGORY CONROLLER

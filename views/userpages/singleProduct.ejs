@@ -656,10 +656,10 @@
                                 <h2>
                                     <%= productDet.productName %>
                                 </h2>
-                                <% if(productDet?.productPrice < productDet[i]?.priceBeforeOffer){%>
+                                <% if(productDet?.productPrice<productDet?.priceBeforeOffer){%>
                                     <h3>
                 
-                                     <h1> <span>$</span> <%=productDet?.productPrice%></h1> <span><h3 style="color: red;" > <strike> <span> $ </span><%=productDet[i]?.priceBeforeOffer%></strike></h3> </span>
+                                     <h1> <span>$</span> <%=productDet?.productPrice%></h1> <span><h3 style="color: red;" > <strike> <span> $ </span><%=productDet?.priceBeforeOffer%></strike></h3> </span>
                                      
                                     </h3>
                                   <% }else{%>

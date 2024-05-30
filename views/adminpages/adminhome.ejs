@@ -1,34 +1,275 @@
 <%- include('../adminpart/adminhead') %>
 
-<body>
-    <style>
-        .error {
-            color: red;
+<style>
+    .error {
+        color: red;
+    }
+
+    .content-main {
+        padding: 20px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .icontext {
+        display: flex;
+        align-items: center;
+    }
+
+    .icontext .icon {
+        margin-right: 15px;
+    }
+
+    .icontext .text {
+        flex-grow: 1;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .col-lg-3, .col-lg-4 {
+        flex: 0 0 auto;
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    canvas {
+        display: block;
+        width: 100%;
+        height: 300px;
+    }
+
+    @media (min-width: 768px) {
+        .col-lg-3 {
+            max-width: 25%;
         }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.7.1.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
-        integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
-        integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        .col-lg-4 {
+            max-width: 45%;
+        }
+    }
 
+    @media (min-width: 992px) {
+        .col-lg-3 {
+            max-width: 23%;
+        }
+        .col-lg-4 {
+            max-width: 48%;
+        }
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <h1>Hello Sasi</h1>
-            </a>
-
-          
-    
-
-        
-             
+        canvas {
+            height: 400px; /* Increase height for better visibility */
+        }
+    }
+</style>
+</head>
+<body>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Dashboard</h2>
+            <p>Whole data about your business here</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card card-body mb-4" style="height: 150px;">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                        <i class="text-primary material-icons md-monetization_on"></i>
+                    </span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">Today Revenue</h6>
+                        <h5 id="currentDayRevenue" class="card-title"></h5>
+                        <span class="text-sm"> Based on your local time. </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card card-body mb-4" style="height: 150px;">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-success-light">
+                        <i class="text-success material-icons md-local_shipping"></i>
+                    </span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">Active User's</h6>
+                        <h5 id="completedOrdersCount" class="card-title"><%=users.length%></h5>
+                        <h6 class="mb-1 card-title">Total Orders</h6>
+                        <h5 id="completedOrdersCount" class="card-title"><%=orderDet.length%></h5>
+                    </div>
+                </article>
+            </div>
+        </div>
        
-   
-</body>
+        <div class="col-lg-3">
+            <div class="card card-body mb-4" style="height: 150px;">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-warning-light">
+                        <i class="text-warning material-icons md-qr_code"></i>
+                    </span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">MonthlyRevenue</h6>
+                        <h5 id="Monthly revenue" class="card-title"></h5>
+                        <span class="text-sm"> Based on your local time. </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card card-body mb-4" style="height: 150px;">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-info-light">
+                        <i class="text-info material-icons md-shopping_basket"></i>
+                    </span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">TotalRevenue</h6>
+                        <h5 id="TotalRevenue" class="card-title"></h5>
+                        <span class="text-sm"> Based on your local time. </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="row">
+    <div class="container text-center">
+        <h5>Two Weeks Sales Report</h5>
+    </div>
+    <br />
+    <br />
+    <hr />
+    <div class="col-lg-4">
+        <canvas id="categoryWiseRevenueChart"></canvas>
+    </div>
+    <div class="col-lg-5" style="margin-top: 70px;">
+        <canvas id="twoWeeksSalesChart"></canvas>
+    </div>
+    <hr />
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Variables to hold chart instances
+
+    let twoWeeksSalesChartInstance;
+    let categoryWiseRevenueChartInstance;
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('/dashboardData', { method: 'GET' });
+            const data = await response.json();
+            const {
+                currentDayRevenue,
+                fourteenDaysRevenue,
+                categoryWiseRevenue,
+                TotalRevenue,
+                MonthlyRevenue
+            } = data;
+
+            // Update and render Two Weeks Sales Chart
+            const twoWeeksSalesChartElement = document.getElementById('twoWeeksSalesChart');
+            document.getElementById('currentDayRevenue').innerText = '$' + currentDayRevenue
+        document.getElementById('TotalRevenue').innerText = '$' + TotalRevenue.revenue
+        document.getElementById('Monthly revenue').innerText = '$' + MonthlyRevenue
+            // Destroy existing chart if it exists
+            if (twoWeeksSalesChartInstance) {
+                twoWeeksSalesChartInstance.destroy();
+            }
+
+            const twoWeeksSalesConfig = {
+                type: 'line',
+                data: {
+                    labels: fourteenDaysRevenue.date,
+                    datasets: [{
+                        label: 'Last 2 weeks revenue per day',
+                        data: fourteenDaysRevenue.revenue,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            // Create new chart instance
+            twoWeeksSalesChartInstance = new Chart(twoWeeksSalesChartElement, twoWeeksSalesConfig);
+
+            // Update and render Categorywise Revenue Chart
+            const categoryWiseRevenueChartElement = document.getElementById('categoryWiseRevenueChart');
+
+            // Destroy existing chart if it exists
+            if (categoryWiseRevenueChartInstance) {
+                categoryWiseRevenueChartInstance.destroy();
+            }
+
+            const categoryWiseRevenueConfig = {
+                type: 'radar',
+                data: {
+                    labels: categoryWiseRevenue.categoryName,
+                    datasets: [{
+                        label: 'Revenue',
+                        data: categoryWiseRevenue.revenuePerCategory,
+                        backgroundColor: [
+                            'rgba(139, 0, 0, 0.7)', // Dark red
+                            'rgba(255, 206, 86, 0.7)', // Yellow
+                            'rgba(0, 0, 139, 0.7)' // Dark blue
+                        ],
+                        borderColor: [
+                            'rgba(139, 0, 0, 1)', // Dark red
+                            'rgba(255, 206, 86, 1)', // Yellow
+                            'rgba(0, 0, 139, 1)' // Dark blue
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            grid: {
+                                circular: true
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `$${tooltipItem.raw}`;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                        }
+                    }
+                }
+            };
+
+            // Create new chart instance
+            categoryWiseRevenueChartInstance = new Chart(categoryWiseRevenueChartElement, categoryWiseRevenueConfig);
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    fetchData();
+</script>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

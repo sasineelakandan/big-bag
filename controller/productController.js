@@ -1,11 +1,11 @@
 const productCollection=require('../model/productmodel')
 const categorycollection=require('../model/categorymodel')
+const AppError=require('../middlewere/errorhandling')
 
 
 
 
-
-const productUpdate=async(req,res)=>{
+const productUpdate=async(req,res,next)=>{
    
     try {
         const croppedImages = req.files.filter(file => file.fieldname.startsWith('croppedImage'));
@@ -42,10 +42,10 @@ const productUpdate=async(req,res)=>{
               
 
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const productEdit=async(req,res)=>{
+const productEdit=async(req,res,next)=>{
     try {
         
         const categoryDetail = await categorycollection.find()
@@ -54,10 +54,10 @@ const productEdit=async(req,res)=>{
         
         res.render('adminpages/productedit', { categoryDet, productDet, categoryDetail })
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500));;
     }
 }
-const productList = async (req, res) => {
+const productList = async (req, res,next) => {
     try {
         let productList
         if (req.query.action === 'list') {
@@ -68,10 +68,10 @@ const productList = async (req, res) => {
         await productCollection.updateOne({ _id: req.query.id }, { $set: { isListed: productList } })
         res.send({ list: productList })
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const deleteProduct=async(req,res)=>{
+const deleteProduct=async(req,res,next)=>{
     try{
         let deleted
         
@@ -83,32 +83,37 @@ const deleteProduct=async(req,res)=>{
         await productCollection.updateOne({_id:req.query.id},{$set:{isDelete:deleted}})
         res.send({del:deleted})
     }catch(err){
-        console.log(err)
+        next(new AppError('Somthing went Wrong', 500));
     
     }
   
   }
-const Product=async(req,res)=>{
+const Product=async(req,res,next)=>{
     try{
-        const productDetails = await productCollection.find({isDelete:false}).populate('parentCategory').sort({ _id: -1 })
-        
-        res.render('adminpages/product',{productDet:productDetails})
+        let productDetails = await productCollection.find({isDelete:false}).populate('parentCategory').sort({ _id: -1 })
+        const productsPerPage = 5
+      const totalPages = productDetails.length / productsPerPage
+      const pageNo = req.query.pages || 1
+      const start = (pageNo - 1) * productsPerPage
+      const end = start + productsPerPage
+      productDetails = productDetails.slice(start, end)
+        res.render('adminpages/product',{productDet:productDetails,totalPages})
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const addProduct=async(req,res)=>{
+const addProduct=async(req,res,next)=>{
     try{
         
         const categoryDetails = await categorycollection.find({isListed:true})
         res.render('adminpages/addproduct',{categorydet:categoryDetails})
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const addProduct2=async(req,res)=>{
+const addProduct2=async(req,res,next)=>{
     
     try {
         const croppedImages = req.files.filter(file => file.fieldname.startsWith('croppedImage'));
@@ -118,6 +123,7 @@ const addProduct2=async(req,res)=>{
             parentCategory: req.body.parentCategory,
             productImage: images,
             productPrice: req.body.productPrice,
+            priceBeforeOffer:req.body.productPrice,
             productStock: req.body.productStock,
             productDiscription:req.body.productdes
         })
@@ -133,10 +139,10 @@ const addProduct2=async(req,res)=>{
         }
 
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const deleteImage = async (req, res) => {
+const deleteImage = async (req, res,next) => {
     try {
         
    const  deletedProduct= await productCollection.findOne({_id:req.body.productId})
@@ -154,10 +160,7 @@ const deleteImage = async (req, res) => {
     res.status(400).json({ error: "Invalid image index" })
   }
     } catch (error) {
-      console.log(
-        "Error in deleteing the Image through the Edit product delete button " +
-          error
-      );
+        next(new AppError('Somthing went Wrong', 500));
     }
   };
 

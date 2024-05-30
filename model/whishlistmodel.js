@@ -6,7 +6,7 @@ const whislistSchema= new mongoose.Schema({
     productId: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: "products",
+        ref: "products", 
       },
     Whishlist:{ type: Boolean, default: false }
 })

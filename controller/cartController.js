@@ -6,9 +6,9 @@ const cartCollection=require('../model/cartmodel')
 const orderCollection=require('../model/ordermodel')
 const walletCollection=require('../model/Walletmodel')
 const couPonCollection=require('../model/Couponmodel')
+const AppError=require('../middlewere/errorhandling')
 
-
-const Cart=async(req,res)=>{
+const Cart=async(req,res,next)=>{
     try{
         
         const cart= await cartCollection.find({userId:req.query.user}).populate('productId')
@@ -24,10 +24,10 @@ const Cart=async(req,res)=>{
         res.render('userpages/cart',{userLogged:req.session.logged,cartDet:cart,grandTotal:Sum,})
     }
     catch(error){
-        console.log(error)
+      next(new AppError('Somthing went Wrong', 500));
     }
 }
-const addTocart=async(req,res)=>{
+const addTocart=async(req,res,next)=>{
     try{
         const productExist = await cartCollection.findOne({
             userId: req.session.logged._id,
@@ -90,10 +90,10 @@ const addTocart=async(req,res)=>{
     }
 }
     catch(error){
-        console.log(error)
+      next(new AppError('Somthing went Wrong', 500));
     }
 }
-const cartbutton=async(req,res)=>{
+const cartbutton=async(req,res,next)=>{
    
   try {
     
@@ -189,11 +189,10 @@ const cartbutton=async(req,res)=>{
    
     
   } catch (error) {
-    console.log("Error while clicking the Cart Increment Button:", error);
-    res.status(500).send({ success: false, message: "Internal server error" });
+    next(new AppError('Somthing went Wrong', 500));
   }
 };
-     const checkOut1=async(req,res)=>{
+     const checkOut1=async(req,res,next)=>{
 
       try{
         const cart= await cartCollection.find({userId:req.query.user}).populate('productId')
@@ -204,10 +203,10 @@ const cartbutton=async(req,res)=>{
         res.render('userpages/shippingAddress',{userLogged:req.session.logged,grandTotal:req.session.grandTotal,addressDet:address})
       }
       catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
       }
      }
-     const checkOut2=async(req,res)=>{
+     const checkOut2=async(req,res,next)=>{
       try{
         const useraddress= await addressCollection.findOne({_id:req.query.id})
         const coupon=await couPonCollection.find({isDelete:false})
@@ -222,20 +221,20 @@ const cartbutton=async(req,res)=>{
          res.render('userpages/checkout2',{userLogged:req.session.logged,userDet:useraddress,usercartDet:usercart,grandTotal:req.session.grandTotal,Total:total,couponDet:coupon,Discount:req.session.copponAplied,subTotal: req.session.Sum})
       }
       catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
       }
      }
-     const checkOut3=async(req,res)=>{
+     const checkOut3=async(req,res,next)=>{
       try{
        
           
          res.send({success:true})
       }
       catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
       }
      }
-     const checkOut4=async(req,res)=>{
+     const checkOut4=async(req,res,next)=>{
       try{
         
        
@@ -339,10 +338,10 @@ const cartbutton=async(req,res)=>{
          
       }
       catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
       }
      }
-     const checkOut5=async(req,res)=>{
+     const checkOut5=async(req,res,next)=>{
       try{
         const online =await orderCollection.find()
       
@@ -397,7 +396,7 @@ const cartbutton=async(req,res)=>{
       }
     }
       catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
       }
      } 
     const removeCart =async(req,res)=>{
@@ -409,7 +408,7 @@ const cartbutton=async(req,res)=>{
         console.log(error)
       }
     } 
-    const Chek3page=async(req,res)=>{
+    const Chek3page=async(req,res,next)=>{
       try{
         
         const useraddress= await addressCollection.findOne({userId:req.query.id})
@@ -427,10 +426,10 @@ const cartbutton=async(req,res)=>{
          
       }
       catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
       }
      }
-  const applyCoupon=async(req,res)=>{
+  const applyCoupon=async(req,res,next)=>{
     try{
       const coupon=await couPonCollection.findOne({couponCode:req.query.couponCode})
       
@@ -446,13 +445,13 @@ const cartbutton=async(req,res)=>{
       }
 
     }catch(error){
-      console.log(error)
+      next(new AppError('Somthing went Wrong', 500));
     }
   }  
 
-  const removeCoupan=async(req,res)=>{
+  const removeCoupan=async(req,res,next)=>{
     try{
-      req.session.copponAplied=null
+      req.session.copponAplied=0
       const Total=req.session.Sum
            req.session.grandTotal=Total
           
@@ -460,7 +459,7 @@ const cartbutton=async(req,res)=>{
            res.send({success:true,grandTotal:Total})
     }
     catch(error){
-      console.log(error)
+      next(new AppError('Somthing went Wrong', 500));
     }
   }
 

@@ -5,12 +5,12 @@ const productCollection = require('../model/productmodel')
 const walletCollection=require('../model/Walletmodel')
 const puppeteer = require('puppeteer-core');
 const exceljs = require('exceljs');
+const AppError=require('../middlewere/errorhandling')
 
 
 
 
-
-const SalesReportGet=async(req,res)=>{
+const SalesReportGet=async(req,res,next)=>{
     try{
     var salesDetails = req.session.salesDetails ||await orderCollection.find({orderStatus:'Delivered'}).sort({_id:-1})
     
@@ -35,16 +35,17 @@ const SalesReportGet=async(req,res)=>{
     let totalSales = sum.reduce((total, sale) =>total= total + sale, 0)
     let totalSales2= sum2.reduce((total, sale) =>total= total + sale, 0)
     let coupontotal= salesDetails.reduce((total, sale) =>total= total + sale.couponApplied, 0)
+    
    let totalDiscount=coupontotal+totalSales2-totalSales
     
-    res.render('adminpages/SalesReport',{Sreports:salesDetails,totalPages,Dates:req.session.admin.datevalue ,TotalDiscount:totalDiscount})
+    res.render('adminpages/SalesReport',{Sreports:salesDetails,totalPages,Dates:req.session.admin.datevalue ,TotalDiscount:coupontotal})
     }
     catch(error){
-        console.log(error)
+      next(new AppError('Somthing went Wrong', 500));
     }
 }
 
-const salesReportDownloadPDF = async (req, res) => {
+const salesReportDownloadPDF = async (req, res,next) => {
     try {
         
         
@@ -103,7 +104,7 @@ const salesReportDownloadPDF = async (req, res) => {
             <h5>FromDate</h5>:<span>${startDate1.toDateString()}</span>
             <h5>To</h5>:<span>${endDate2.toDateString()}</span>
           <h3>Total Sales</h3>  <h4>${salesData.length}</h4>  <h3>Total Amount</h3> <h4>  $ ${totalSales}</h4> 
-          <h3>Total Discount</h3> <h4>  $ ${totalDiscount}</h4> 
+          <h3>Total Discount</h3> <h4>  $ ${coupontotal}</h4> 
             <table style="width:100%; border-collapse: collapse;" border="1">
               <tr>
                 <th>Order Number</th>
@@ -147,12 +148,11 @@ const salesReportDownloadPDF = async (req, res) => {
 
         await browser.close();
     } catch (error) {
-        console.error("Error generating PDF:", error);
-        res.status(500).send("Internal Server Error");
+      next(new AppError('Somthing went Wrong', 500));
     }
 };
 
-const filterDates=async(req,res)=>{
+const filterDates=async(req,res,next)=>{
   try {console.log(req.body)
     let { filterOption } = req.body;
     let startDate, endDate;
@@ -188,17 +188,20 @@ const filterDates=async(req,res)=>{
 
     res.status(200).json({ success: true });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: "Internal server error" });
+    next(new AppError('Somthing went Wrong', 500));;
   }
 };
 
 
 
 
-const filterDate=async(req,res)=>{
+const filterDate=async(req,res,next)=>{
   try{
      
+    if(req.body.filterDateFrom>req.body.filterDateTo){
+       res.send({dateInvalid:true})
+    }else{
+
     const startOfDay = (date) => {
       return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 6, 1, 1, 1);
   };
@@ -230,8 +233,9 @@ const filterDate=async(req,res)=>{
    res.send({success:true})
   }
 }
+  }
   catch(error){
-    console.log(error)
+    next(new AppError('Somthing went Wrong', 500));
   }
 }
 
@@ -239,7 +243,7 @@ const formatDate = (date) => {
   // Implement your date formatting function here
   return date.toISOString().split('T')[0]; // Example implementation
 };
-const salesReportDownload = async (req, res) => {
+const salesReportDownload = async (req, res,next) => {
   try{ 
     const workBook = new exceljs.Workbook();
     const sheet = workBook.addWorksheet("book");
@@ -337,7 +341,7 @@ const salesReportDownload = async (req, res) => {
       
       noOfItems: 'Total Orders: ' + totalOrders,
       totalCost: 'Total Sales: $' + totalSales,
-      CouponAmount:'TotalDiscount: $'+totalDiscount,
+      CouponAmount:'TotalDiscount: $'+coupontotal,
       paymentMethod: '',
       status: ''
     });
@@ -361,17 +365,17 @@ const salesReportDownload = async (req, res) => {
     
 }
 catch(error){
-  console.log(error)
+  next(new AppError('Somthing went Wrong', 500));
 }
 }
   
-  const removeAllFillters = async (req, res) => {
+  const removeAllFillters = async (req, res,next) => {
     try {
-      req.session.salesDetails  = null
+      req.session.salesDetails=null
       req.session.admin.datevalue=null
         res.redirect('/Sales')
     } catch (error) {
-        console.log(error)
+      next(new AppError('Somthing went Wrong', 500));
     }
 }
 module.exports={SalesReportGet,salesReportDownloadPDF,salesReportDownload,filterDate,removeAllFillters,filterDates}

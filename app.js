@@ -9,6 +9,7 @@ const session=require('express-session')
 app.set('view engine','ejs')
 const userrouter=require('./routes/user route')
 const adminerout=require('./routes/adminroute')
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
@@ -29,6 +30,17 @@ app.use((req, res, next) => {
 })
 app.use(adminerout)
 app.use(userrouter)
+
+  
+ 
+  
+  
+  app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const status = err.status || 'error';
+    res.status(statusCode).render('userpages/error', { statusCode, status, message: err.message });
+  })
+  
 app.get('*', function(req, res){
     res.status(404).render('userpages/404');
   });

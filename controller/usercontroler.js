@@ -10,13 +10,13 @@ const { productList } = require('./productController')
 const offer = require('../controller/OfferController')
 const categoryOffer = require('../controller/categoryOfferController')
 const whishlistCollection = require('../model/whishlistmodel')
-const { search } = require('../routes/user route')
+const AppError=require('../middlewere/errorhandling')
 const BestOffer = require('../services/helpper')
 const ReferalCode=require('../services/referal')
 
 
 
-const home = async (req, res) => {
+const home = async (req, res,next) => {
     try {
         const productDetails = await productcollection.find({ isListed: true })
         const categoryDetails = await categorycollection.find({ isListed: true })
@@ -28,13 +28,13 @@ const home = async (req, res) => {
             res.render('userpages/home', { userLogged: null, productDetails, categoryDetails })
         }
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500))
     }
 
 }
 
 
-const otppage = (req, res) => {
+const otppage = (req, res,next) => {
     try {
         if (req.session.user) {
             res.redirect('/')
@@ -43,13 +43,13 @@ const otppage = (req, res) => {
         }
 
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 
 
 
-const loginget = async (req, res) => {
+const loginget = async (req, res,) => {
 
 
     if (req.session.logged) {
@@ -62,7 +62,7 @@ const loginget = async (req, res) => {
     }
 }
 
-const signupget = (req, res) => {
+const signupget = (req, res,next) => {
     try { const Referal=req.query.referral
         
         if (req.session.logged) {
@@ -71,12 +71,12 @@ const signupget = (req, res) => {
             res.render('userpages/signup',{referral:Referal})
         }
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500))
     }
 
 }
 
-const verifyotp = async (req, res) => {
+const verifyotp = async (req, res,next) => {
 
 
 
@@ -102,11 +102,10 @@ const verifyotp = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
-    }
+        next(new AppError('Somthing went Wrong', 500))
 }
-
-const register = async (req, res) => {
+}
+const register = async (req, res,next) => {
     try {
 
         const checksignin = await usercollection.findOne({ $or: [{ email: req.body.email }, { phone: req.body.phone }] })
@@ -118,11 +117,11 @@ const register = async (req, res) => {
         }
 
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 
-const singleProduct = async (req, res) => {
+const singleProduct = async (req, res,next) => {
     try {
 
         const productDetails = await productcollection.findOne({ _id: req.query.id })
@@ -138,11 +137,11 @@ const singleProduct = async (req, res) => {
     }
 
     catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 
-const userRegister = async (req, res) => {
+const userRegister = async (req, res,next) => {
 
 
 
@@ -182,11 +181,11 @@ const userRegister = async (req, res) => {
         res.status(200).send({ userSaved: true })
     }
     catch (error) {
-        console.log(`THIS IS THE ERROR IN SIGN UP : ${error}`);
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 
-const logionverify = async (req, res) => {
+const logionverify = async (req, res,next) => {
 
     try {
         const user = await usercollection.findOne({ email: req.body.email })
@@ -212,14 +211,14 @@ const logionverify = async (req, res) => {
 
 
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 
 
 
 
-const resendotp = async (req, res) => {
+const resendotp = async (req, res,next) => {
     try {
 
         const generatedotp = Math.floor(100000 + Math.random() * 900000).toString()
@@ -229,12 +228,12 @@ const resendotp = async (req, res) => {
 
         res.status(200).send({ otpsend: true })
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
 
 
-const shopPage = async (req, res) => {
+const shopPage = async (req, res,next) => {
     try {
         categoryOffer.categoryOfferExpiry()
         offer.productOfferExpiry()
@@ -260,18 +259,18 @@ const shopPage = async (req, res) => {
             for (i = 0; i < productDetails.length; i++) {
 
                 productDetails[i].isWhishlisted = whishlistarr.includes(productDetails[i]._id.toString())
-               console.log(productDetails[i].isWhishlisted)
+            
             }
 
         }
 
         res.render('userpages/shoppage', { userLogged: req.session.logged, productDet: productDetails, categoryDet: categoryDetails, totalPages })
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 
-const shopSort = async (req, res) => {
+const shopSort = async (req, res,next) => {
 
     try {
         let productDetail = req.session.productDetail || await productcollection.find({ isListed: true })
@@ -303,13 +302,13 @@ const shopSort = async (req, res) => {
         res.redirect('/shop')
 
     } catch (err) {
-        console.log(err)
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 
-const filter = async (req, res) => {
+const filter = async (req, res,next) => {
     try {
-        console.log(req.body)
+        
         let productDetail = req.session.productDetail || await productcollection.find({ isListed: true })
         let start = 0, end = Infinity
 
@@ -338,25 +337,25 @@ const filter = async (req, res) => {
             console.log(start, end)
             return val.productPrice > start && val.productPrice <= end
         })
-        console.log(productDetail)
+        
         req.session.productDetail = productDetail
 
         res.redirect('/shop')
 
     } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
 
 
-const filter2 = async (req, res) => {
+const filter2 = async (req, res,next) => {
     try {
         productDetail = await productcollection.find({ isListed: true, parentCategory: req.body.cid })
         req.session.productDetail = productDetail
 
         res.redirect('/shop')
     } catch (error) {
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 
@@ -366,19 +365,19 @@ const logout = async (req, res) => {
     res.redirect('/')
 }
 
-const Fillters = async (req, res) => {
+const Fillters = async (req, res,next) => {
     try{
         const searchuser = await productcollection.find({ productName: { $regex: req.body.search, $options: 'i' } })
         req.session.productDetail=searchuser
         res.redirect('/shop')
     }catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
     }
 
 
 
 }
-const Whishlist = async (req, res) => {
+const Whishlist = async (req, res,next) => {
 
     try {
 
@@ -407,17 +406,18 @@ const Whishlist = async (req, res) => {
     }
 
     catch (error) {
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 const WhishlistRemove = async (req, res) => {
+    
     await whishlistCollection.deleteOne({ productId: req.query.id })
     res.send({ list: true })
 }
 
 const Whishlist2 = async (req, res) => {
     const Whishlist = await whishlistCollection.find({ userId: req.query.id })
-    console.log(Whishlist)
+    
     let products = []
     for (i = 0; i < Whishlist.length; i++) {
         Whishlist[i].productId
@@ -426,12 +426,12 @@ const Whishlist2 = async (req, res) => {
 
     }
     const productDetail = products.flat()
-    console.log(productDetail)
+    
     res.render('userpages/whishlist', { whishlistDet: Whishlist, userLogged: req.session.logged, productDet: productDetail })
 
 }
 
-const googleCallback = async (req, res) => {
+const googleCallback = async (req, res,next) => {
     try {
         const user = await usercollection.findOneAndUpdate(
             { email: req.user.email }, // Search condition
@@ -442,7 +442,7 @@ const googleCallback = async (req, res) => {
         req.session.logged = user
         res.redirect('/')
     } catch (error) {
-        console.error("Error updating user:", error);
+        next(new AppError('Somthing went Wrong', 500))
         // Handle error
     }
 }
@@ -451,9 +451,9 @@ const notFound = async (req, res) => {
 };
 
 
-const whishToCart = async (req, res) => {
+const whishToCart = async (req, res,next) => {
 
-
+try{
     const productExist = await cartCollection.findOne({
         userId: req.session.logged._id,
         productId: req.query.pid,
@@ -485,24 +485,26 @@ const whishToCart = async (req, res) => {
             res.send({ OutStock: true })
         }
     }
-
+}catch(err){
+    next(new AppError('Somthing went Wrong', 500))
+}
 
 }
-const removeWish = async (req, res) => {
+const removeWish = async (req, res,next) => {
     try {
-        console.log('hai')
+        
         await whishlistCollection.deleteOne({ _id: req.query.id })
         res.send({ success: true })
     } catch {
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
-const removeAllFillters = async (req, res) => {
+const removeAllFillters = async (req, res,next) => {
     try {
         req.session.productDetail = null
         res.redirect('/shop')
     } catch (error) {
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 

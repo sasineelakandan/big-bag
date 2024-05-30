@@ -41,6 +41,26 @@
         </div>
       </div>
       <script>
+        var today = new Date().toISOString().split('T')[0];
+  
+  document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('startDate').setAttribute('min', today);
+  });
+  
+  var startDateInput = document.getElementById('startDate');
+  var endDateInput = document.getElementById('expiryDate');
+  
+  startDateInput.addEventListener('change', function () {
+      var startDate = startDateInput.value;
+      endDateInput.setAttribute('min', startDate);
+  });
+  
+  endDateInput.addEventListener('change', function () {
+      var endDate = endDateInput.value;
+      startDateInput.setAttribute('max', endDate);
+  });
+  </script>
+      <script>
         $("#productForm2").validate({
           rules: {
                     couponCode: {

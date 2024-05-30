@@ -7,7 +7,7 @@ const cartCollection=require('../model/cartmodel')
 const orderCollection=require('../model/ordermodel')
 const addressCollection=require('../model/addressmodel')
 const walletCollection=require('../model/Walletmodel')
-const { orderStatus } = require('./orderController')
+const AppError=require('../middlewere/errorhandling')
 
 const { PAYPALMODE,PAYPAL_CLINT_KEY,PAYPAL_SECRET_KEY}=process.env
 
@@ -17,7 +17,7 @@ paypal.configure({
     'client_secret':PAYPAL_SECRET_KEY
 })
 
-const paymentPage=async(req,res)=>{
+const paymentPage=async(req,res,next)=>{
     const card=await cartCollection.find({userId:req.query.id})
     
    
@@ -77,18 +77,105 @@ try{
 }
 
 catch(error){
-    console.log(error)
+    next(new AppError('Somthing went Wrong', 500));
 }
 
 }
-const Wallet=async(req,res)=>{
+const paymentPage2=async(req,res,next)=>{
+    const card=await cartCollection.find({userId:req.query.id})
+    
+  const  user=await userCollection.findOne({_id:req.query.id})
+
+    const total=req.session.grandtotal-user.walletBalance
+    req.session.total=total
+try{
+    const create_payment_json = {
+        'intent': 'sale',
+        'payer': {
+            'payment_method': 'paypal'
+        },
+        'redirect_urls': { // Change made here: redirect_urls instead of redirect_url
+            'return_url': 'http://localhost:8001/Wallet',
+            'cancel_url': 'http://localhost:8001/shop'
+        },
+           "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "book",
+                        "sku": "001",
+                        "price":total ,
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
+                    "currency": "USD",
+                    "total": total // Fix the total amount to 2 decimal places
+                },
+                "description": "This is the payment description.",
+
+            }]
+        };
+    
+
+   paypal.payment.create(create_payment_json,async function(error,payment){
+        if(error){
+            throw error;
+        }else{
+            
+                   
+                
+               
+              
+            req.session.paymentId2=payment.id
+            
+            for(let i=0;payment.links.length;i++){
+                if(payment.links[i].rel==='approval_url'){
+                    
+                   
+                    
+                  
+                    
+                    return res.redirect(payment.links[i].href)
+                    
+            }
+        }
+          } 
+         }
+        )
+}
+
+catch(error){
+    next(new AppError('Somthing went Wrong', 500));
+}
+
+}
+const Wallet=async(req,res,next)=>{
     try{
-         
-        const userWallet=await userCollection.findOne({_id:req.query.id})
-        const walletHistory=await walletCollection.find({userId:req.query.id}).sort({_id:-1})
+         if(req.session.paymentId2){
+            const  user=await userCollection.updateOne({_id:req.session.logged._id},{$inc:{walletBalance:+req.session.total}})
+            const walletTransaction =new walletCollection({
+                userId: req.session.logged._id,
+                walletBalance:req.session.total ,
+                PaymentType:'Online Amountadded',
+                transactionsDate: new Date(),
+                transactiontype: 'credited'
+            });
+            
+            const saveResult = await walletTransaction.save();
+            
+            req.session.paymentId=null
+            req.session.total=null
+            const userWallet=await userCollection.findOne({_id:req.session.logged._id})
+            const walletHistory=await walletCollection.find({userId:req.session.logged._id}).sort({_id:-1})
         
         res.render('userpages/Wallet',{userLogged:req.session.logged,userDet:userWallet,walletDet:walletHistory})
-     
+         }else{
+        const userWallet=await userCollection.findOne({_id:req.session.logged._id})
+        const walletHistory=await walletCollection.find({userId:req.session.logged._id}).sort({_id:-1})
+        
+        res.render('userpages/Wallet',{userLogged:req.session.logged,userDet:userWallet,walletDet:walletHistory})
+         }
     
        
 
@@ -99,7 +186,7 @@ const Wallet=async(req,res)=>{
    
 
     catch(error){
-        console.log(error)
+        next(new AppError(error, 500));
     }
 }
-module.exports={paymentPage,Wallet}
+module.exports={paymentPage,Wallet,paymentPage2}

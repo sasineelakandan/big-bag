@@ -703,7 +703,10 @@
                               <td class=""><%=orderDet?.cartData[i]?.productQuantity%></td>
                               <td class="">$ <%=orderDet?.cartData[i]?.totalCostPerProduct%></td>
                               <% if ('Delivered'==orderDet?.cartData[i]?.Status) { %>
-                                <td class=""> <button id=" Return"  onclick="fn('<%=orderDet?.cartData[i]?._id%>')" type="button"class="btn btn-success">Return</button></td>
+                                <td>
+                                  <button id="Return" onclick="fn('<%= orderDet?.cartData[i]?._id %>')" type="button" class="btn btn-success" data-order-date="<%= orderDet?.orderDate %>">Return</button>
+                                </td>
+                                
                                 <%}else if ('Return'==orderDet?.cartData[i]?.Status) { %> 
                                   <td class="" style="color: green;" > <%=orderDet?.cartData[i]?.Status%></td>
                                   <%}else if ('cancel'==orderDet?.orderStatus) { %> 
@@ -943,6 +946,27 @@
             }
           
         </script>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            
+            const button = document.getElementById('Return');
+            const orderDateStr = button.getAttribute('data-order-date');
+            const orderDate = new Date(orderDateStr);
+            const currentDate = new Date();
+            
+            // Calculate the difference in milliseconds
+            const timeDiff = currentDate - orderDate;
+            // Convert to days
+            const dayDiff = timeDiff / (1000 * 3600 * 24);
+        
+            // Hide the button if more than 14 days have passed
+            if (dayDiff > 14) {
+              button.style.display = 'none';
+            }
+          });
+        </script>
+
+
       			<!-- FOOTER -->
 			<div class="footer clearfix">
 				<div class="container">

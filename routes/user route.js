@@ -59,7 +59,7 @@ Router.put('/return',orderConroller.RetunOrder)
 //whishlist
 Router.get('/whishlist',isuser,userConroller.Whishlist)
 Router.get('/whishlist2',isuser,userConroller.Whishlist2)
-Router.get('/removewhishlist',isuser,userConroller.WhishlistRemove)
+Router.delete('/removeWishlist',isuser,userConroller.WhishlistRemove)
 Router.post('/addtocart2',isuser,userConroller.whishToCart)
 Router.get('/removewish',userConroller.removeWish)
 //googleAuth
@@ -67,6 +67,8 @@ Router.get('/removewish',userConroller.removeWish)
 Router.get('/googleAuth/googlever',passport.authenticate('google',{scope:['email','profile']}))
 Router.get('/google/callback',passport.authenticate('google'),userConroller.googleCallback)
 //online payment
-Router.get('/pay',paymentcontroller.paymentPage)
-Router.get('/Wallet',paymentcontroller.Wallet)
+Router.get('/pay',isuser,paymentcontroller.paymentPage)
+
+Router.get('/pay2',isuser,paymentcontroller.paymentPage2)
+Router.get('/Wallet',isuser,paymentcontroller.Wallet)
 module.exports=Router

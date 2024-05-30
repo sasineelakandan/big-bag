@@ -1185,16 +1185,19 @@
                         <h3 style="color: red;" > Out of Stocks</h3>
 
                         <% }%>
-                      <%if(productDet[i]?.isWhishlisted==true){%>
-                        <i class="fa-solid fa-heart fa-beat" onclick="fn2('<%=productDet[i]?._id%>','<%=userLogged?._id%>')" style="color: #e50b41;font-size: 20px;"></i>
-                     <% }else{%>
-                        <i class="fa-solid fa-heart fa-beat" onclick="fn('<%=productDet[i]?._id%>','<%=userLogged?._id%>')" ></i>
-    
-                        <% }%>
+                        <% if(productDet[i].isWhishlisted==true){ %>
+                          <button id="removeWishlist<%=i%>" onclick="removeWishlist('<%=productDet[i]._id%>')"
+                            class='fa fa-heart fa-beat' style='font-size: 24px; color: red; background: none; border: none;'>
+                          </button>
+                          <% }else{ %>
+                            <button id="wishlist<%=i%>" onclick="addToWishlist('<%=productDet[i]._id%>','<%=userLogged?._id%>')" class='fa fa-heart fa-beat'
+                              style='font-size: 24px; color: white; background: none; border: none; text-shadow: 0 0 5px black;'>
+                            </button>
+                            <% } %>
 
 
 <script>
-  async function fn(productId,userId){
+  async function addToWishlist(productId,userId){
     
             let response = await fetch(`/whishlist?id=${productId}&action=${userId}`, {
                               method: 'GET',
@@ -1217,31 +1220,25 @@
                       });
                           }
                       }
-                       
-                      async function fn2(productId,userId){
+                      async function removeWishlist(productId) {
+                            let response = await fetch(`/removeWishlist?id=${productId}`, {
+                              method: 'DELETE'
+                            })
+                            let result = await response.json()
+                            if (result.list) {
+                              await Swal.fire({
+                                icon: "success",
+                                title: "Product removed from Wishlist",
+                                showConfirmButton: false,
+                                timer: 1500
+                              });
+                              window.location.reload()
+                            } if (result.userNotLogged) {
+                              window.location.href = 'login'
+                            }
+                          }
     
-    let response = await fetch(`/whishlist?id=${productId}&action=${userId}`, {
-                      method: 'GET',
-                  })
-                  let result = await response.json()
-                  if (result.list) {
-                      await Swal.fire({
-                          icon: "success",
-                          title: "Add to whishListe",
-                      });
-                      window.location.reload()
-
-
-                  } else {
-                    await Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Please Login!",
-                
-              });
-                  }
-              }
-               
+    
              
 </script> 
 

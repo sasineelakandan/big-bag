@@ -3,10 +3,10 @@ const categoryCollection=require('../model/categorymodel')
 const addressCollection=require('../model/addressmodel')
 const usercollection=require('../model/usermodel')
 const bcrypt = require('bcryptjs')
+const AppError=require('../middlewere/errorhandling')
 
 
-
-const account=async(req,res)=>{
+const account=async(req,res,next)=>{
     try{
         if(req.session.logged){
         res.render('userpages/account',{userLogged:req.session.logged,password:'******'})
@@ -15,10 +15,10 @@ const account=async(req,res)=>{
     }
   }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const addaddress=async(req,res)=>{
+const addaddress=async(req,res,next)=>{
 try{
     if(req.session.logged){
         res.render('userpages/addaddress',{userLogged:req.session.logged})
@@ -30,10 +30,10 @@ try{
     }
 }
 catch(error){
-    console.log(error)
+    next(new AppError('Somthing went Wrong', 500));
 }
 }
-const addaddress2=async(req,res)=>{
+const addaddress2=async(req,res,next)=>{
 
     try{
         console.log(req.body)
@@ -54,10 +54,10 @@ const addaddress2=async(req,res)=>{
     }
    
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const Myaddress=async(req,res)=>{
+const Myaddress=async(req,res,next)=>{
     try{
         
         if(req.query.id){
@@ -69,10 +69,10 @@ const Myaddress=async(req,res)=>{
     }
 } 
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const editAdd=async(req,res)=>{
+const editAdd=async(req,res,next)=>{
     try{
         
         if(req.params.id){
@@ -82,10 +82,10 @@ const editAdd=async(req,res)=>{
     }
 }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const updateAdd=async(req,res)=>{
+const updateAdd=async(req,res,next)=>{
     try{
         console.log(req.body)
     const updateAdd=await addressCollection.updateOne({_id:req.body.addressId},{$set:{
@@ -101,20 +101,20 @@ const updateAdd=async(req,res)=>{
     res.send({ success: true });
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const deleteAdd=async(req,res)=>{
+const deleteAdd=async(req,res,next)=>{
     try{ 
         await addressCollection.deleteOne({_id:req.query.id})
         const address=await addressCollection.find()
         res.render('userpages/myaddress',{userLogged:req.session.logged,addressDet:address})
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const updatePro=async(req,res)=>{
+const updatePro=async(req,res,next)=>{
     try{
         const user=await usercollection.findOne({_id:req.body.userId})
         
@@ -141,7 +141,7 @@ const updatePro=async(req,res)=>{
         }
     }
     catch(error){
-     console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
 module.exports={account,addaddress,addaddress2,Myaddress,editAdd,updateAdd,deleteAdd,updatePro}

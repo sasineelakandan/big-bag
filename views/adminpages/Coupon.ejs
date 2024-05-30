@@ -11,7 +11,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
     integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+  <scrip src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
     integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -103,7 +103,7 @@
             Edit
           </button></a>
           
-          <a href="/coupondelete?id=<%=couponDet[i]._id%>"><button   type="button" class="btn btn-danger" data-toggle="" data-target="">
+          <button  id="delete<%i%>" onclick="fndelete('<%=couponDet[i]._id%>')"  type="button" class="btn btn-danger" data-toggle="" data-target="">
             Delete
           </button></a>
             
@@ -115,6 +115,75 @@
       
     </tbody>
   </table>
+  <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <%for(i=0;i<totalPages;i++){%>
+            <li class="page-item"><a class="page-link" href="/coupons?pages=<%=i+1%>">
+                    <%=i+1%>
+                </a></li>
+            <%}%>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+    </ul>
+</nav>
+  <script>
+
+    async function fndelete(productId) {
+           Swal.fire({
+                        title: "Are you sure?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes!"
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            let response = await fetch(`/coupondelete?id=${productId}`, {
+                                method: 'GET',
+                            })
+                            let result = await response.json()
+                            if (result.del) {
+                                await Swal.fire({
+                                    icon: "success",
+                                    title: "couPon deleted",
+                                });
+                            }
+                        window.location.reload()
+                        }     
+                    });
+       } 
+            
+        </script>
+  <script>
+      var today = new Date().toISOString().split('T')[0];
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('startDate').setAttribute('min', today);
+});
+
+var startDateInput = document.getElementById('startDate');
+var endDateInput = document.getElementById('expiryDate');
+
+startDateInput.addEventListener('change', function () {
+    var startDate = startDateInput.value;
+    endDateInput.setAttribute('min', startDate);
+});
+
+endDateInput.addEventListener('change', function () {
+    var endDate = endDateInput.value;
+    startDateInput.setAttribute('max', endDate);
+});
+</script>
+
+
   <script>
 $("#productForm").validate({
   rules: {
@@ -236,7 +305,7 @@ $(document).on('click', '#unblock', function() {
 
  </script>
 
-  </script>
+</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js"></script>

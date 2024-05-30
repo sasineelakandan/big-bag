@@ -3,24 +3,29 @@ const otpcollections = require('../model/otpmodel')
 const categorycollection = require('../model/categorymodel')
 const productcollection = require("../model/productmodel")
 const productOfferCollection=require('../model/ProductOffer')
-
-const productOfferget=async(req,res)=>{
+const AppError=require('../middlewere/errorhandling')
+const productOfferget=async(req,res,next)=>{
     try{
        const offers= await productOfferCollection.find({}).sort({_id:-1})
        
        
 
        
-       const productDetails=await productcollection.find({})
-      
-        res.render('adminpages/productOffer',{OfferDet:offers,productDet:productDetails})
+       let productDetails=await productcollection.find({})
+       const productsPerPage = 10
+       const totalPages = productDetails.length / productsPerPage
+       const pageNo = req.query.pages || 1
+       const start = (pageNo - 1) * productsPerPage
+       const end = start + productsPerPage
+       productDetails = productDetails.slice(start, end)
+        res.render('adminpages/productOffer',{OfferDet:offers,productDet:productDetails,totalPages})
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
     }
 
 }
-const productofferDet=async(req,res)=>{
+const productofferDet=async(req,res,next)=>{
     try{
         
         const offer1= await productOfferCollection?.findOne({productName:req.body.productId})
@@ -42,12 +47,12 @@ const productofferDet=async(req,res)=>{
     }
 }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
-const productofferEdit=async(req,res)=>{
+const productofferEdit=async(req,res,next)=>{
     try{
-         console.log(req.body)
+         
         const product=await productcollection.findOne({productName:req.body.categoryname})
         
         const productOffer=await productOfferCollection.updateOne({_id:req.body.offerid},{$set:{
@@ -61,33 +66,49 @@ const productofferEdit=async(req,res)=>{
         res.send({success:true})
     }
     catch(error){
-        console.log(error)
+       next(new AppError('Somthing went Wrong', 500))
     }
 
 }
-const productEditpageget=async(req,res)=>{
+const productEditpageget=async(req,res,next)=>{
     try{
         const offerDet= await productOfferCollection.findOne({_id:req.query.id})
         const offerdet2=await productcollection.findOne( {productName: { $regex: new RegExp('^' + req.body.pn + '$', 'i') }})
        res.render('adminpages/productOffereditpage',{OfferDet:offerDet,Offerdet2:offerdet2})
      }
      catch(error){
-         console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
      }
 }
 
-const ProductDel=async(req,res)=>{
+const ProductDel=async(req,res,next)=>{
     try{
+        
+        
+         const expiry = await productOfferCollection.find({_id:req.query.id})
+         
+         for (let i = 0; i < expiry.length; i++) {
+             
+             
+         
+                 await productOfferCollection.updateOne({ _id: expiry[i]._id }, { $set: { isAvailable: false } });
+                 const product = await productcollection.findOne({ _id: expiry[i].product }); // Use findOne instead of find
+                 if (product) {
+                     await productcollection.updateOne({ _id: expiry[i].product }, { $set: {productPrice: product.priceBeforeOffer,productOfferPercentage:0 } });
+                 }
+             
+         }
+        
         const update=await productOfferCollection.deleteOne({_id:req.query.id})
-        res.redirect('/productOffer')
+        res.send({del:true})
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
 
 
-const productOfferExpiry = async (req, res) => {
+const productOfferExpiry = async (req, res,next) => {
     try {
         const currentDate = new Date();
         
@@ -105,7 +126,7 @@ const productOfferExpiry = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log(error);
+        next(new AppError('Somthing went Wrong', 500))
     }
 };
 

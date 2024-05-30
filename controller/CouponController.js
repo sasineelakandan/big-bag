@@ -3,27 +3,33 @@ const productcollection = require("../model/productmodel")
 const productOfferCollection=require('../model/ProductOffer')
 const categoryOfferCollection=require('../model/categoryOffer')
 const couPonCollection=require('../model/Couponmodel')
+const AppError=require('../middlewere/errorhandling')
 
-
-const Couponget=async(req,res)=>{
+const Couponget=async(req,res,next)=>{
     try{
-        const coupons=await couPonCollection.find({isDelete:false})
-        res.render('adminpages/Coupon',{userLogged:req.session.logged,couponDet:coupons})
+        let coupons=await couPonCollection.find({isDelete:false})
+        const productsPerPage = 10
+       const totalPages = coupons.length / productsPerPage
+       const pageNo = req.query.pages || 1
+       const start = (pageNo - 1) * productsPerPage
+       const end = start + productsPerPage
+       coupons = coupons.slice(start, end)
+        res.render('adminpages/Coupon',{userLogged:req.session.logged,couponDet:coupons,totalPages})
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500))
     }
 }
-const CouponEditget=async(req,res)=>{
+const CouponEditget=async(req,res,next)=>{
     try{
         const coupons=await couPonCollection.findOne({_id:req.query.id})
         res.render('adminpages/couponEditpage',{userLogged:req.session.logged,couponDet:coupons})
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const CouponOffDet=async(req,res)=>{
+const CouponOffDet=async(req,res,next)=>{
 
     try{
         console.log(req.body)
@@ -43,10 +49,10 @@ const CouponOffDet=async(req,res)=>{
     }
 }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
-const CouponOffEdit=async(req,res)=>{
+const CouponOffEdit=async(req,res,next)=>{
     try{
          
     const update=await couPonCollection.updateOne({_id:req.body.offerid},{$set:{
@@ -59,17 +65,17 @@ const CouponOffEdit=async(req,res)=>{
     res.send({success:true})
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
     
 }
-const couponDelete=async(req,res)=>{
+const couponDelete=async(req,res,next)=>{
     try{
     const update=  await couPonCollection.updateOne({_id:req.query.id},{$set:{isDelete:true}})
-      res.redirect('/coupons')
+      res.send({del:true})
     }
     catch(error){
-        console.log(error)
+        next(new AppError('Somthing went Wrong', 500));
     }
 }
 

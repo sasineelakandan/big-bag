@@ -124,7 +124,7 @@
                    
                     
                    
-                    <th>CoupanAmount</th>
+                    <th>CouponAmount</th>
                     <th>Total</th>
                     <th>PayMethod</th>
                     <th>Status</th>
@@ -196,7 +196,7 @@
                         </li>
             </ul>
         </nav>
-
+       
         </script>
 
         <script>
@@ -228,11 +228,13 @@
                     if (data.success) {
                         window.location.reload()
                         // Check if the response is successful
+                    }if(data.dateInvalid){
+                        await Swal.fire({
+                             icon: "error",
+                             title: "Date is Invalid",
+                         }); 
                     }
-                        // Handle the response data
-
-                        // Log the data to the console
-                        // Do something with the data, e.g., update the UI
+                       
                     } catch (error) {
                         console.error('There was a problem with the fetch operation:', error); // Log any errors to the console
                     }

@@ -100,7 +100,7 @@
           <a href="/productOfferedit?id=<%=OfferDet[i]._id%>"><button   type="button" class="btn btn-primary" data-toggle="modal" data-target="#my2Modal<%= i %>">
             Edit
           </button></a>
-          <a href="/productDel?id=<%=OfferDet[i]._id%>"><button   type="button" class="btn btn-danger" data-toggle="modal" data-target="#my2Modal<%= i %>">
+          <button  id="delete<%i%>" onclick="fndelete('<%=OfferDet[i]._id%>')" type="button" class="btn btn-danger" data-toggle="modal" data-target="#my2Modal<%= i %>">
             Delete
           </button></a>
         </td> 
@@ -111,7 +111,45 @@
       <% } %>
     </tbody>
   </table>
-  
+  <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <%for(i=0;i<totalPages;i++){%>
+            <li class="page-item"><a class="page-link" href="/productOffer?pages=<%=i+1%>">
+                    <%=i+1%>
+                </a></li>
+            <%}%>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+    </ul>
+</nav>
+  <script>
+    var today = new Date().toISOString().split('T')[0];
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('startDate').setAttribute('min', today);
+});
+
+var startDateInput = document.getElementById('startDate');
+var endDateInput = document.getElementById('expiryDate');
+
+startDateInput.addEventListener('change', function () {
+  var startDate = startDateInput.value;
+  endDateInput.setAttribute('min', startDate);
+});
+
+endDateInput.addEventListener('change', function () {
+  var endDate = endDateInput.value;
+  startDateInput.setAttribute('max', endDate);
+});
+</script>
   <script>
 
     $("#productForm").validate({
@@ -185,6 +223,34 @@
 
 
   </script>
+      <script>
+
+        async function fndelete(productId) {
+               Swal.fire({
+                            title: "Are you sure?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes!"
+                        }).then(async (result) => {
+                            if (result.isConfirmed) {
+                                let response = await fetch(`/productDel?id=${productId}`, {
+                                    method: 'GET',
+                                })
+                                let result = await response.json()
+                                if (result.del) {
+                                    await Swal.fire({
+                                        icon: "success",
+                                        title: "Product Offer deleted",
+                                    });
+                                }
+                            window.location.reload()
+                            }     
+                        });
+           } 
+                
+            </script>
   <script>
     $("#productForm2").validate({
       rules: {

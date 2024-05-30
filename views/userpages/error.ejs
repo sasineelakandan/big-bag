@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f8d7da;
+      color: #721c24;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    .animation {
+      width: 100px;
+      height: 100px;
+      background-color: #f5c6cb;
+      border-radius: 50%;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="animation"></div>
+    <h1><%= message %></h1>
+    <p>Status: <%= status %> (<%= statusCode %>)</p>
+  </div>
+</body>
+</html>

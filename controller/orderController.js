@@ -3,17 +3,18 @@ const userCollection = require('../model/usermodel')
 const addressCollection = require('../model/addressmodel')
 const productCollection = require('../model/productmodel')
 const walletCollection=require('../model/Walletmodel')
-const { subscribe } = require('../routes/user route')
-const allOrder = async (req, res) => {
+const AppError=require('../middlewere/errorhandling')
+const allOrder = async (req, res,next) => {
     try {
-        const orderDetails = await orderCollection.find({ userId: req.query.id })
-        res.render('userpages/allorders', { userLogged: req.session.logged, orderDet: orderDetails })
+        let orderDetails = await orderCollection.find({ userId: req.query.id }).sort({_id:-1})
+       
+        res.render('userpages/allorders', { userLogged: req.session.logged, orderDet: orderDetails})
     }
     catch (error) {
-        console.log(error)
+        next(new AppError(error, 500));
     }
 }
-const singleOrder = async (req, res) => {
+const singleOrder = async (req, res,next) => {
     try {
 
         const orderDetails = await orderCollection.findOne({ _id: req.query.id })
@@ -23,10 +24,10 @@ const singleOrder = async (req, res) => {
         res.render('userpages/singleOrders', { userLogged: req.session.logged, orderDet: orderDetails, userDet: userDetails, userAdd: useradd })
     }
     catch (error) {
-        console.log(error)
+        next(new AppError(error, 500));
     }
 }
-const Cancel = async (req, res) => {
+const Cancel = async (req, res,next) => {
     try {
     
 
@@ -98,10 +99,10 @@ const Cancel = async (req, res) => {
   }
     
     catch (error) {
-        console.log(error)
+        next(new AppError(error, 500));
     }
 }
-const Cancelall = async (req, res) => {
+const Cancelall = async (req, res,next) => {
     try {
         const orderDet = await orderCollection.findOne({ _id: req.query.order })
         let a = orderDet.cartData
@@ -119,10 +120,10 @@ const Cancelall = async (req, res) => {
         res.send({ success: true })
     }
     catch (error) {
-        console.log(error)
+        next(new AppError(error, 500));
     }
 }
-const adminOrder=async(req,res)=>{
+const adminOrder=async(req,res,next)=>{
     try{
         var orderDetails=await orderCollection.find({}).sort({_id:-1})
       
@@ -138,12 +139,12 @@ const adminOrder=async(req,res)=>{
         res.render('adminpages/ordermanagement',{orderDet:orderDetails,totalPages:totalPages})
       }
       catch(error){
-          console.log(error)
+        next(new AppError(error, 500));
       }
   }
 
-const orderStatus=async(req,res)=>{
-    
+const orderStatus=async(req,res,next)=>{
+   try{ 
     const orderDetails=await orderCollection.findOne({_id:req.query.orderId})
     
 
@@ -151,7 +152,11 @@ const orderStatus=async(req,res)=>{
         const useradd=await addressCollection.findOne({_id:req.query.add})
     res.render('adminpages/singleOrder',{orderDet:orderDetails,userDet:userDetails,userAdd:useradd})
 }
-const updateStatus=async(req,res)=>{
+catch(error){
+    next(new AppError(error, 500));
+}
+}
+const updateStatus=async(req,res,next)=>{
  try{
     console.log(req.query.id)
     const order=await orderCollection.findOne({_id:req.query.id})
@@ -202,10 +207,10 @@ for(let i=0;i<a.length;i++){
     res.send({success:true})
 }       
 catch(error){
-    console.log(error)
+    next(new AppError(error, 500));
 }
 }
-const updateStatus2=async(req,res)=>{
+const updateStatus2=async(req,res,next)=>{
     try{
       
        await orderCollection.updateOne({ _id: req.query.id }, { $set: { orderStatus:req.query.value} })
@@ -223,11 +228,11 @@ const updateStatus2=async(req,res)=>{
        res.send({success:true})
    }       
    catch(error){
-       console.log(error)
+    next(new AppError(error, 500));
    }
    }
 
-   const RetunOrder=async(req,res)=>{
+   const RetunOrder=async(req,res,next)=>{
     
   
 
@@ -302,7 +307,7 @@ const updateStatus2=async(req,res)=>{
   }
     
     catch (error) {
-        console.log(error)
+        next(new AppError(error, 500));
     }
 
 } 

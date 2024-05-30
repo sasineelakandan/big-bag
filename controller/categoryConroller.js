@@ -1,15 +1,22 @@
 const categoryCollection=require('../model/categorymodel')
 const productCollection=require('../model/productmodel')
-const categoryManagement = async (req, res) => {
+const AppError=require('../middlewere/errorhandling')
+const categoryManagement = async (req, res,next) => {
     try {
-        const category = await categoryCollection.find()
-        res.render('adminpages/category', { categorydet: category })
+        let category = await categoryCollection.find()
+        const productsPerPage = 2
+        const totalPages = category.length / productsPerPage
+        const pageNo = req.query.pages || 1
+        const start = (pageNo - 1) * productsPerPage
+        const end = start + productsPerPage
+        category = category.slice(start, end)
+        res.render('adminpages/category', { categorydet: category ,totalPages})
     }
     catch (error) {
-        console.log(error)
+      next(new AppError('Somthing went Wrong', 500));
     }
 }
-const addCategory = async (req, res) => {
+const addCategory = async (req, res,next) => {
     try {
         const newcategory = new categoryCollection({
             categoryname: req.body.categoryname,
@@ -31,10 +38,10 @@ const addCategory = async (req, res) => {
         }
 
     } catch (err) {
-        console.log(err);
+      next(new AppError('Somthing went Wrong', 500));
     }
 }
-const categoryList = async (req, res) => {
+const categoryList = async (req, res,next) => {
     try {
         let catList
         if (req.query.action === 'list') {
@@ -46,10 +53,10 @@ const categoryList = async (req, res) => {
         await categoryCollection.updateOne({ _id: req.query.id }, { $set: { isListed: catList } })
         res.send({ list: catList })
     } catch (err) {
-        console.log(err);
+      next(new AppError('Somthing went Wrong', 500));
     }
 }
-const editCategory = async (req, res) => {
+const editCategory = async (req, res,next) => {
 
     try {
         console.log(req.params.id)
@@ -57,16 +64,16 @@ const editCategory = async (req, res) => {
         res.render('adminpages/adminedit', { categorydetail })
     }
     catch (error) {
-        console.log(error)
+      next(new AppError('Somthing went Wrong', 500));
 
 
     }
 }
 
 
-const updateCategory = async (req, res) => {
+const updateCategory = async (req, res,next) => {
     try {
-       console.log(req.body)
+       
         
         const catDetails = await categoryCollection.findOne({
           categoryname: {
@@ -98,7 +105,7 @@ const updateCategory = async (req, res) => {
           res.send({ success: true });
         }
       } catch (err) {
-        console.log(err);
+        next(new AppError('Somthing went Wrong', 500));
       }
     };
 
