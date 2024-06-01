@@ -579,7 +579,7 @@
               </div>
             </div>
           </div>
-
+     
           <div class="row">
             <div class="col-12">
               <div class="innerWrapper singleOrder">
@@ -602,51 +602,73 @@
                   <div class="mb-3">
                     <div class="trackingProgress">
                       <div class="progress customProgress">
-                        <div class="progress-bar customProgressBar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                          <% 
+                          let progressPercentage = 0;
+                          switch(orderDet.orderStatus) {
+                              case 'Pending':
+                                  progressPercentage = 20;
+                                  break;
+                              
+                              case 'Shipped':
+                                  progressPercentage = 50;
+                                  break;
+                            
+                              case 'Delivered':
+                                  progressPercentage = 100;
+                                  break;
+                          }
+                          %>
+                          <div class="progress-bar customProgressBar" role="progressbar" aria-valuenow="<%= progressPercentage %>" aria-valuemin="0" aria-valuemax="100" ></div>
                       </div>
-                    </div>
                   </div>
                   
+                  <script>
+                      // JavaScript to dynamically set the width of the progress bar
+                      document.addEventListener("DOMContentLoaded", function() {
+                          const progressBar = document.querySelector(".customProgressBar");
+                          const progressPercentage1 =' <%= progressPercentage %>' // Retrieve progress percentage from server
+                          progressBar.style.width = progressPercentage1 + "%";
+                          progressBar.setAttribute("aria-valuenow", progressPercentage);
+                      });
+                  </script>
+                  </div>
+                
                   <div class="trackingProgressContent">
-                    <div class="row">
-                      <div class="col">
-                        <h4>ordered</h4>
-                        <h5>18/03/21</h5>
-                        <h6 class="mb-0">13:19</h6>
+                      <div class="row">
+                         
+                          <div class="col ps-0 pe-2 px-md-3">
+                              <% if(orderDet.orderStatus === 'Pending') { %>
+                                  <h4>Pending</h4>
+                                  
+                                  <h6 class="mb-0"><%= orderDet.updatedAt.toDateString() %></h6>
+                              <% } %>
+                          </div>
+                
+                          <div class="col ps-0 pe-2 px-md-3">
+                              <% if(orderDet.orderStatus === 'Shipped') { %>
+                                  <div class="width-lg">
+                                      <h4>shipped</h4>
+                                      <h5><%= orderDet.updatedAt %></h5>
+                                      <h6 class="mb-0"><%= orderDet.updatedAt.toDateString() %></h6>
+                                  </div>
+                              <% } %>
+                          </div>
+                
+                         
+                
+                          <div class="col">
+                              <% if(orderDet.orderStatus === 'Delivered') { %>
+                                  <div class="float-end">
+                                      <h4>Delivered</h4>
+                                      
+                                      <h6 class="mb-0"><%= orderDet.updatedAt.toDateString() %></h6>
+                                  </div>
+                              <% } %>
+                          </div>
                       </div>
-          
-                      <div class="col ps-0 pe-2 px-md-3">
-                        <h4>ready</h4>
-                        <h5>20/03/21</h5>
-                        <h6 class="mb-0">15:29</h6>
-                      </div>
-          
-                      <div class="col ps-0 pe-2 px-md-3">
-                        <div class="width-lg">
-                          <h4>shipped</h4>
-                          <h5>20/03/21</h5>
-                          <h6 class="mb-0">17:05</h6>
-                        </div>
-                      </div>
-          
-                      <div class="col px-0 px-md-3">
-                        <div class="float-lg-end ms-md-4 ms-lg-0 me-lg-4">
-                          <h4>dispatched</h4>
-                          <h5>25/03/21</h5>
-                          <h6 class="mb-0">14:00</h6>
-                        </div>
-                      </div>
-          
-                      <div class="col">
-                        <div class="float-end">
-                          <h4>delivered</h4>
-                          <h5>30/03/21</h5>
-                          <h6 class="mb-0">16:00</h6>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
+                
 
                 <div class="row">
                   <div class="col-12">

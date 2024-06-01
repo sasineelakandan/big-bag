@@ -130,8 +130,111 @@ const dashboardData = async (req, res) => {
   };
 
 
+     
+const topProduct = async (req, res,next) => {
+    try {
+      const topProducts = await orderCollection.aggregate([
+        {
+          $match: { orderStatus: 'Delivered' }
+        },
+        {
+          $unwind: '$cartData'
+        },
+        {
+          $group: {
+            _id: '$cartData.productId',
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $sort: { count: -1 }
+        },
+        {
+          $limit: 5
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: '_id',
+            foreignField: '_id',
+            as: 'product'
+          }
+        },
+        {
+          $unwind: '$product'
+        },
+        {
+          $project: {
+            _id: 0,
+            productId: '$_id',
+            count: 1,
+            productName: '$product.productName',
+            productPrice: '$product.productPrice'
+          }
+        }
+      ]);
+      
+     res.render('adminpages/top 3 products',{topProducts})
+     
+   }
+   catch(error){
+    next(new AppError('Sorry...Something went wrong', 500));
+   } 
+}
+const topCategory = async (req, res,next) => {
+    try {
+      const topCategories = await orderCollection.aggregate([
+        {
+          $match: { orderStatus: 'Delivered' }
+        },
+        {
+          $unwind: '$cartData'
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'cartData.productId',
+            foreignField: '_id',
+            as: 'product'
+          }
+        },
+        {
+          $unwind: '$product'
+        },
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'product.parentCategory',
+            foreignField: '_id',
+            as: 'category'
+          }
+        },
+        {
+          $unwind: '$category'
+        },
+        {
+          $group: {
+            _id: '$category.categoryname',
+            quantity: { $sum: 1 }
+          }
+        },
+        {
+          $sort: { quantity: -1 }
+        },
+        {
+          $limit: 10
+        }
+      ]);
+     console.log(topCategories)
+      res.render('adminpages/Top3category', { topCategories });
+    } catch (err) {
+      // Consider using a centralized error handler
+      next(new AppError('Sorry...Something went wrong', 500));
+      res.status(500).send({ success: false, message: 'Internal Server Error' });
+    }
+  };
+  
 
-
-module.exports = { adminlogin, loginpage, adminlogout, usermanagement, userblock, usersearch,dashboardData
+module.exports = { adminlogin, loginpage, adminlogout, usermanagement, userblock, usersearch,dashboardData,topProduct,topCategory,
 
 }

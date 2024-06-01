@@ -10,21 +10,47 @@ const AppError=require('../middlewere/errorhandling')
 
 const Cart=async(req,res,next)=>{
     try{
-        
-        const cart= await cartCollection.find({userId:req.query.user}).populate('productId')
-       
-         Sum=0
-         for(let i=0;i<cart.length;i++){
-          Sum=Sum+cart[i].totalCostPerProduct
-         }
-        
-         req.session.Sum=Sum
-         req.session.grandTotal=Sum
-              
-        res.render('userpages/cart',{userLogged:req.session.logged,cartDet:cart,grandTotal:Sum,})
-    }
+      
+      const cart = await cartCollection.find({ userId: req.query.user }).populate('productId');
+
+      if (cart.length == 0) {
+          req.session.Sum = null;
+          res.render('userpages/emptyCart', { userLogged: req.session.logged, cartDet: [], grandTotal: req.session.Sum });
+      } else {
+          let outOfStock = false;
+          
+          
+          for (let i = 0; i < cart.length; i++) {
+              if (cart[i].productId.productStock == 0) {
+                  outOfStock = true;
+                  await cartCollection.deleteOne({ _id: cart[i]._id });
+              }
+          }
+      
+          
+          const updatedCart = await cartCollection.find({ userId: req.query.user }).populate('productId');
+      
+          if (updatedCart.length == 0) {
+              req.session.Sum = null;
+              res.render('userpages/emptyCart', { userLogged: req.session.logged, cartDet: [], grandTotal: req.session.Sum });
+          } else {
+              let Sum = 0;
+              for (let i = 0; i < updatedCart.length; i++) {
+                  Sum += updatedCart[i].totalCostPerProduct;
+              }
+      
+              req.session.Sum = Sum;
+              req.session.grandTotal = Sum;
+      
+              res.render('userpages/cart', { userLogged: req.session.logged, cartDet: updatedCart, grandTotal: Sum });
+          }
+      }
+      
+      
+}
+    
     catch(error){
-      next(new AppError('Somthing went Wrong', 500));
+      next(new AppError(error, 500));
     }
 }
 const addTocart=async(req,res,next)=>{
@@ -243,6 +269,9 @@ const cartbutton=async(req,res,next)=>{
           res.send({paypal:true})
 
      } if(req.query.pm==='Cash on Delivery'){
+      if(req.query.total>1000){
+        res.send({bigAmount:true})
+      }else{
         const usercart=await cartCollection.find({userId:req.query.id})
         var count=0
         for(let i=0;i<usercart?.length;i++){
@@ -277,7 +306,7 @@ const cartbutton=async(req,res,next)=>{
       newOrder.save()
     
       res.send({success:true})
-         
+    }   
     } 
     if(req.query.pm==='wallet'){
       if(req.session.logged.walletBalance<req.query.total){

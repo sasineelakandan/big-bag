@@ -1,0 +1,50 @@
+<%- include('../userpart/header') %>
+
+  
+
+<body>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f8f8;
+            margin: 0;
+        }
+        .cart-container {
+            text-align: center;
+        }
+        .cart-container img {
+            width: 150px;
+            animation: bounce 2s infinite;
+        }
+        .cart-container h1 {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        .cart-container p {
+            font-size: 1em;
+            color: #666;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+    
+    <div class="cart-container">    
+        <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="image">
+        <h1>Your Cart is Empty</h1>
+        <p>Looks like you haven't added anything to your cart yet.</p>
+    </div>
+</body>
+</html>

@@ -20,7 +20,8 @@ Router.post('/adminlogout',adminConroller.adminlogout)
 Router.get('/usermanagement',isadmin,adminConroller.usermanagement)
 Router.get('/userblock',isadmin,adminConroller.userblock)
 Router.post('/adminsearch',isadmin,adminConroller.usersearch)
-
+Router.get('/admin/adminhome/Top3',isadmin,adminConroller.topProduct)
+Router.get('/admin/adminhome/Top3category',adminConroller.topCategory)
 Router.get('/dashboardData',isadmin,adminConroller.dashboardData)
 
 

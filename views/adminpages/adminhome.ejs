@@ -136,7 +136,33 @@
         </div>
     </div>
 </section>
-<div class="row">
+<section class="row">
+    <div class="col-lg-4">
+        <a href="/admin/adminhome/Top3"><div class="card card-body mb-4">
+            <h5 class="card-title">Top 5 Products</h5></a>
+            <ul id="topProductsList" class="list-unstyled">
+                <!-- Top products will be injected here -->
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card card-body mb-4">
+            <a href="/admin/adminhome/Top3category"> <h5 class="card-title">Top 3 Categories</h5></a>
+            <ul id="topCategoriesList" class="list-unstyled">
+                <!-- Top categories will be injected here -->
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card card-body mb-4">
+            <h5 class="card-title">Top 3 Brands</h5>
+            <ul id="topBrandsList" class="list-unstyled">
+                <!-- Top brands will be injected here -->
+            </ul>
+        </div>
+    </div>
+</section>
+<section class="row">
     <div class="container text-center">
         <h5>Two Weeks Sales Report</h5>
     </div>
@@ -150,7 +176,10 @@
         <canvas id="twoWeeksSalesChart"></canvas>
     </div>
     <hr />
-</div>
+</section>
+
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
