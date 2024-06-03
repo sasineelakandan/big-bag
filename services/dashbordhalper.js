@@ -11,46 +11,97 @@ module.exports = {
       yesterday.setDate(today.getDate() - 1);
 
       const result = await orderCollection.aggregate([
-        { $match: { orderStatus: 'Delivered' } },
-        { $match: { orderDate: { $gte: yesterday, $lt: today } } },
+        { $match: { orderStatus: 'Delivered', orderDate: { $gte: yesterday, $lt: today } } },
         { $group: { _id: "", totalRevenue: { $sum: "$Total" } } },
-      ]);
+      ])
       return result.length > 0 ? result[0].totalRevenue : 0;
     } catch (error) {
       console.error(error);
+      return 0; // Return 0 in case of error
     }
   },
 
-  fourteenDaysRevenue: async () => {
+  fourteenDaysRevenue: async (filter) => {
     try {
+      
+      let startDate;
+      switch(filter) {
+          case 'week':
+              startDate = new Date();
+              startDate.setDate(startDate.getDate() - 7);
+              break;
+          case '2week':
+              startDate = new Date();
+              startDate.setDate(startDate.getDate() - 14);
+              break;
+          case 'month':
+              startDate = new Date();
+              startDate.setMonth(startDate.getMonth() - 1);
+              break;
+          case 'year':
+              startDate = new Date();
+              startDate.setFullYear(startDate.getFullYear() - 1);
+              break;
+          default:
+              // Default to 14 days if no filter specified
+              startDate = new Date();
+              startDate.setDate(startDate.getDate() - 14);
+      }
+      
       const result = await orderCollection.aggregate([
-        { $match: { orderStatus: 'Delivered' } },
-        {
-          $group: {
-            _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
-            dailyRevenue: { $sum: "$Total" },
+          { $match: { orderStatus: 'Delivered', orderDate: { $gte: startDate } } },
+          {
+              $group: {
+                  _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
+                  dailyRevenue: { $sum: "$Total" },
+              },
           },
-        },
-        { $sort: { _id: 1 } },
-        { $limit: 14 },
-      ]);
+          { $sort: { _id: -1 } },
+          
+      ])
+      
       return {
-        date: result.map((v) => v._id),
-        revenue: result.map((v) => v.dailyRevenue),
+          date: result.map((v) => v._id),
+          revenue: result.map((v) => v.dailyRevenue),
       };
     } catch (error) {
       console.error(error);
+      return { date: [], revenue: [] }; // Return empty arrays in case of error
     }
   },
 
-  categoryWiseRevenue: async () => {
+  categoryWiseRevenue: async (filter) => {
     try {
+      let startDate;
+      switch(filter) {
+          case 'week':
+              startDate = new Date();
+              startDate.setDate(startDate.getDate() - 7);
+              break;
+          case '2week':
+              startDate = new Date();
+              startDate.setDate(startDate.getDate() - 14);
+              break;
+          case 'month':
+              startDate = new Date();
+              startDate.setMonth(startDate.getMonth() - 1);
+              break;
+          case 'year':
+              startDate = new Date();
+              startDate.setFullYear(startDate.getFullYear() - 1);
+              break;
+          default:
+              // Default to 14 days if no filter specified
+              startDate = new Date();
+              startDate.setDate(startDate.getDate() - 14);
+      }
+
       const result = await orderCollection.aggregate([
-        { $match: { orderStatus: 'Delivered' } },
+        { $match: { orderStatus: 'Delivered', orderDate: { $gte: startDate } } },
         { $unwind: '$cartData' },
         {
           $lookup: {
-            from: 'products', // assuming your product collection is named 'products'
+            from: 'products',
             localField: 'cartData.productId',
             foreignField: '_id',
             as: 'productDetails'
@@ -59,23 +110,21 @@ module.exports = {
         { $unwind: '$productDetails' },
         {
           $lookup: {
-            from: 'categories', // assuming your category collection is named 'categories'
-            localField: 'productDetails.parentCategory', // this should match the field in products
-            foreignField: '_id', // this should match the primary key field in categories
+            from: 'categories',
+            localField: 'productDetails.parentCategory',
+            foreignField: '_id',
             as: 'categoryDetails'
           }
         },
         { $unwind: '$categoryDetails' },
         {
           $group: {
-            _id: '$categoryDetails.categoryname', // assuming 'categoryname' is the field you want to group by in 'categories'
+            _id: '$categoryDetails.categoryname',
             revenuePerCategory: { $sum: '$cartData.totalCostPerProduct' }
           }
         },
         { $sort: { _id: 1 } }
-      ]).exec();
-      
-
+      ])
 
       return {
         categoryName: result.map(v => v._id),
@@ -83,18 +132,20 @@ module.exports = {
       };
     } catch (error) {
       console.error(error);
+      return { categoryName: [], revenuePerCategory: [] }; // Return empty arrays in case of error
     }
   },
 
   Revenue: async () => {
     try {
-      const result = await orderCollection.find({ orderStatus: 'Delivered' });
+      const result = await orderCollection.find({ orderStatus: 'Delivered' })
 
       return {
         revenue: result.reduce((acc, curr) => (acc += curr.Total), 0)
       };
     } catch (error) {
       console.error(error);
+      return { revenue: 0 }; // Return 0 in case of error
     }
   },
 
@@ -107,10 +158,11 @@ module.exports = {
       const result = await orderCollection.aggregate([
         { $match: { orderStatus: 'Delivered', orderDate: { $gte: lastMonth, $lt: today } } },
         { $group: { _id: "", MonthlyRevenue: { $sum: "$Total" } } },
-      ]);
+      ])
       return result.length > 0 ? result[0].MonthlyRevenue : 0;
     } catch (error) {
       console.error(error);
+      return 0; // Return 0 in case of error
     }
   },
 };

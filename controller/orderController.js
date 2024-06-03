@@ -4,6 +4,7 @@ const addressCollection = require('../model/addressmodel')
 const productCollection = require('../model/productmodel')
 const walletCollection=require('../model/Walletmodel')
 const AppError=require('../middlewere/errorhandling')
+const { generateInvoice } = require('../services/generatePdf');
 const allOrder = async (req, res,next) => {
     try {
         let orderDetails = await orderCollection.find({ userId: req.query.id }).sort({_id:-1})
@@ -311,5 +312,36 @@ const updateStatus2=async(req,res,next)=>{
     }
 
 } 
+const downloadInvoice = async (req, res, next) => {
+    try {
+        let orderData = await orderCollection
+            .findOne({ _id: req.query.id }).populate('address')
+            
+
+        if (!orderData) {
+            return next(new AppError('Order not found', 404));
+        }
+
+        // Extract order number
+        const orderNumber = orderData.OrderId;
+
+        // Construct filename with order number
+        const filename = `invoice_order_${orderNumber}.pdf`;
+
+        const stream = res.writeHead(200, {
+            "Content-Type": "application/pdf",
+            "Content-Disposition": `attachment; filename=${filename}`,
+        });
+
+        generateInvoice(
+            (chunk) => stream.write(chunk),
+            () => stream.end(),
+            orderData
+        );
+    } catch (err) {
+        console.error('Error generating invoice:', err);
+        next(new AppError('Sorry...Something went wrong', 500));
+    }
+};
    
-    module.exports = { allOrder, singleOrder, Cancel, Cancelall ,adminOrder,orderStatus,updateStatus,updateStatus2,RetunOrder}
+    module.exports = { allOrder, singleOrder, Cancel, Cancelall ,adminOrder,orderStatus,updateStatus,updateStatus2,RetunOrder,downloadInvoice}

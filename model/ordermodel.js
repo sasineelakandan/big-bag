@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema(
     paymentType: { type: String, required: true },
     orderStatus: { type: String, required: true, default: "Pending" },
     address: {
-      type:String,
+      type: mongoose.Types.ObjectId,
       required: true,
       ref: "addresses",
     },

@@ -106,8 +106,8 @@ const dashboardData = async (req, res) => {
       ] = await Promise.all([
        
         dashboardHelper.currentDayRevenue(),
-        dashboardHelper.fourteenDaysRevenue(),
-        dashboardHelper.categoryWiseRevenue(),
+        dashboardHelper.fourteenDaysRevenue(req.query.filter),
+        dashboardHelper.categoryWiseRevenue(req.query.filter),
         dashboardHelper.Revenue(),
         dashboardHelper.MonthlyRevenue(),
      

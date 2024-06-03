@@ -32,7 +32,7 @@ try{
         },
         'redirect_urls': { // Change made here: redirect_urls instead of redirect_url
             'return_url': 'http://localhost:8001/checkout5',
-            'cancel_url': 'http://localhost:8001/shop'
+            'cancel_url': 'http://localhost:8001/errPay'
         },
            "transactions": [{
                 "item_list": {
@@ -80,6 +80,48 @@ catch(error){
     next(new AppError('Somthing went Wrong', 500));
 }
 
+}
+const errPage=async(req,res)=>{
+    try{
+        var usercart=await cartCollection.find({userId:req.session.logged._id})
+        const add =await addressCollection.findOne({userId:req.session.logged._id})          
+        var count=0
+        for(let i=0;i<usercart?.length;i++){
+         var cartData=usercart[i]?._id
+            count++
+        }         
+                  
+      
+        
+         
+      
+     
+       
+         
+       
+       
+        const orderId = Math.floor(100000 + Math.random() * 900000);
+        const newOrder = new orderCollection({
+          OrderId:orderId,
+          userId:req.session.logged._id,
+          orderStatus:'PaymentPanding',
+          UserName:req.session.logged.name,
+          paymentType:'Online Payment',
+          paymentId:req.session.paymentId,
+          address:add._id,
+          grandTotalCost:req.session.Sum,
+          cartData:usercart,
+          Items:count,
+          couponApplied:req.session.copponAplied,
+          UserName:req.session.logged.name,
+          Total:req.session.total
+      })
+      newOrder.save()
+      req.session.paymentId=null  
+      res.render('userpages/paymenterrorpage',{userLogged:req.session.logged})
+    }catch(error){
+        next(new AppError('Somthing went Wrong', 500));
+    }
 }
 const paymentPage2=async(req,res,next)=>{
     const card=await cartCollection.find({userId:req.query.id})
@@ -189,4 +231,4 @@ const Wallet=async(req,res,next)=>{
         next(new AppError(error, 500));
     }
 }
-module.exports={paymentPage,Wallet,paymentPage2}
+module.exports={paymentPage,Wallet,paymentPage2,errPage}

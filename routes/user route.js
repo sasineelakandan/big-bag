@@ -56,6 +56,7 @@ Router.get('/singleorders',isuser,blockedUser,orderConroller.singleOrder)
 Router.put('/cancel',isuser,orderConroller.Cancel)
 Router.put('/cancelall',isuser,orderConroller.Cancelall)
 Router.put('/return',orderConroller.RetunOrder)
+Router.get('/account/orderList/orderStatus/downloadInvoice',isuser,orderConroller.downloadInvoice)
 //whishlist
 Router.get('/whishlist',isuser,userConroller.Whishlist)
 Router.get('/whishlist2',isuser,userConroller.Whishlist2)
@@ -68,7 +69,7 @@ Router.get('/googleAuth/googlever',passport.authenticate('google',{scope:['email
 Router.get('/google/callback',passport.authenticate('google'),userConroller.googleCallback)
 //online payment
 Router.get('/pay',isuser,paymentcontroller.paymentPage)
-
+Router.get('/errPay',isuser,paymentcontroller.errPage)
 Router.get('/pay2',isuser,paymentcontroller.paymentPage2)
 Router.get('/Wallet',isuser,paymentcontroller.Wallet)
 module.exports=Router

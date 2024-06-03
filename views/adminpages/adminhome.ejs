@@ -67,7 +67,7 @@
     }
 </style>
 </head>
-<body>
+<body >
 <section class="content-main">
     <div class="content-header">
         <div>
@@ -137,46 +137,66 @@
     </div>
 </section>
 <section class="row">
-    <div class="col-lg-4">
-        <a href="/admin/adminhome/Top3"><div class="card card-body mb-4">
-            <h5 class="card-title">Top 5 Products</h5></a>
-            <ul id="topProductsList" class="list-unstyled">
-                <!-- Top products will be injected here -->
-            </ul>
-        </div>
+    <div class="col-lg-6">
+        <a href="/admin/adminhome/Top3">
+            <div class="card card-body mb-4">
+                <h5 class="card-title">Top 5 Products</h5>
+            </div>
+        </a>
+        <ul id="topProductsList" class="list-unstyled">
+            <!-- Top products will be injected here -->
+        </ul>
     </div>
-    <div class="col-lg-4">
-        <div class="card card-body mb-4">
-            <a href="/admin/adminhome/Top3category"> <h5 class="card-title">Top 3 Categories</h5></a>
-            <ul id="topCategoriesList" class="list-unstyled">
-                <!-- Top categories will be injected here -->
-            </ul>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="card card-body mb-4">
-            <h5 class="card-title">Top 3 Brands</h5>
-            <ul id="topBrandsList" class="list-unstyled">
-                <!-- Top brands will be injected here -->
-            </ul>
-        </div>
+    <div class="col-lg-6">
+        <a href="/admin/adminhome/Top3category">
+            <div class="card card-body mb-4">
+                <h5 class="card-title">Top 3 Categories</h5>
+            </div>
+        </a>
+        <ul id="topCategoriesList" class="list-unstyled">
+            <!-- Top categories will be injected here -->
+        </ul>
     </div>
 </section>
-<section class="row">
-    <div class="container text-center">
-        <h5>Two Weeks Sales Report</h5>
-    </div>
-    <br />
-    <br />
-    <hr />
+
+<section class="row" style="display: flex; align-items: center; margin-top: 20px;">
+    <select style="width: 200px;padding: 10px;margin-left: 20px;" id="timeRange">
+        <option value="week">This Week</option>
+        <option value="2week">Last 2 Weeks</option>
+        <option value="month">Last Month</option>
+        <option value="year">Last Year</option>
+    </select>
+    
+    <button 
+        style="width: 200px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: auto;" 
+        type="button" 
+        onclick="updateRevenue()">
+        Update Revenue
+    </button>
+</section>
+
+<script>
+async function updateRevenue() {
+    const range = document.getElementById("timeRange").value;
+    await fetchData(range); 
+    // Use revenueData.date and revenueData.revenue to update your UI
+}
+</script>
+
+<div class="container text-center">
+    <h5>Two Weeks Sales Report</h5>
+</div>
+<br />
+<hr />
+<div class="row justify-content-center">
     <div class="col-lg-4">
         <canvas id="categoryWiseRevenueChart"></canvas>
     </div>
     <div class="col-lg-5" style="margin-top: 70px;">
         <canvas id="twoWeeksSalesChart"></canvas>
     </div>
-    <hr />
-</section>
+</div>
+<hr />
 
 
 
@@ -184,13 +204,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Variables to hold chart instances
-
     let twoWeeksSalesChartInstance;
     let categoryWiseRevenueChartInstance;
 
-    const fetchData = async () => {
+    const fetchData = async (filter) => {
+        
         try {
-            const response = await fetch('/dashboardData', { method: 'GET' });
+            const response = await fetch(`/dashboardData?filter=${filter}`, { method: 'GET' });
             const data = await response.json();
             const {
                 currentDayRevenue,
@@ -200,11 +220,14 @@
                 MonthlyRevenue
             } = data;
 
+            // Update UI elements
+            document.getElementById('currentDayRevenue').innerText = '$' + currentDayRevenue;
+            document.getElementById('TotalRevenue').innerText = '$' + TotalRevenue.revenue;
+            document.getElementById('Monthly revenue').innerText = '$' + MonthlyRevenue;
+
             // Update and render Two Weeks Sales Chart
             const twoWeeksSalesChartElement = document.getElementById('twoWeeksSalesChart');
-            document.getElementById('currentDayRevenue').innerText = '$' + currentDayRevenue
-        document.getElementById('TotalRevenue').innerText = '$' + TotalRevenue.revenue
-        document.getElementById('Monthly revenue').innerText = '$' + MonthlyRevenue
+
             // Destroy existing chart if it exists
             if (twoWeeksSalesChartInstance) {
                 twoWeeksSalesChartInstance.destroy();
@@ -295,8 +318,10 @@
         }
     };
 
-    fetchData();
+    // Initial fetch without filter
+    fetchData(); // Default to 2 weeks on initial load
 </script>
+
 
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>

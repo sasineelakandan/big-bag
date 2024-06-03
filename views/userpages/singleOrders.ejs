@@ -590,15 +590,20 @@
                       <a class='btn btn-sm btn-primary' href=''><%=orderDet?.orderStatus%></a>
                       <% } else if('Delivered'==orderDet?.orderStatus){ %>
                       <a class='btn btn-sm btn-success' href=''><%=orderDet?.orderStatus%></a>
-                      <% } else if('Return'==orderDet?.orderStatus){ %>
+                      <% }  else if('PaymentPanding'==orderDet?.orderStatus){ %>
+                        <a class='btn btn-sm btn-success' href='/'>ContinuePayment</a>
+                        <% }else if('Return'==orderDet?.orderStatus){ %>
                         <a class='btn btn-sm btn-success' href=''><%=orderDet?.orderStatus%></a>
                       <% }else { %>
                        <a class='btn btn-sm btn-danger' href=''><%=orderDet?.orderStatus%></a>
                        <% } %>
                   </div>
+                  
                 </div>
-
-                <div class="orderTracking">
+                <button id="cancelBtn" class="btn btn-primary" >
+                  <a href="/account/orderList/orderStatus/downloadInvoice?id=<%= orderDet._id %>" style="color: white; text-decoration: none;">Download Invoice</a>
+              </button>
+                <div style="margin-top: 10px;" class="orderTracking">
                   <div class="mb-3">
                     <div class="trackingProgress">
                       <div class="progress customProgress">
@@ -731,6 +736,8 @@
                                 
                                 <%}else if ('Return'==orderDet?.cartData[i]?.Status) { %> 
                                   <td class="" style="color: green;" > <%=orderDet?.cartData[i]?.Status%></td>
+                                  <%}else if ('PaymentPanding'==orderDet?.orderStatus) { %> 
+                                    <td><span style="color: rgb(106, 111, 112);">PaymentPanding</span></td>
                                   <%}else if ('cancel'==orderDet?.orderStatus) { %> 
                                     <td class="" style="color: red;" > <%=orderDet?.cartData[i]?.Status%></td>
                                 
@@ -821,9 +828,20 @@
                   </div>
                   <div class="col-12">
                     <div class="btn-group" role="group" aria-label="...">
-                      <!-- <button type="button" class="btn btn-default">Print</button>
-                      <button type="button" class="btn btn-default">Save to pdf</button> -->
-                      <button type="button" id="cancel" class="btn btn-danger">cancel order</button>
+                      
+                      <% if (orderDet?.orderStatus === "Delivered") { %>
+                       
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                document.getElementById("cancel").style.display = "none";
+                            });
+                        </script>
+                    <% }else{%>
+                      <button type="button" id="cancel" class="btn btn-danger">Cancel Order</button>
+                  <%}%>
+                    
+                        
+                    
                     </div>
                   </div>
                 </div>

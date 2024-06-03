@@ -9,47 +9,81 @@ const couPonCollection=require('../model/Couponmodel')
 const AppError=require('../middlewere/errorhandling')
 
 const Cart=async(req,res,next)=>{
-    try{
+    
       
-      const cart = await cartCollection.find({ userId: req.query.user }).populate('productId');
+      // const cart = await cartCollection.find({ userId: req.query.user }).populate('productId');
 
-      if (cart.length == 0) {
-          req.session.Sum = null;
-          res.render('userpages/emptyCart', { userLogged: req.session.logged, cartDet: [], grandTotal: req.session.Sum });
-      } else {
-          let outOfStock = false;
+      // if (cart.length == 0) {
+      //     req.session.Sum = null;
+      //     res.render('userpages/emptyCart', { userLogged: req.session.logged, cartDet: [], grandTotal: req.session.Sum });
+      // } else {
+      //     let outOfStock = false;
           
           
-          for (let i = 0; i < cart.length; i++) {
-              if (cart[i].productId.productStock == 0) {
-                  outOfStock = true;
-                  await cartCollection.deleteOne({ _id: cart[i]._id });
-              }
+      //     for (let i = 0; i < cart.length; i++) {
+      //         if (cart[i].productId.productStock == 0) {
+      //             outOfStock = true;
+      //             await cartCollection.deleteOne({ _id: cart[i]._id });
+      //         }
+      //     }
+      
+          
+      //     const updatedCart = await cartCollection.find({ userId: req.query.user }).populate('productId');
+      
+      //     if (updatedCart.length == 0) {
+      //         req.session.Sum = null;
+      //         res.render('userpages/emptyCart', { userLogged: req.session.logged, cartDet: [], grandTotal: req.session.Sum });
+      //     } else {
+      //         let Sum = 0;
+      //         for (let i = 0; i < updatedCart.length; i++) {
+      //             Sum += updatedCart[i].totalCostPerProduct;
+      //         }
+      
+      //         req.session.Sum = Sum;
+      //         req.session.grandTotal = Sum;
+      
+      //         res.render('userpages/cart', { userLogged: req.session.logged, cartDet: updatedCart, grandTotal: Sum });
+      //     }
+      // }
+      try {
+        const cartData = await cartCollection.find({ userId: req.session.logged._id}).populate('productId');
+        if(cartData.length==0){
+          
+          res.render('userpages/emptyCart', { userLogged: req.session.logged, cartDet:cartData,  });
+        }else{
+        let totalItems = 0;
+        let grandTotal = 0;
+        let outOfStockItems = [];
+    
+        
+        for (const item of cartData) {
+          const product = item.productId;
+    
+          if (product.productStock < item.productQuantity) {
+      
+            outOfStockItems.push({ productName: product.productName, requestedQuantity: item.productQuantity, availableQuantity: product.productStock });
+    
+            
+            await cartCollection.updateOne({ _id: item._id }, { $set: { productQuantity: product.productStock, totalCostPerProduct: product.productStock * product.productPrice } });
+    
+            item.productQuantity = product.productStock;
+            item.totalCostPerProduct = product.productStock * product.productPrice;
           }
-      
-          
-          const updatedCart = await cartCollection.find({ userId: req.query.user }).populate('productId');
-      
-          if (updatedCart.length == 0) {
-              req.session.Sum = null;
-              res.render('userpages/emptyCart', { userLogged: req.session.logged, cartDet: [], grandTotal: req.session.Sum });
-          } else {
-              let Sum = 0;
-              for (let i = 0; i < updatedCart.length; i++) {
-                  Sum += updatedCart[i].totalCostPerProduct;
-              }
-      
-              req.session.Sum = Sum;
-              req.session.grandTotal = Sum;
-      
-              res.render('userpages/cart', { userLogged: req.session.logged, cartDet: updatedCart, grandTotal: Sum });
-          }
+    
+          totalItems += item.productQuantity;
+          grandTotal += item.totalCostPerProduct;
+          req.session.Sum = grandTotal;
+          req.session.grandTotal = grandTotal
+        }
+    
+        res.render("userpages/cart", { userLogged: req.session.logged,cartDet:cartData, totalItems, grandTotal, outOfStockItems });
       }
       
-      
-}
     
-    catch(error){
+      
+
+    
+  }  catch(error){
       next(new AppError(error, 500));
     }
 }
@@ -265,7 +299,7 @@ const cartbutton=async(req,res,next)=>{
         
        
      if(req.query.pm=='paypal'){
-          
+      
           res.send({paypal:true})
 
      } if(req.query.pm==='Cash on Delivery'){
