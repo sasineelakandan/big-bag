@@ -36,7 +36,7 @@ catch(error){
 const addaddress2=async(req,res,next)=>{
 
     try{
-        console.log(req.body)
+        
        const address= new addressCollection({
         userId:req.session.logged?._id,
         firstName: req.body.firstName,
@@ -60,14 +60,13 @@ const addaddress2=async(req,res,next)=>{
 const Myaddress=async(req,res,next)=>{
     try{
         
-        if(req.query.id){
-         const address=await addressCollection.find({userId:req.query.id})
+        
+         const address=await addressCollection.find({userId:req.session.logged._id})
          
         res.render('userpages/myaddress',{userLogged:req.session.logged,addressDet:address})
-    }else{
-        res.render('userpages/myaddress',{userLogged:null})
+    
     }
-} 
+
     catch(error){
         next(new AppError('Somthing went Wrong', 500));
     }

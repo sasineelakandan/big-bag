@@ -52,14 +52,14 @@ const adminlogout = async (req, res,next) => {
 
 const usermanagement = async (req, res,next) => {
     try {
-        let Users= await usercollection.find()
-        const productsPerPage = 5
+        let Users=req.session.search|| await usercollection.find()
+        const productsPerPage = 8
         const totalPages = Users.length / productsPerPage
         const pageNo = req.query.pages || 1
         const start = (pageNo - 1) * productsPerPage
         const end = start + productsPerPage
         Users = Users.slice(start, end)
-          
+        req.session.search=null 
         res.render('adminpages/usermanagement', { userdet: Users,totalPages })
     } catch (err) {
         next(new AppError('Somthing went Wrong', 500));
@@ -87,7 +87,7 @@ const usersearch = async (req, res,next) => {
     try {
         const searchuser = await usercollection.find({ name: { $regex: req.body.search, $options: 'i' } })
         req.session.search = searchuser
-        res.redirect('/usermanagement')
+        res.redirect('/admin/usermanagement')
     } catch (error) {
         next(new AppError('Somthing went Wrong', 500));
     }

@@ -7,9 +7,26 @@ const AppError=require('../middlewere/errorhandling')
 const { generateInvoice } = require('../services/generatePdf');
 const allOrder = async (req, res,next) => {
     try {
-        let orderDetails = await orderCollection.find({ userId: req.query.id }).sort({_id:-1})
-       
-        res.render('userpages/allorders', { userLogged: req.session.logged, orderDet: orderDetails})
+        let orderDetails = await orderCollection.find({ userId: req.session.logged._id}).sort({ _id: -1 });
+
+        
+        const pageNo = parseInt(req.query.pages) || 1;
+        const productsPerPage = 7;
+        const totalPages = orderDetails.length / productsPerPage;
+        
+        
+        const start = (pageNo - 1) * productsPerPage;
+        const end = start + productsPerPage;
+        
+        
+        orderDetails = orderDetails.slice(start, end);
+        
+        res.render('userpages/allorders', {
+          userLogged: req.session.logged,
+          orderDet: orderDetails,
+          totalPages: totalPages
+        });
+    
     }
     catch (error) {
         next(new AppError(error, 500));
