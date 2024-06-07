@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+  integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+  integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* Add your custom styles here */
+  </style>
+</head>
+<body>
+  <style>
+    .d-none {
+        display: none;
+    }
+</style>
+<section class="mainContent clearfix lostPassword">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3>Authentication</h3>
+          </div>
+          <div class="panel-body">
+            <form id="verifyotp" >
+              <p class="help-block">You will receive an email with an OTP</p>
+              <div class="form-group">
+                <input type="text" placeholder="Enter OTP" name="otp" id="otp" class="form-control" />
+                <p id="otpText">Time Remaining: <span id="timer"></span> seconds </p>
+              </div>
+              <button id="verify" type="submit" class="btn btn-primary w-100">Verify OTP</button>
+              <br>
+              <br>
+              <button id="resend" type="submit" class="btn btn-primary w-100 d-none">Resend OTP</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+    $('#verifyotp').validate({
+      rules: {
+               otp:{
+                    required: true
+                  }
+             },
+      
+
+      submitHandler: async (form, event) => {
+        console.log('hai')
+        event.preventDefault()
+        let otp = {
+          otp: form.otp.value
+        }
+        console.log("form submited");
+        let response = await fetch('/verifyotp2', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(otp)
+        })
+        const result = await response.json()
+        console.log(result);
+        if (result.otpverified) {
+          await Swal.fire({
+            icon: "success",
+            title: "OTP verification Successfull",
+            showConfirmButton: false,
+            timer: 1500
+          });
+          window.location.href = '/forgotSuccess'
+        } if (result.otpinvalid) {
+          await Swal.fire({
+            icon: "error",
+            title: "Invalid OTP",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      }
+    
+    })
+    
+    
+
+  </script>
+  <script>
+
+
+    const dbSec = '<%- JSON.stringify(diffInSeconds) %>'
+            const secondsVal = JSON.parse(dbSec)
+            console.log(secondsVal);
+            const otpInput = document.getElementById('otpText');
+            const otpTimer = document.getElementById('timer');
+            const verifyOtpBtn = document.getElementById("verify");
+            const resendOtpBtn = document.getElementById("resend");
+            const currentTime = new Date()
+    
+    
+            let remainingTime = Math.abs(90 - secondsVal);
+    
+            if (Math.abs(90 - secondsVal) == 0 || secondsVal >= 90) {
+                remainingTime = 0
+            }
+            // Set the remaining time to 1.5 minutes
+    
+            // let remainingTime = 0;
+    
+    
+            function startTimer(duration, display, verifyOtpBtn, resendOtpBtn) {
+                let timer = duration;
+                let timerInterval;
+    
+                timerInterval = setInterval(function () {
+                    const minutes = Math.floor(timer / 60);
+                    const seconds = timer % 60;
+    
+                    const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+                    const formattedSeconds = seconds < 10 ? "0" + seconds : seconds;
+    
+                    display.textContent =` ${formattedMinutes}:${formattedSeconds}`;
+    
+                    if (timer == 0) {
+                        clearInterval(timerInterval);
+                        display.textContent =  'The OTP has expired. Kindly click "Resend OTP" to generate a new one.'
+                        resendOtpBtn.classList.remove("d-none");
+                        verifyOtpBtn.classList.add("d-none"); // Hides the Verify OTP button
+                        otpInput.disabled = true;
+                        return;
+                    }
+    
+                    timer--;
+                }, 1000);
+            }
+    
+            // OTP Timer
+            startTimer(remainingTime, otpTimer, verifyOtpBtn, resendOtpBtn);
+    
+            // Reset timer on form submission
+            function resetTimerOnSubmit() {
+                remainingTime = 90;
+                startTimer(remainingTime, otpTimer, verifyOtpBtn, resendOtpBtn);
+                return true;
+            }
+    
+            // Resend OTP Button Click Event
+            resendOtpBtn.addEventListener('click', function () {
+                otpInput.disabled = false;
+                // remainingTime = 90; // Reset the remaining time to 1.5 minutes
+                // startTimer(remainingTime, otpTimer, verifyOtpBtn, resendOtpBtn);
+                resendOtpBtn.classList.add("d-none");
+                verifyOtpBtn.classList.remove("d-none");
+            });
+    
+            // Verify OTP Button Click Event
+            
+        </script>
+    
+  <script>
+  resend.addEventListener('click', fnResend);
+
+async function fnResend(event) {
+    event.preventDefault();
+
+    try {
+        let response = await fetch('/resendotp2', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        // Check if the response is OK (status code 200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Attempt to parse the response as JSON
+        const result = await response.json();
+
+        console.log(result);
+
+        if (result.otpsend) {
+            await Swal.fire({
+                icon: "success",
+                title: "New OTP generated",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            window.location.href = '/changePassword';
+        } else {
+            // Handle case where `otpsend` is not true
+            throw new Error('Failed to resend OTP');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        await Swal.fire({
+            icon: "error",
+            title: "Failed to resend OTP",
+            text: error.message,
+            showConfirmButton: true
+        });
+    }
+}
+
+  
+  
+  </script>
+<!-- Bootstrap JS (optional) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- jQuery (optional) -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Your custom scripts -->
+<script>
+  // Add your custom scripts here
+</script>
+</body>
+</html>
+

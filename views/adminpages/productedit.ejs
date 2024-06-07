@@ -72,7 +72,7 @@
           <div class="d-flex flex-wrap align-items-start " style="max-width: 350px;">
             <% for(let i=0;i<productDet?.productImage.length;i++){ %>
               <div class="position-relative m-2">
-                <img src="assets/uploads/<%=productDet.productImage[i]%>"
+                <img src="/assets/uploads/<%=productDet.productImage[i]%>"
                   style="height: 60px; width: 60px; border-radius: 0;" alt="">
                 <button type="button" class="btn btn-danger delete-image" data-id="<%=productDet._id%>"
                   data-index="<%=i%>">Delete</button>
@@ -114,7 +114,7 @@
       // Function to handle file input change event and display image previews
       function previewImages() {
         var preview = document.getElementById("image-preview");
-        preview.innerHTML = ""; // Clear previous preview
+        // preview.innerHTML = ""; // Clear previous preview
 
         var files = document.getElementById("images").files;
         for (var i = 0; i < files.length; i++) {
@@ -230,7 +230,7 @@
           formData.append("originalImage", blob);
 
 
-          let response = await fetch('/productupdate/<%=productDet._id%>', {
+          let response = await fetch('/admin/productupdate/<%=productDet._id%>', {
             method: 'POST',
             body: formData
           })
@@ -247,7 +247,7 @@
               icon: "success",
               title: "Product Edited"
             })
-            window.location.href = '/product'
+            window.location.href = '/admin/product'
           }
           if (result.noValue) {
             await Swal.fire({
@@ -315,7 +315,7 @@
 
         // Send an AJAX request to delete the image
         $.ajax({
-          url: '/delete-image',
+          url: '/admin/delete-image',
           method: 'POST',
           data: {
             productId: productId,

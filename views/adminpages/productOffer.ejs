@@ -97,7 +97,7 @@
           <span class="lead"><%=OfferDet[i].endDate.toDateString()%></span>
         </td>
         <td>
-          <a href="/productOfferedit?id=<%=OfferDet[i]._id%>"><button   type="button" class="btn btn-primary" data-toggle="modal" data-target="#my2Modal<%= i %>">
+          <a href="/admin/productOfferedit?id=<%=OfferDet[i]._id%>"><button   type="button" class="btn btn-primary" data-toggle="modal" data-target="#my2Modal<%= i %>">
             Edit
           </button></a>
           <button  id="delete<%i%>" onclick="fndelete('<%=OfferDet[i]._id%>')" type="button" class="btn btn-danger" data-toggle="modal" data-target="#my2Modal<%= i %>">
@@ -119,7 +119,7 @@
             </a>
         </li>
         <%for(i=0;i<totalPages;i++){%>
-            <li class="page-item"><a class="page-link" href="/productOffer?pages=<%=i+1%>">
+            <li class="page-item"><a class="page-link" href="/admin/productOffer?pages=<%=i+1%>">
                     <%=i+1%>
                 </a></li>
             <%}%>
@@ -196,7 +196,7 @@ endDateInput.addEventListener('change', function () {
         });
 
         // Submit data using Fetch API
-        let response = await fetch('/productOfferDet', {
+        let response = await fetch('/admin/productOfferDet', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -235,7 +235,7 @@ endDateInput.addEventListener('change', function () {
                             confirmButtonText: "Yes!"
                         }).then(async (result) => {
                             if (result.isConfirmed) {
-                                let response = await fetch(`/productDel?id=${productId}`, {
+                                let response = await fetch(`/admin/productDel?id=${productId}`, {
                                     method: 'GET',
                                 })
                                 let result = await response.json()
@@ -296,7 +296,7 @@ endDateInput.addEventListener('change', function () {
         });
 
         // Submit data using Fetch API
-        let response = await fetch('/productOfferedit', {
+        let response = await fetch('/admin/productOfferedit', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'

@@ -17,67 +17,67 @@ const salesConroller=require('../controller/SalesController')
 Router.get('/admin',adminConroller.loginpage)
 Router.post('/adminlogin',adminConroller.adminlogin)
 Router.post('/adminlogout',adminConroller.adminlogout)
-Router.get('/usermanagement',isadmin,adminConroller.usermanagement)
-Router.get('/userblock',isadmin,adminConroller.userblock)
-Router.post('/adminsearch',isadmin,adminConroller.usersearch)
+Router.get('/admin/usermanagement',isadmin,adminConroller.usermanagement)
+Router.get('/admin/userblock',isadmin,adminConroller.userblock)
+Router.post('/admin/adminsearch',isadmin,adminConroller.usersearch)
 Router.get('/admin/adminhome/Top3',isadmin,adminConroller.topProduct)
 Router.get('/admin/adminhome/Top3category',adminConroller.topCategory)
-Router.get('/dashboardData',isadmin,adminConroller.dashboardData)
+Router.get('/admin/dashboardData',isadmin,adminConroller.dashboardData)
 
 
 
 // CATEGORY CONROLLER
-Router.get('/category',isadmin,categoryConroller.categoryManagement)
-Router.post('/addcategory',isadmin,categoryConroller.addCategory)
-Router.get('/categorylist',isadmin,categoryConroller.categoryList)
-Router.get('/adminedit/:id',isadmin,categoryConroller.editCategory)
-Router.post('/updatecategory',categoryConroller.updateCategory)
+Router.get('/admin/category',isadmin,categoryConroller.categoryManagement)
+Router.post('/admin/addcategory',isadmin,categoryConroller.addCategory)
+Router.get('/admin/categorylist',isadmin,categoryConroller.categoryList)
+Router.get('/admin/adminedit/:id',isadmin,categoryConroller.editCategory)
+Router.post('/admin/updatecategory',categoryConroller.updateCategory)
 
 
 
 
 
 //PRODUCT CONTROLLER
-Router.get('/product',isadmin,productConroller.Product)
-Router.get('/addproduct',isadmin,productConroller.addProduct)
-Router.post('/addproduct2',upload.any(),productConroller.addProduct2)
-Router.get('/productlist',productConroller.productList)
-Router.get('/productedit',isadmin,productConroller.productEdit)
-Router.post('/productupdate/:id',upload.any(),productConroller.productUpdate)
-Router.post("/delete-image", productConroller.deleteImage);
-Router.get('/productdelete',productConroller.deleteProduct)
+Router.get('/admin/product',isadmin,productConroller.Product)
+Router.get('/admin/addproduct',isadmin,productConroller.addProduct)
+Router.post('/admin/addproduct2',upload.any(),productConroller.addProduct2)
+Router.get('/admin/productlist',productConroller.productList)
+Router.get('/admin/productedit',isadmin,productConroller.productEdit)
+Router.post('/admin/productupdate/:id',upload.any(),productConroller.productUpdate)
+Router.post("/admin/delete-image", productConroller.deleteImage);
+Router.get('/admin/productdelete',productConroller.deleteProduct)
 
 //Order Controller
-Router.get('/order',isadmin,orderConroller.adminOrder)
-Router.get('/orderStatus',isadmin,orderConroller.orderStatus)
-Router.put('/updateStatus',orderConroller.updateStatus)
-Router.put('/updateStatus2',orderConroller.updateStatus2)
+Router.get('/admin/order',isadmin,orderConroller.adminOrder)
+Router.get('/admin/orderStatus',isadmin,orderConroller.orderStatus)
+Router.put('/admin/updateStatus',orderConroller.updateStatus)
+Router.put('/admin/updateStatus2',orderConroller.updateStatus2)
 
 //product offer controller
 
-Router.get('/productOffer',isadmin,productOfferController.productOfferget)
-Router.post('/productOfferDet',productOfferController.productofferDet)
-Router.put('/productOfferedit',productOfferController.productofferEdit)
-Router.get('/productOfferedit',isadmin,productOfferController.productEditpageget)
-Router.get('/productDel',productOfferController.ProductDel)
+Router.get('/admin/productOffer',isadmin,productOfferController.productOfferget)
+Router.post('/admin/productOfferDet',productOfferController.productofferDet)
+Router.put('/admin/productOfferedit',productOfferController.productofferEdit)
+Router.get('/admin/productOfferedit',isadmin,productOfferController.productEditpageget)
+Router.get('/admin/productDel',productOfferController.ProductDel)
 //categoryOffer 
-Router.get('/categoryOffer',isadmin,categoryOfferController.categoryOfferget)
-Router.get('/categoryEditpage',isadmin,categoryOfferController.categoryOffereditget)
-Router.post('/categoryOfferDet',categoryOfferController.categoryofferDet)
-Router.put('/categoryOfferedit',categoryOfferController.categoryOfferedit)
-Router.get('/categoryDel',categoryOfferController.catOffDel)
+Router.get('/admin/categoryOffer',isadmin,categoryOfferController.categoryOfferget)
+Router.get('/admin/categoryEditpage',isadmin,categoryOfferController.categoryOffereditget)
+Router.post('/admin/categoryOfferDet',categoryOfferController.categoryofferDet)
+Router.put('/admin/categoryOfferedit',categoryOfferController.categoryOfferedit)
+Router.get('/admin/categoryDel',categoryOfferController.catOffDel)
 //couPon
-Router.get('/coupons',isadmin,couPonController.Couponget)
-Router.get('/couponEditpage',isadmin,couPonController.CouponEditget)
-Router.post('/couponDet',couPonController.CouponOffDet)
-Router.put('/couponOfferedit',couPonController.CouponOffEdit)
-Router.get('/coupondelete',couPonController.couponDelete)
+Router.get('/admin/coupons',isadmin,couPonController.Couponget)
+Router.get('/admin/couponEditpage',isadmin,couPonController.CouponEditget)
+Router.post('/admin/couponDet',couPonController.CouponOffDet)
+Router.put('/admin/couponOfferedit',couPonController.CouponOffEdit)
+Router.get('/admin/coupondelete',couPonController.couponDelete)
 
 //salesReport
 Router.get('/Sales',isadmin,salesConroller.SalesReportGet)
-Router.post('/filterdate',salesConroller.filterDate)
-Router.get("/salesReport/download/xlsx",salesConroller.salesReportDownload);
-Router.get('/salesReport/download/pdf',salesConroller.salesReportDownloadPDF)
+Router.post('/admin/filterdate',salesConroller.filterDate)
+Router.get("/admin/salesReport/download/xlsx",salesConroller.salesReportDownload);
+Router.get('/admin/salesReport/download/pdf',salesConroller.salesReportDownloadPDF)
 Router.get('/removefilter',salesConroller.removeAllFillters)
 Router.post('/admin/salesReport/filter',salesConroller.filterDates)
 module.exports=Router

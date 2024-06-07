@@ -586,23 +586,31 @@
                 <div class="orderBox d-flex align-items-center mb-4">
                   <h2 class="orderBoxContent mb-0">Order ID:<%=orderDet?.OrderId%></h2>
                   <div class="ms-3">
-                    <% if ('Pending'==orderDet?.orderStatus) { %>
-                      <a class='btn btn-sm btn-primary' href=''><%=orderDet?.orderStatus%></a>
-                      <% } else if('Delivered'==orderDet?.orderStatus){ %>
-                      <a class='btn btn-sm btn-success' href=''><%=orderDet?.orderStatus%></a>
-                      <% }  else if('PaymentPanding'==orderDet?.orderStatus){ %>
-                        <a class='btn btn-sm btn-success' href='/'>ContinuePayment</a>
-                        <% }else if('Return'==orderDet?.orderStatus){ %>
-                        <a class='btn btn-sm btn-success' href=''><%=orderDet?.orderStatus%></a>
-                      <% }else { %>
-                       <a class='btn btn-sm btn-danger' href=''><%=orderDet?.orderStatus%></a>
-                       <% } %>
+                    <% if (orderDet?.orderStatus === 'Pending') { %>
+                      <a class="btn btn-sm btn-primary" href=""><%= orderDet?.orderStatus %></a>
+                    <% } else if (orderDet?.orderStatus === 'Delivered') { %>
+                      <a class="btn btn-sm btn-success" href=""><%= orderDet?.orderStatus %></a>
+                    <% } else if (orderDet?.orderStatus === 'Return') { %>
+                      <a class="btn btn-sm btn-success" href=""><%= orderDet?.orderStatus %></a>
+                    <% } else { %>
+                      <a class="btn btn-sm btn-danger" href=""><%= orderDet?.orderStatus %></a>
+                    <% } %>
                   </div>
+                  
                   
                 </div>
                 <button id="cancelBtn" class="btn btn-primary" >
                   <a href="/account/orderList/orderStatus/downloadInvoice?id=<%= orderDet._id %>" style="color: white; text-decoration: none;">Download Invoice</a>
               </button>
+              <% if (orderDet?.orderStatus === 'Payment Pending') { %>
+                <td>
+                  <button class="btn btn-success">
+                    <a href="/pay?id=<%= userLogged?._id %>&orderId=<%= orderDet?.OrderId %>&grandTot=<%= orderDet?.Total %>" style="color: white; text-decoration: none;">Continue Payment</a>
+                  </button>
+                </td>
+                <% } %>
+                
+
                 <div style="margin-top: 10px;" class="orderTracking">
                   <div class="mb-3">
                     <div class="trackingProgress">
@@ -731,18 +739,20 @@
                               <td class="">$ <%=orderDet?.cartData[i]?.totalCostPerProduct%></td>
                               <% if ('Delivered'==orderDet?.cartData[i]?.Status) { %>
                                 <td>
-                                  <button id="Return" onclick="fn('<%= orderDet?.cartData[i]?._id %>')" type="button" class="btn btn-success" data-order-date="<%= orderDet?.orderDate %>">Return</button>
+                                  <button class="return-button btn btn-success" onclick="fn('<%= orderDet?.cartData[i]?._id %>')" type="button" data-order-date="<%= orderDet?.orderDate %>">Return</button>
                                 </td>
+                                
                                 
                                 <%}else if ('Return'==orderDet?.cartData[i]?.Status) { %> 
                                   <td class="" style="color: green;" > <%=orderDet?.cartData[i]?.Status%></td>
-                                  <%}else if ('PaymentPanding'==orderDet?.orderStatus) { %> 
-                                    <td><span style="color: rgb(106, 111, 112);">PaymentPanding</span></td>
+                                  <%}else if ('Payment Pending'==orderDet?.orderStatus) { %> 
+                                    <td><span style="color: rgb(106, 111, 112);">PaymentPending</span></td>
                                   <%}else if ('cancel'==orderDet?.orderStatus) { %> 
                                     <td class="" style="color: red;" > <%=orderDet?.cartData[i]?.Status%></td>
                                 
                                 <%}else if ('cancel'==orderDet?.cartData[i]?.Status) { %> 
                               <td class="" style="color: red;" > <%=orderDet?.cartData[i]?.Status%></td>
+                              else
                               <% }else { %>
                                 <td class=""> <button id="cancelone" onclick="fn2('<%=orderDet?.cartData[i]?._id%>')" type="button"class="btn btn-danger">cancel</button></td>
                                 <% } %>
@@ -986,25 +996,29 @@
             }
           
         </script>
-        <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            
-            const button = document.getElementById('Return');
-            const orderDateStr = button.getAttribute('data-order-date');
-            const orderDate = new Date(orderDateStr);
-            const currentDate = new Date();
-            
-            // Calculate the difference in milliseconds
-            const timeDiff = currentDate - orderDate;
-            // Convert to days
-            const dayDiff = timeDiff / (1000 * 3600 * 24);
-        
-            // Hide the button if more than 14 days have passed
-            if (dayDiff > 14) {
-              button.style.display = 'none';
-            }
-          });
-        </script>
+     <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Select all elements with the class 'return-button'
+        const buttons = document.querySelectorAll('.return-button');
+        const currentDate = new Date();
+      
+        buttons.forEach(button => {
+          const orderDateStr = button.getAttribute('data-order-date');
+          const orderDate = new Date(orderDateStr);
+          
+          // Calculate the difference in milliseconds
+          const timeDiff = currentDate - orderDate;
+          // Convert to days
+          const dayDiff = timeDiff / (1000 * 3600 * 24);
+          
+          // Hide the button if more than 14 days have passed
+          if (dayDiff > 14) {
+            button.style.display = 'none';
+          }
+        });
+      });
+      </script>
+      
 
 
       			<!-- FOOTER -->

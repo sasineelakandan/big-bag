@@ -39,7 +39,7 @@
         
         <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
-                <form action="/adminsearch" method="post" class="d-flex">
+                <form action="/admin/adminsearch" method="post" class="d-flex">
                     <input class="form-control" name="search" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-success " type="submit">Search</button>
                 </form>
@@ -95,7 +95,7 @@
                 </a>
             </li>
             <%for(i=0;i<totalPages;i++){%>
-                <li class="page-item"><a class="page-link" href="/usermanagement?pages=<%=i+1%>">
+                <li class="page-item"><a class="page-link" href="/admin/usermanagement?pages=<%=i+1%>">
                         <%=i+1%>
                     </a></li>
                 <%}%>
@@ -118,7 +118,7 @@
                 confirmButtonText: "Yes!"
             }).then(async (result) => {
                 if (result.isConfirmed) {   
-                    let response = await fetch(`/userblock?id=${userId}&action=${action}`, {
+                    let response = await fetch(`/admin/userblock?id=${userId}&action=${action}`, {
                         method: 'GET',
                     })
                     let result = await response.json()

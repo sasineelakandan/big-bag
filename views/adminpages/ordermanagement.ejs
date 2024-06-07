@@ -105,7 +105,7 @@
                    
                     <td>
                       <span class="lead ">
-                        <a href="/orderStatus?orderId=<%=orderDet[i]?._id%>&user=<%=orderDet[i].userId%>&add=<%=orderDet[i].address%>"><button class="btn btn-primary">View</button>
+                        <a href="/admin/orderStatus?orderId=<%=orderDet[i]?._id%>&user=<%=orderDet[i].userId%>&add=<%=orderDet[i].address%>"><button class="btn btn-primary">View</button>
 
                       </span>
                     </td>
@@ -122,7 +122,7 @@
               </a>
           </li>
           <%for(i=0;i<totalPages;i++){%>
-              <li class="page-item"><a class="page-link" href="/order?pages=<%=i+1%>">
+              <li class="page-item"><a class="page-link" href="/admin/order?pages=<%=i+1%>">
                       <%=i+1%>
                   </a></li>
               <%}%>

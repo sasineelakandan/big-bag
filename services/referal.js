@@ -5,20 +5,8 @@ const walletCollection=require('../model/Walletmodel')
 
 const Referal= async(referalCode,Newuser)=>{
     try{
-      const update2=await usercollection.updateOne({email:Newuser},{$inc:{walletBalance:+100}})
-       
-       const user=await usercollection.findOne({email:Newuser})
-       
       
      
-       const wallet= new walletCollection({
-          userId:user._id,
-          walletBalance :user.walletBalance,
-          PaymentType:'Referal',
-          transactionsDate:new Date(),
-          transactiontype:'credited'
-       })
-       wallet.save()
        
        const referalUser= await usercollection?.findOne({ReferalCode:referalCode})
        if(referalUser){
@@ -31,8 +19,23 @@ const Referal= async(referalCode,Newuser)=>{
             transactiontype:'credited'
          })
          wallet1.save()
+         const update2=await usercollection.updateOne({email:Newuser},{$inc:{walletBalance:+100}})
+       
+         const user=await usercollection.findOne({email:Newuser})
          
         
+       
+         const wallet= new walletCollection({
+            userId:user._id,
+            walletBalance :user.walletBalance,
+            PaymentType:'Referal',
+            transactionsDate:new Date(),
+            transactiontype:'credited'
+         })
+         wallet.save()
+        
+       }else{
+         alert('you miss 100$ referal bonus')
        }
     }
     catch(error){

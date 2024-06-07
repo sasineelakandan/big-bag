@@ -50,7 +50,7 @@
             
         </div>
     </nav>
-    <a href="/addproduct" type="button" class="btn btn-primary"   >
+    <a href="/admin/addproduct" type="button" class="btn btn-primary"   >
         Add Product 
        </a>
        <table class="table">
@@ -81,7 +81,7 @@
                         <% for(let j=0;j<productDet[i].productImage.length;j++){ %>
                             <%if(productDet[i].productImage[j]){%>
                                
-                                <img src="assets/uploads/<%=productDet[i].productImage[j]%>"
+                                <img src="/assets/uploads/<%=productDet[i].productImage[j]%>"
                                 style="height: 60px; width: 60px; border-radius: 0;">
                            <% }%>
 
@@ -124,7 +124,7 @@
                 </a>
             </li>
             <%for(i=0;i<totalPages;i++){%>
-                <li class="page-item"><a class="page-link" href="/product?pages=<%=i+1%>">
+                <li class="page-item"><a class="page-link" href="/admin/product?pages=<%=i+1%>">
                         <%=i+1%>
                     </a></li>
                 <%}%>
@@ -147,7 +147,7 @@
                     confirmButtonText: "Yes!"
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        let response = await fetch(`/productlist?id=${productId}&action=${action}`, {
+                        let response = await fetch(`/admin/productlist?id=${productId}&action=${action}`, {
                             method: 'GET',
                         })
                         let result = await response.json()
@@ -183,7 +183,7 @@ async function fndelete(productId, action) {
                     confirmButtonText: "Yes!"
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        let response = await fetch(`/productdelete?id=${productId}&action=${action}`, {
+                        let response = await fetch(`/admin/productdelete?id=${productId}&action=${action}`, {
                             method: 'GET',
                         })
                         let result = await response.json()

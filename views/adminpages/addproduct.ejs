@@ -288,7 +288,7 @@
           // Append the original image Blob to FormData
           formData.append("originalImage", blob);
 
-          let response = await fetch("/addproduct2", {
+          let response = await fetch("/admin/addproduct2", {
             method: "POST",
             body: formData,
           });
@@ -304,7 +304,7 @@
               icon: "success",
               title: "Product Added",
             });
-            window.location.href = "/product";
+            window.location.href = "/admin/product";
           }
           if (result.noValue) {
             await Swal.fire({

@@ -6,9 +6,10 @@ const productCollection = require("../model/productmodel")
 const cartCollection=require('../model/cartmodel')
 const orderCollection=require('../model/ordermodel')
 const addressCollection=require('../model/addressmodel')
+const couPonCollection=require('../model/Couponmodel')
 const walletCollection=require('../model/Walletmodel')
 const AppError=require('../middlewere/errorhandling')
-
+const crypto=require('crypto')
 const { PAYPALMODE,PAYPAL_CLINT_KEY,PAYPAL_SECRET_KEY}=process.env
 
 paypal.configure({
@@ -21,9 +22,25 @@ const paymentPage=async(req,res,next)=>{
     const card=await cartCollection.find({userId:req.query.id})
     
    
-
-    const total=req.session.grandtotal
+console.log(req.query)
+    
+   
+    let total = req.query.grandTot || String(req.session.grandtotal);
     req.session.total=total
+   
+    let orderId = req.query.orderId ||  Math.floor(100000 + Math.random() * 900000);
+   
+  
+    if (req.query.orderId) {
+      const pendingPayment = await orderCollection.findOne({
+        OrderId: req.query.orderId,
+      });
+      req.session.orderNumber=pendingPayment.OrderId
+      req.session.add = pendingPayment.address;
+     
+      req.session.copponAplied= pendingPayment.couponApplied;
+      req.session.paymentMethod = pendingPayment.paymentType;
+    }
 try{
     const create_payment_json = {
         'intent': 'sale',
@@ -31,8 +48,8 @@ try{
             'payment_method': 'paypal'
         },
         'redirect_urls': { // Change made here: redirect_urls instead of redirect_url
-            'return_url': 'http://localhost:8001/checkout5',
-            'cancel_url': 'http://localhost:8001/errPay'
+        'return_url': `http://localhost:8001/checkout5?orderId=${orderId}`,
+            'cancel_url': `http://localhost:8001/errPay?orderId=${orderId}`
         },
            "transactions": [{
                 "item_list": {
@@ -61,9 +78,9 @@ try{
             
                    
                 
-               
+            req.session.orderId=orderId
               req.session.paymentId=payment.id
-            console.log('hai')
+            
             for(let i=0;payment.links.length;i++){
                 if(payment.links[i].rel==='approval_url'){
                    
@@ -81,52 +98,75 @@ catch(error){
 }
 
 }
-const errPage=async(req,res)=>{
-    try{
-        var usercart=await cartCollection.find({userId:req.session.logged._id})
-        const add =await addressCollection.findOne({userId:req.session.logged._id})          
-        var count=0
-        for(let i=0;i<usercart?.length;i++){
-         var cartData=usercart[i]?._id
-            count++
-        }         
-                  
-      
+const errPage=async(req,res,next)=>{
+    try {
         
-         
-      
-     
-       
-         
-       
-       
-        const orderId = Math.floor(100000 + Math.random() * 900000);
-        const newOrder = new orderCollection({
-          OrderId:orderId,
-          userId:req.session.logged._id,
-          orderStatus:'PaymentPanding',
-          UserName:req.session.logged.name,
-          paymentType:'Online Payment',
-          paymentId:req.session.paymentId,
-          address:add._id,
-          grandTotalCost:req.session.Sum,
-          cartData:usercart,
-          Items:count,
-          couponApplied:req.session.copponAplied,
-          UserName:req.session.logged.name,
-          Total:req.session.total
-      })
-      newOrder.save()
-      req.session.paymentId=null  
-      res.render('userpages/paymenterrorpage',{userLogged:req.session.logged})
-    }catch(error){
-        next(new AppError('Somthing went Wrong', 500));
-    }
-}
+        const user = await userCollection.findById(req.session.logged._id);
+        if (user.failPayments.includes(req.query.orderId)) {
+          await orderCollection.updateOne(
+            { orderId: req.query.orderId },
+            {
+              $set: {
+                paymentType: req.session.paymentMethod,
+              },
+            }
+          );
+          req.session.cartTotal = null;
+          req.session.couponApplied = null;
+          req.session.orderId = null;
+          req.session.save();
+    
+          res.render("userpages/paymenterrorpage");
+        } else {
+          const cartDet = await cartCollection.find({
+            userId: req.session.logged._id,
+          });
+    
+          await userCollection.findByIdAndUpdate(req.session.logged._id, {
+            $push: { failPayments: req.query.orderId },
+          });
+    
+          const clonedCartDet = cartDet.map((cart) => ({ ...cart }));
+          var count=0
+          for(let i=0;i<clonedCartDet?.length;i++){
+           let cartData=clonedCartDet[i]?._id
+              count++
+          }
+          const coupan=await couPonCollection.findOne({discountPercentage:req.session.copponAplied})
+          const storingDet = new orderCollection({
+            OrderId:req.query.orderId ,
+            UserName:req.session.logged.name,
+            userId: req.session.logged._id,
+            orderDate: new Date(),
+            paymentType:'Online Payment',
+            orderStatus: "Payment Pending",
+            address: req.session.add,
+            Items:count,
+            cartData: clonedCartDet,
+            grandTotalCost: req.session.Sum,
+            paymentId: req.query.paymentId,
+            couponApplied:coupan?.discountPercentage,
+            Total:req.session.total
+          });
+    
+          const stored = await storingDet.save();
+    
+          req.session.total= null;
+          req.session.Sum=null
+          req.session.appliedCoupon = null;
+          req.session.orderId = null;
+          req.session.save();
+    
+          res.render("userpages/paymenterrorpage");
+        }
+      } catch (error) {
+        next(new AppError(error, 500));
+      }
+    };
 const paymentPage2=async(req,res,next)=>{
     const card=await cartCollection.find({userId:req.query.id})
     
-  const  user=await userCollection.findOne({_id:req.query.id})
+  const  user=await userCollection.findOne({_id:req.session.logged._id})
 
     const total=req.session.grandtotal-user.walletBalance
     req.session.total=total
@@ -206,7 +246,7 @@ const Wallet=async(req,res,next)=>{
             
             const saveResult = await walletTransaction.save();
             
-            req.session.paymentId=null
+            req.session.paymentId2=null
             req.session.total=null
             const userWallet=await userCollection.findOne({_id:req.session.logged._id})
             const walletHistory=await walletCollection.find({userId:req.session.logged._id}).sort({_id:-1})

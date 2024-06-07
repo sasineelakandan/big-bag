@@ -132,7 +132,7 @@
                                     
 
                                 }
-                                let response = await fetch('/updatecategory', {
+                                let response = await fetch('/admin/updatecategory', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify(formData)
@@ -144,21 +144,21 @@
                                         title: "Category Edited"
 
                                     });
-                                    window.location.href='/category';
+                                    window.location.href='/admin/category';
                                 } if (result.exists) {
                                     await Swal.fire({
                                         icon: "error",
                                         title: "Category Already Exists"
 
                                     });
-                                    window.location.href='/category';
+                                    window.location.href='/admin/category';
                                 } if (result.noValue) {
                                     await Swal.fire({
                                         icon: "error",
                                         title: "Give any value"
 
                                     });
-                                    window.location.href='/category';
+                                    window.location.href='/admin/category';
                                 }
                             }
                         })

@@ -11,40 +11,7 @@ const AppError=require('../middlewere/errorhandling')
 const Cart=async(req,res,next)=>{
     
       
-      // const cart = await cartCollection.find({ userId: req.query.user }).populate('productId');
-
-      // if (cart.length == 0) {
-      //     req.session.Sum = null;
-      //     res.render('userpages/emptyCart', { userLogged: req.session.logged, cartDet: [], grandTotal: req.session.Sum });
-      // } else {
-      //     let outOfStock = false;
-          
-          
-      //     for (let i = 0; i < cart.length; i++) {
-      //         if (cart[i].productId.productStock == 0) {
-      //             outOfStock = true;
-      //             await cartCollection.deleteOne({ _id: cart[i]._id });
-      //         }
-      //     }
-      
-          
-      //     const updatedCart = await cartCollection.find({ userId: req.query.user }).populate('productId');
-      
-      //     if (updatedCart.length == 0) {
-      //         req.session.Sum = null;
-      //         res.render('userpages/emptyCart', { userLogged: req.session.logged, cartDet: [], grandTotal: req.session.Sum });
-      //     } else {
-      //         let Sum = 0;
-      //         for (let i = 0; i < updatedCart.length; i++) {
-      //             Sum += updatedCart[i].totalCostPerProduct;
-      //         }
-      
-      //         req.session.Sum = Sum;
-      //         req.session.grandTotal = Sum;
-      
-      //         res.render('userpages/cart', { userLogged: req.session.logged, cartDet: updatedCart, grandTotal: Sum });
-      //     }
-      // }
+     
       try {
         const cartData = await cartCollection.find({ userId: req.session.logged._id}).populate('productId');
         if(cartData.length==0){
@@ -296,10 +263,10 @@ const cartbutton=async(req,res,next)=>{
      }
      const checkOut4=async(req,res,next)=>{
       try{
-        
+        req.session.add=req.query.addressId
        
      if(req.query.pm=='paypal'){
-      
+        
           res.send({paypal:true})
 
      } if(req.query.pm==='Cash on Delivery'){
@@ -321,6 +288,7 @@ const cartbutton=async(req,res,next)=>{
             { $inc: { productStock: -usercart[i].productQuantity } }
           );
         }
+
         const coupan=await couPonCollection.findOne({discountPercentage:req.session.copponAplied})
         await cartCollection.deleteMany({userId:req.query.id})
         const orderId = Math.floor(100000 + Math.random() * 900000);
@@ -338,12 +306,15 @@ const cartbutton=async(req,res,next)=>{
           Total:req.query.total
       })
       newOrder.save()
-    
+      req.session.copponAplied=null
       res.send({success:true})
     }   
     } 
     if(req.query.pm==='wallet'){
-      if(req.session.logged.walletBalance<req.query.total){
+      console.log(req.query.total)
+          const user=await usercollection.findOne({_id:req.session.logged._id})
+         console.log(user.walletBalance)
+      if( user.walletBalance<req.query.total){
         res.send({checkBalance:true})
         
       }else{
@@ -382,6 +353,7 @@ const cartbutton=async(req,res,next)=>{
     
   })
   newOrder.save()
+  
   const total=Number(req.query.total)
   const wallet3= new walletCollection({
     userId:req.query.id,
@@ -392,6 +364,7 @@ const cartbutton=async(req,res,next)=>{
  })
  wallet3.save()
   const wallet2=await usercollection.updateOne({_id:req.query.id},{$inc:{walletBalance:-total}})
+  req.session.copponAplied=null
   
   res.send({success:true})
       
@@ -406,9 +379,32 @@ const cartbutton=async(req,res,next)=>{
      }
      const checkOut5=async(req,res,next)=>{
       try{
-        const online =await orderCollection.find()
       
-      if(req.session.paymentId){
+       
+        
+          const user = await usercollection.findById(req.session.logged._id);
+          
+          
+        if (user.failPayments.includes(req.query.orderId)) {
+          c
+        const user2=  await orderCollection.updateOne(
+            { OrderId: req.query.orderId },
+            {
+              $set: {
+                paymentType: "Online Payment",orderStatus:'Pending'
+              },
+            }
+          );
+        console.log(user2)
+        let indx = user.failPayments.indexOf(req.query.orderId);
+        console.log(indx);
+        user.failPayments.splice(indx, 1);
+        await user.save();
+        await cartCollection.deleteMany({userId:req.session.logged._id})
+        req.session.paymentId=null
+         res.render('userpages/checkout4',{userLogged:req.session.logged})
+        }else{
+         if(req.session.paymentId){
         var usercart=await cartCollection.find({userId:req.session.logged._id})
         const add =await addressCollection.findOne({userId:req.session.logged._id})          
         var count=0
@@ -435,7 +431,7 @@ const cartbutton=async(req,res,next)=>{
        
         const orderId = Math.floor(100000 + Math.random() * 900000);
         const newOrder = new orderCollection({
-          OrderId:orderId,
+          OrderId:  req.session.orderId,
           userId:req.session.logged._id,
           UserName:req.session.logged.name,
           paymentType:'Online Payment',
@@ -450,14 +446,19 @@ const cartbutton=async(req,res,next)=>{
       })
       newOrder.save()
       req.session.paymentId=null
+      req.session.copponAplied=null
       await cartCollection.deleteMany({userId:req.session.logged._id})
       res.render('userpages/checkout4',{userLogged:req.session.logged})
-    }else{
+    }
+  
+    else{
       
          res.render('userpages/checkout4',{userLogged:req.session.logged})
       
       }
+    
     }
+      }
       catch(error){
         next(new AppError('Somthing went Wrong', 500));
       }

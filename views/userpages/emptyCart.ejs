@@ -1,8 +1,9 @@
-<%- include('../userpart/header') %>
-
-  
-
-<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empty Cart</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,12 +40,36 @@
                 transform: translateY(-15px);
             }
         }
+        .btn-success {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        .btn-success a {
+            color: white;
+            text-decoration: none;
+        }
+        .btn-success a:hover {
+            color: white;
+        }
     </style>
-    
+</head>
+<body>
     <div class="cart-container">    
-        <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="image">
+        <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="Empty Cart">
         <h1>Your Cart is Empty</h1>
         <p>Looks like you haven't added anything to your cart yet.</p>
+        <button class="btn-success"><a href="/shop">Go to Shop</a></button>
     </div>
 </body>
 </html>

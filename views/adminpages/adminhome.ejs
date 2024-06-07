@@ -210,7 +210,7 @@ async function updateRevenue() {
     const fetchData = async (filter) => {
         
         try {
-            const response = await fetch(`/dashboardData?filter=${filter}`, { method: 'GET' });
+            const response = await fetch(`/admin/dashboardData?filter=${filter}`, { method: 'GET' });
             const data = await response.json();
             const {
                 currentDayRevenue,

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery Validation Plugin CSS (optional) -->
+  <style>
+    /* Add your custom styles here */
+    .mainContent {
+      margin-top: 50px;
+    }
+    .error{
+        color:red
+    }
+  </style>
+</head>
+<body>
+
+<!-- MAIN CONTENT SECTION -->
+<section class="mainContent clearfix">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <h3>Reset Password</h3>
+          </div>
+          <div class="card-body">
+            <form id="resetPasswordForm" role="form" autocomplete="off">
+              <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+              </div>
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password" required>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirm New Password</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bootstrap CSS -->
+
+<!-- Custom CSS -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Your custom JavaScript -->
+<script>
+  // Initialize form validation
+ 
+
+    $('#resetPasswordForm').validate({
+      rules: {
+        email: {
+          required: true,
+          email: true
+        },
+        newPassword: {
+          required: true,
+          minlength: 6
+        },
+        confirmPassword: {
+          required: true,
+          equalTo: "#newPassword"
+        }
+      },
+      messages: {
+        email: {
+          required: "Please enter your email address",
+          email: "Please enter a valid email address"
+        },
+        newPassword: {
+          required: "Please provide a new password",
+          minlength: "Your password must be at least 6 characters long"
+        },
+        confirmPassword: {
+          required: "Please confirm your new password",
+          equalTo: "Passwords do not match"
+        }
+      },
+      submitHandler: async function(form,event) {
+        event.preventDefault()
+        console.log('Form is valid and ready to be submitted');
+
+        const email = $('#email').val();
+        const newPassword = $('#newPassword').val();
+        const confirmPassword = $('#confirmPassword').val();
+
+        console.log('Email:', email);
+        console.log('New Password:', newPassword);
+        console.log('Confirm Password:', confirmPassword);
+
+        const data = {
+          email: email,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword
+        };
+
+        try {
+          const response = await fetch('/resetpassword', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+
+          console.log('Server response:', result);
+
+          if (result.success) {
+            await Swal.fire({
+              icon: 'success',
+              title: 'Password reset successful',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            window.location.href = '/login';
+          } else {
+            await Swal.fire({
+              icon: 'error',
+              title: 'Password reset failed',
+              text: result.message,
+              showConfirmButton: true
+            });
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          await Swal.fire({
+            icon: 'error',
+            title: 'An error occurred',
+            showConfirmButton: true
+          });
+        }
+      }
+    });
+  
+</script>
+
+</body>
+</html>

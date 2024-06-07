@@ -578,20 +578,70 @@
 
 
 
-                                <div id="carousel" class="carousel slide" data-ride="carousel">
-                                    <div class="carousel-inner SingleProductItem">
+                                <div  data-ride="carousel">
+                                    <div>
 
-                                        <div class="carousel-item active productImage SingleProductImage"
+                                        <div
                                             data-thumb="0">
+                                            <div class="slide_item" style="background: url('/assets/uploads/<%=productDet?.productImage[0]%>') 0% 0% / 460px 460px no-repeat; width: 460px; height: 460px;">
+                                            </div>
 
-                                            <img src="/assets/uploads/<%=productDet?.productImage[0]%>">
                                             <a data-fancybox="images"
                                                 href="/assets/uploads/<%=productDet?.productImage[0]%>"
                                                 class="product-content">
                                                 <div class="MaskingIcon"><i class="fa fa-plus"></i></div>
                                             </a>
                                         </div>
+                                    <script>
+                                        // IMAGE ZOOM
+        // CREDITS : https://www.cssscript.com/image-zoom-pan-hover-detail-view/
+        const addZoom = container => {
+            // (A) GET IMAGE SOURCE
+            let initialBackgroundPosition = container.style.backgroundPosition;
+            let initialBackgroundSize = container.style.backgroundSize;
+            let imgsrc = container.style.backgroundImage.slice(4, -1).replace(/"/g, "");
 
+            // (B) LOAD IMAGE + ATTACH ZOOM
+            let img = new Image();
+            img.src = imgsrc;
+            img.onload = () => {
+                // (B1) SET CONTAINER WIDTH AND HEIGHT
+                container.style.width = "460px";
+                container.style.height = "460px";
+
+                // (B2) ADD CSS TRANSITION
+                container.style.transition = "background-position 0.2s, background-size 0.2s";
+
+                // (B2) ATTACH ZOOM ON MOUSE MOVE
+                container.onmousemove = e => {
+                    let rect = e.target.getBoundingClientRect(),
+                        xPos = e.clientX - rect.left,
+                        yPos = e.clientY - rect.top,
+                        xPercent = xPos / (container.clientWidth / 100) + "%",
+                        yPercent = yPos / ((container.clientHeight) / 100) + "%";
+
+                    Object.assign(container.style, {
+                        backgroundPosition: xPercent + " " + yPercent,
+                        backgroundSize: "920px 920px" // Set zoomed size here
+                    });
+                };
+
+                // (B3) RESET ZOOM ON MOUSE LEAVE
+                container.onmouseleave = e => {
+                    Object.assign(container.style, {
+                        backgroundPosition: initialBackgroundPosition,
+                        backgroundSize: "460px 460px" // Reset to original size
+                    });
+                };
+            }
+        };
+        document.addEventListener("DOMContentLoaded", () => {
+            const imageContainers = document.querySelectorAll(".slide_item");
+            imageContainers.forEach(container => {
+                addZoom(container);
+            });
+        });
+                                    </script>
                                         <div class="carousel-item SingleProductImage" data-thumb="1">
                                             <img src="/assets/uploads/<%=productDet?.productImage[1]%>">
                                             <a data-fancybox="images"

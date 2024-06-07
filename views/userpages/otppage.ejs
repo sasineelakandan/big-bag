@@ -721,7 +721,11 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         </div>
       </div>
     </section>
-
+    <style>
+      .d-none {
+          display: none;
+      }
+  </style>
     <!-- MAIN CONTENT SECTION -->
     <section class="mainContent clearfix lostPassword">
       <div class="container">
@@ -743,7 +747,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                   <br>
                   <br>
 
-                  <button id="resend" type="submit" class="btn btn-primary w-100">Resend OTP</button>
+                  <button id="resend" type="submit" class="btn btn-primary w-100 d-none">Resend OTP</button>
                 </form>
               </div>
             </div>
@@ -797,7 +801,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       
 
     </script>
-    <script>
+    <!-- <script>
       let seconds = 60
     const countdown = document.getElementById('timer')
     const otpText = document.getElementById('otpText')
@@ -815,7 +819,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     const interval = setInterval(updateTimer, 1000)
   
 
-    </script>
+    </script> -->
     <script>
         resend.addEventListener('click', fnResend)
                   async function fnResend() {
@@ -838,7 +842,77 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
     
     </script>
-    
+    <script>
+
+
+const dbSec = '<%- JSON.stringify(diffInSeconds) %>'
+        const secondsVal = JSON.parse(dbSec)
+        console.log(secondsVal);
+        const otpInput = document.getElementById('otpText');
+        const otpTimer = document.getElementById('timer');
+        const verifyOtpBtn = document.getElementById("verify");
+        const resendOtpBtn = document.getElementById("resend");
+        const currentTime = new Date()
+
+
+        let remainingTime = Math.abs(90 - secondsVal);
+
+        if (Math.abs(90 - secondsVal) == 0 || secondsVal >= 90) {
+            remainingTime = 0
+        }
+        // Set the remaining time to 1.5 minutes
+
+        // let remainingTime = 0;
+
+
+        function startTimer(duration, display, verifyOtpBtn, resendOtpBtn) {
+            let timer = duration;
+            let timerInterval;
+
+            timerInterval = setInterval(function () {
+                const minutes = Math.floor(timer / 60);
+                const seconds = timer % 60;
+
+                const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+                const formattedSeconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent =` ${formattedMinutes}:${formattedSeconds}`;
+
+                if (timer == 0) {
+                    clearInterval(timerInterval);
+                    display.textContent =  'The OTP has expired. Kindly click "Resend OTP" to generate a new one.'
+                    resendOtpBtn.classList.remove("d-none");
+                    verifyOtpBtn.classList.add("d-none"); // Hides the Verify OTP button
+                    otpInput.disabled = true;
+                    return;
+                }
+
+                timer--;
+            }, 1000);
+        }
+
+        // OTP Timer
+        startTimer(remainingTime, otpTimer, verifyOtpBtn, resendOtpBtn);
+
+        // Reset timer on form submission
+        function resetTimerOnSubmit() {
+            remainingTime = 90;
+            startTimer(remainingTime, otpTimer, verifyOtpBtn, resendOtpBtn);
+            return true;
+        }
+
+        // Resend OTP Button Click Event
+        resendOtpBtn.addEventListener('click', function () {
+            otpInput.disabled = false;
+            // remainingTime = 90; // Reset the remaining time to 1.5 minutes
+            // startTimer(remainingTime, otpTimer, verifyOtpBtn, resendOtpBtn);
+            resendOtpBtn.classList.add("d-none");
+            verifyOtpBtn.classList.remove("d-none");
+        });
+
+        // Verify OTP Button Click Event
+        
+    </script>
 
 
     <!-- FOOTER -->

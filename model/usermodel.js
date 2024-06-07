@@ -25,7 +25,7 @@ const userschema=new mongoose.Schema({
         default:false
     },
     ReferalCode: {type: Number,required:true} ,
-
+    failPayments:{type:Array},
     walletBalance: {type: Number,default:0}
 })
 module.exports=mongoose.model('user',userschema)

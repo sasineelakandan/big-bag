@@ -34,12 +34,25 @@ const home = async (req, res,next) => {
 }
 
 
-const otppage = (req, res,next) => {
+const otppage = async(req, res,next) => {
     try {
         if (req.session.user) {
+            req.session.user=false
             res.redirect('/')
         } else {
-            res.render('userpages/otppage')
+            let diffInSeconds;
+            const existingOtp = await otpcollections.findOne({ userId: req.session.loggedNew._id });
+            console.log(existingOtp)
+            if (existingOtp) {
+              const createdAt = existingOtp.generatedDate;
+              const currentDate = new Date();
+              const diffInMs = currentDate.getTime() - createdAt.getTime();
+              diffInSeconds = Math.floor(diffInMs / 1000);
+              console.log(diffInSeconds)
+            } else {
+              diffInSeconds = null;
+            }
+            res.render('userpages/otppage',{diffInSeconds})
         }
 
     } catch (err) {
@@ -82,7 +95,7 @@ const verifyotp = async (req, res,next) => {
 
 
     try {
-        const usersOTP = await otpcollections.findOne({ userId: req.session.logged._id });
+        const usersOTP = await otpcollections.findOne({ userId: req.session.loggedNew._id });
 
 
         const otpmatch = await bcrypt.compare(req.body.otp, usersOTP.otp)
@@ -92,9 +105,9 @@ const verifyotp = async (req, res,next) => {
 
         if (otpmatch && notExpired) {
 
-            await usercollection.updateOne({ _id: req.session.logged._id }, { $set: { isVerified: true } })
+            await usercollection.updateOne({ _id: req.session.loggedNew._id }, { $set: { isVerified: true } })
             req.session.user = true
-
+            req.session.logged=await usercollection.findOne({_id: req.session.loggedNew._id})
             res.status(200).send({ otpverified: true })
         } else {
             res.status(200).send({ otpinvalid: true })
@@ -161,14 +174,14 @@ const userRegister = async (req, res,next) => {
 
 
         if (req.query.otp) {
-            req.session.logged = await usercollection.findOne({ email: req.body.email })
+            req.session.loggedNew = await usercollection.findOne({ email: req.body.email })
 
             const genratedotp = Math.floor(100000 + Math.random() * 900000).toString()
-            await sendotp(req.session.logged, genratedotp)
+            await sendotp(req.session.loggedNew, genratedotp)
             await  ReferalCode.Referal(req.body.ReferalCode,req.body.email)
             const bcryptotp = bcrypt.hashSync(genratedotp, 10)
             const userotp = new otpcollections({
-                userId: req.session.logged._id,
+                userId: req.session.loggedNew._id,
                 otp: bcryptotp,
                 generatedDate: new Date().toISOString(),
                 expiryDate: new Date(Date.now() + 60000).toISOString()
@@ -222,9 +235,9 @@ const resendotp = async (req, res,next) => {
     try {
 
         const generatedotp = Math.floor(100000 + Math.random() * 900000).toString()
-        await sendotp(req.session.logged, generatedotp)
+        await sendotp(req.session.loggedNew, generatedotp)
         const bycryptotp = bcrypt.hashSync(generatedotp, 10)
-        await otpcollections.updateOne({ userId: req.session.logged._id }, { $set: { otp: bycryptotp, generatedDate: new Date().toISOString(), expiryDate: new Date(Date.now() + 60000).toISOString() } })
+        await otpcollections.updateOne({ userId: req.session.loggedNew._id }, { $set: { otp: bycryptotp, generatedDate: new Date().toISOString(), expiryDate: new Date(Date.now() + 60000).toISOString() } })
 
         res.status(200).send({ otpsend: true })
     } catch (err) {
@@ -507,9 +520,134 @@ const removeAllFillters = async (req, res,next) => {
         next(new AppError('Somthing went Wrong', 500))
     }
 }
+const forgotPassword=async(req,res,next)=>{
+    try{
+         res.render('userpages/forgotPassword')
+    }
+    catch(error){
+        next(new AppError('Somthing went Wrong', 500))
+    }
+}
+const forgotPassword2=async(req,res,next)=>{
+    try{
+        const user=await usercollection.findOne({email:req.body.email})
+        req.session.otpuser=user
+        if(user){
+           
 
+            const genratedotp = Math.floor(100000 + Math.random() * 900000).toString()
+            await sendotp(user, genratedotp)
+          
+            const bcryptotp = bcrypt.hashSync(genratedotp, 10)
+            const userotp = new otpcollections({
+                userId:user._id,
+                otp: bcryptotp,
+                generatedDate: new Date().toISOString(),
+                expiryDate: new Date(Date.now() + 60000).toISOString()
+            })
+            await userotp.save()
+            res.send({success:true})
+        }
+    }
+    catch(error){
+        next(new AppError('Somthing went Wrong', 500))
+    }
+}
+const forgotPassword3=async(req,res,next)=>{
+    try{
+        let diffInSeconds;
+        const existingOtp = await otpcollections.findOne({ userId: req.session.otpuser._id });
+        console.log(existingOtp)
+        if (existingOtp) {
+          const createdAt = existingOtp.generatedDate;
+          const currentDate = new Date();
+          const diffInMs = currentDate.getTime() - createdAt.getTime();
+          diffInSeconds = Math.floor(diffInMs / 1000);
+          console.log(diffInSeconds)
+        } else {
+          diffInSeconds = null;
+        }
+    res.render('userpages/veryfyOtpPageForgot',{diffInSeconds})
+    }
+    catch(error){
+        next(new AppError('Somthing went Wrong', 500)) 
+    }
+}
+const verifyotp2 = async (req, res,next) => {
+
+        console.log(req.body)
+  
+    try {
+        const usersOTP = await otpcollections.findOne({ userId: req.session.otpuser._id });
+        
+        // Check if usersOTP is found
+        if (!usersOTP) {
+            console.log('No OTP found for user');
+            return res.status(200).send({ otpinvalid: true });
+        }
+    
+        console.log('Stored OTP:', usersOTP.otp);
+        console.log('User-provided OTP:', req.body.otp);
+    
+        // Compare provided OTP with stored hashed OTP
+        const otpmatch = await bcrypt.compare(req.body.otp, usersOTP.otp);
+        console.log('OTP Match:', otpmatch);
+    
+        // Check if OTP is not expired
+        const notExpired = usersOTP.expiryDate.toISOString() > new Date().toISOString();
+        console.log('Not Expired:', notExpired);
+        await otpcollections.deleteOne({userId:req.session.otpuser._id })
+        if (otpmatch && notExpired) {
+            await usercollection.updateOne({ _id: req.session.otpuser._id }, { $set: { isVerified: true } });
+            req.session.user1 = true;
+            
+            res.status(200).send({ otpverified: true });
+        } else {
+            res.status(200).send({ otpinvalid: true });
+        }
+    } catch (error) {
+        console.error('Error occurred:', error);
+        next(new AppError('Something went wrong', 500));
+    }
+    
+}
+const forgotSuccess=async(req,res,next)=>{
+    try{
+       
+       res.render('userpages/forgotsuccesPage')
+    }
+    catch(error){
+        next(new AppError('Something went wrong', 500)); 
+    }
+}
+const resetPassword=async(req,res,next)=>{
+    try{
+        
+        const bcryptpassword = await bcrypt.hash(req.body.confirmPassword, 10)
+        const user= await usercollection.updateOne({email:req.body.email},{$set:{password:bcryptpassword}})
+        
+        res.send({success:true})
+    }
+    catch(error){
+        next(new AppError('Something went wrong', 500)); 
+    }
+}
+const resendotp2=async(req,res,next)=>{
+    try {
+        console.log('HAI')
+        const generatedotp = Math.floor(100000 + Math.random() * 900000).toString()
+        
+        await sendotp(req.session.otpuser, generatedotp)
+        const bycryptotp = bcrypt.hashSync(generatedotp, 10)
+     const  user= await otpcollections.updateOne({ userId: req.session.otpuser._id }, { $set: { otp: bycryptotp, generatedDate: new Date().toISOString(), expiryDate: new Date(Date.now() + 60000).toISOString() } })
+      console.log(user)
+        res.status(200).send({ otpsend: true })
+    } catch (err) {
+        next(new AppError('Somthing went Wrong', 500));
+    }
+}
 module.exports = {
     home, signupget, loginget, userRegister, logionverify, verifyotp, resendotp, otppage, register, shopPage,
     singleProduct, logout, Fillters, googleCallback, notFound, Whishlist, WhishlistRemove, Whishlist2, whishToCart, removeWish, shopSort,
-    filter, filter2, removeAllFillters
+    filter, filter2, removeAllFillters,forgotPassword,forgotPassword2,forgotPassword3,verifyotp2,forgotSuccess,resetPassword,resendotp2
 }
