@@ -83,7 +83,7 @@ function generateInvoiceTable(doc, orderData) {
     doc,
     subtotalPosition,
     "", // Empty for alignment
-    "Subtotal",
+    "Subtotal"+'$',
     orderData.grandTotalCost
   );
 
@@ -92,7 +92,7 @@ function generateInvoiceTable(doc, orderData) {
     doc,
     discountPosition,
     "", // Empty for alignment
-    "Discount",
+    "Discount"+'$',
     orderData.couponApplied
   );
 
@@ -101,7 +101,7 @@ function generateInvoiceTable(doc, orderData) {
     doc,
     totalPosition,
     "", // Empty for alignment
-    "Total",
+    "Total"+'$',
     orderData.Total
   );
 }
