@@ -83,8 +83,8 @@ function generateInvoiceTable(doc, orderData) {
     doc,
     subtotalPosition,
     "", // Empty for alignment
-    "Subtotal"+'$',
-    orderData.grandTotalCost
+    "Subtotal",
+    orderData.grandTotalCost+'$'
   );
 
   const discountPosition = subtotalPosition + 30;
@@ -92,8 +92,8 @@ function generateInvoiceTable(doc, orderData) {
     doc,
     discountPosition,
     "", // Empty for alignment
-    "Discount"+'$',
-    orderData.couponApplied
+    "Discount",
+    orderData.couponApplied+'$'
   );
 
   const totalPosition = discountPosition + 30;
@@ -101,8 +101,8 @@ function generateInvoiceTable(doc, orderData) {
     doc,
     totalPosition,
     "", // Empty for alignment
-    "Total"+'$',
-    orderData.Total
+    "Total",
+    orderData.Total+'$'
   );
 }
 
