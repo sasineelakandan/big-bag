@@ -56,56 +56,54 @@ const Cart=async(req,res,next)=>{
 }
 const addTocart=async(req,res,next)=>{
     try{
-        const productExist = await cartCollection.findOne({
-            userId: req.session.logged._id,
-            productId: req.query.pid,
-           
-            
-          });
+      
+      const productExist = await cartCollection.findOne({
+        userId: req.session.logged._id,
+        productId: req.query.pid,
+       
+        
+      });
+     
+      if(productExist){
+        const presentQty = parseInt(productExist.productQuantity);
+        const qty = parseInt(req.query.quantity);
+        const productPrice = parseInt(req.query.productPrice);
+        const productStock=parseInt(req.query.stock)
+       const totaqty=presentQty + qty
          
-          if(productExist){
-            const presentQty = parseInt(productExist.productQuantity);
-            const qty = parseInt(req.query.quantity);
-            const productPrice = parseInt(req.query.productPrice);
-            const productStock=parseInt(req.query.stock)
-           const totaqty=presentQty + qty
-             
-           if(totaqty<=productStock){
-            
-              await cartCollection.updateOne(
-              { productId: req.query.pid },
-              {
-                $set: {
-                  productQuantity: totaqty,
-                  totalCostPerProduct:(presentQty + qty )* productPrice,
-                },
-              }
-            );
-            res.send({success:true})
-          }else{
-            res.send({success:false})
+       if(totaqty<=productStock){
+        
+          await cartCollection.updateOne(
+          { productId: req.query.pid },
+          {
+            $set: {
+              productQuantity: totaqty,
+              totalCostPerProduct:(presentQty + qty )* productPrice,
+            },
           }
-        }
+        );
+        res.send({success:true})
+      }else{
+        res.send({success:false})
+      }
+    }
     if(!productExist){
-      const qty2=await productCollection.findOne({ _id: req.query.pid})
+      
+      const qty2 = await productCollection.findOne({ _id: req.query.pid });
            const qtyy=Number(req.query.quantity)
-           if(qty2.productPrice>=qty2.priceBeforeOffer){
-                 var productprice=qty2.priceBeforeOffer
-           }else{
-              var productprice=qty2.productPrice
-           }
-          let offerprice= qtyy*productprice
+          
       if(qtyy<=qty2.productStock){
+      let total=qtyy*qty2.productPrice
         const newcart = new cartCollection({
-            userId:req.query.user,
+            userId:req.session.logged._id,
             productId:req.query.pid ,
             productQuantity:req.query.quantity, 
             productStock:req.query.stock,
-            productprice:productprice,
+            productprice:qty2.productPrice,
             priceBeforeOffer:qty2.priceBeforeOffer,
             productOfferPercentage:qty2.productOfferPercentage,
             Status:'pending',
-            totalCostPerProduct:offerprice,
+            totalCostPerProduct:total,
             productImage:req.query.Img,
             productName:req.query.productname
         })
@@ -120,7 +118,7 @@ const addTocart=async(req,res,next)=>{
       next(new AppError('Somthing went Wrong', 500));
     }
 }
-const cartbutton=async(req,res,next)=>{
+const cartbutton=async(req,res)=>{
    
   try {
     
@@ -151,16 +149,16 @@ const cartbutton=async(req,res,next)=>{
       if (productStock>quantity) {
         let total =(1+quantity)*productPrice
         
-        
+        console.log(total)
          
            const cartProduct = await cartCollection.findOneAndUpdate(
-            { productId },
+            { productId,userId:user },
             { 
                 $inc: { productQuantity: 1 },
                 $set: { totalCostPerProduct: total }
             },
             { 
-                new: true // Return the updated document
+                new: true 
             }
           );
         
@@ -172,7 +170,7 @@ const cartbutton=async(req,res,next)=>{
           }
          
             
-          // Send success response with updated cart product
+        
           res.send({ success: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:total,grandTotal:Sum});
 
         }else {
@@ -182,7 +180,7 @@ const cartbutton=async(req,res,next)=>{
    }
    if(action=='min'){
       if (quantity >1 ) {
-          // If quantity is less than productStock, update the cart
+          
          
          const productprice=((quantity-1)*productPrice)
          const cartProduct = await cartCollection.findOneAndUpdate(
@@ -216,9 +214,14 @@ const cartbutton=async(req,res,next)=>{
    
     
   } catch (error) {
-    next(new AppError('Somthing went Wrong', 500));
+    console.log("Error while clicking the Cart Increment Button:", error);
+    res.status(500).send({ success: false, message: "Internal server error" });
   }
 };
+   
+
+
+    
      const checkOut1=async(req,res,next)=>{
 
       try{
