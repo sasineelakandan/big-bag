@@ -48,8 +48,8 @@ try{
             'payment_method': 'paypal'
         },
         'redirect_urls': { // Change made here: redirect_urls instead of redirect_url
-        'return_url': `http://localhost:8001/checkout5?orderId=${orderId}`,
-            'cancel_url': `http://localhost:8001/errPay?orderId=${orderId}`
+        'return_url': `http://bigbags.site/checkout5?orderId=${orderId}`,
+            'cancel_url': `http://bigbags.site/errPay?orderId=${orderId}`
         },
            "transactions": [{
                 "item_list": {
@@ -177,8 +177,8 @@ try{
             'payment_method': 'paypal'
         },
         'redirect_urls': { // Change made here: redirect_urls instead of redirect_url
-            'return_url': 'http://localhost:8001/Wallet',
-            'cancel_url': 'http://localhost:8001/shop'
+            'return_url': 'http://bigbags.site/Wallet',
+            'cancel_url': 'http://bigbags.site/shop'
         },
            "transactions": [{
                 "item_list": {
