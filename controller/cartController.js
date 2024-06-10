@@ -147,20 +147,23 @@ const cartbutton=async(req,res)=>{
     
     if(action=='plus'){
       if (productStock>quantity) {
-        let total =(1+quantity)*productPrice
         
-        console.log(total)
+        
+        
          
-           const cartProduct = await cartCollection.findOneAndUpdate(
-            { productId,userId:user },
-            { 
-                $inc: { productQuantity: 1 },
-                $set: { totalCostPerProduct: total }
-            },
-            { 
-                new: true 
+        const cartProduct = await cartCollection.findOneAndUpdate(
+          { productId, userId: user },
+          { 
+            $inc: { 
+              productQuantity: 1, 
+              totalCostPerProduct: productPrice 
             }
-          );
+          },
+          { 
+            new: true 
+          }
+        );
+        
         
           const cart= await cartCollection.find({userId:user}).populate('productId')
    
@@ -171,7 +174,7 @@ const cartbutton=async(req,res)=>{
          
             
         
-          res.send({ success: true, cartProduct:cartProduct.productQuantity,Stock:productStock,Total:total,grandTotal:Sum});
+          res.send({ success: true, cartProduct:cartProduct.productQuantity,Total:cartProduct.totalCostPerProduct,Stock:productStock,grandTotal:Sum});
 
         }else {
           res.status(400).send({ success: false, exceed: true });
@@ -182,17 +185,19 @@ const cartbutton=async(req,res)=>{
       if (quantity >1 ) {
           
          
-         const productprice=((quantity-1)*productPrice)
-         const cartProduct = await cartCollection.findOneAndUpdate(
-          { productId },
+         
+        const cartProduct = await cartCollection.findOneAndUpdate(
+          { productId, userId: user },
           { 
-              $inc: { productQuantity: -1 },
-              $set: { totalCostPerProduct: productprice }
+            $inc: { 
+              productQuantity:-1, 
+              totalCostPerProduct: -productPrice 
+            }
           },
           { 
-              new: true // Return the updated document
+            new: true 
           }
-      );
+        );
       const cart= await cartCollection.find({userId:user}).populate('productId')
    
       Sum=0
