@@ -770,14 +770,14 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
           let otp = {
             otp: form.otp.value
           }
-          console.log("form submited");
+          
           let response = await fetch('/verifyotp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(otp)
           })
           const result = await response.json()
-          console.log(result);
+        
           if (result.otpverified) {
             await Swal.fire({
               icon: "success",
@@ -847,7 +847,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 const dbSec = '<%- JSON.stringify(diffInSeconds) %>'
         const secondsVal = JSON.parse(dbSec)
-        console.log(secondsVal);
+        
         const otpInput = document.getElementById('otpText');
         const otpTimer = document.getElementById('timer');
         const verifyOtpBtn = document.getElementById("verify");

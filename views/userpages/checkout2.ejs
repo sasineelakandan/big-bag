@@ -827,7 +827,7 @@
                 })
                
                 let result = await response.json()
-                console.log(result)
+                
                 if (result.success) {
                 
                   document.getElementById('grandTotal').innerHTML=result.grandTotal
@@ -895,7 +895,7 @@
       method:'POST'
     })
     let result = await response.json()
-                console.log(result)
+                
                 if (result.success) {
                 
                   document.getElementById('grandTotal').innerHTML=result.grandTotal

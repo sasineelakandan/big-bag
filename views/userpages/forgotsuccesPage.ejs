@@ -100,15 +100,15 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       },
       submitHandler: async function(form,event) {
         event.preventDefault()
-        console.log('Form is valid and ready to be submitted');
+        
 
         const email = $('#email').val();
         const newPassword = $('#newPassword').val();
         const confirmPassword = $('#confirmPassword').val();
 
-        console.log('Email:', email);
-        console.log('New Password:', newPassword);
-        console.log('Confirm Password:', confirmPassword);
+        
+        
+        
 
         const data = {
           email: email,

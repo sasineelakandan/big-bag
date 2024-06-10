@@ -22,7 +22,7 @@ const paymentPage=async(req,res,next)=>{
     const card=await cartCollection.find({userId:req.query.id})
     
    
-console.log(req.query)
+
     
    
     let total = req.query.grandTot || String(req.session.grandtotal);

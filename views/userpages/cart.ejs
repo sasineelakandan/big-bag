@@ -638,7 +638,7 @@
                   
                     async function fn(productId,price,action,userId){
                       
-                    console.log(document.getElementById('total'+productId))
+                    
                       const quantityInput= document.getElementById('quantity'+productId)?.value
                     
                      let response= await fetch(`/cartbutton?id=${productId}&action=${action}&quantity=${quantityInput}&user=${userId}`, {

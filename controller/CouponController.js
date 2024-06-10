@@ -32,7 +32,7 @@ const CouponEditget=async(req,res,next)=>{
 const CouponOffDet=async(req,res,next)=>{
 
     try{
-        console.log(req.body)
+        
         const coupons=await couPonCollection?.findOne({couponCode:{ $regex: new RegExp('^' + req.body.name + '$', 'i')}})
         if(coupons){
             res.send({success:false})

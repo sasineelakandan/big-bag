@@ -311,9 +311,9 @@ const cartbutton=async(req,res,next)=>{
     }   
     } 
     if(req.query.pm==='wallet'){
-      console.log(req.query.total)
+      
           const user=await usercollection.findOne({_id:req.session.logged._id})
-         console.log(user.walletBalance)
+         
       if( user.walletBalance<req.query.total){
         res.send({checkBalance:true})
         
@@ -395,9 +395,9 @@ const cartbutton=async(req,res,next)=>{
               },
             }
           );
-        console.log(user2)
+      
         let indx = user.failPayments.indexOf(req.query.orderId);
-        console.log(indx);
+        
         user.failPayments.splice(indx, 1);
         await user.save();
         await cartCollection.deleteMany({userId:req.session.logged._id})

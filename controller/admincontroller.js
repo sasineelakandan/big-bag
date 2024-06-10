@@ -225,7 +225,7 @@ const topCategory = async (req, res,next) => {
           $limit: 10
         }
       ]);
-     console.log(topCategories)
+     
       res.render('adminpages/Top3category', { topCategories });
     } catch (err) {
       // Consider using a centralized error handler

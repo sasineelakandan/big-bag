@@ -69,7 +69,7 @@ const categoryOffereditget=async(req,res,next)=>{
 }
 const categoryOfferedit=async(req,res,next)=>{
     try{
-        console.log(req.body.offerid)
+        
           
     
         const productOffer=await categoryOfferCollection.updateOne({_id:req.body.offerid},{$set:{
@@ -115,7 +115,7 @@ const categoryOfferExpiry = async (req, res,next) => {
 };
 const catOffDel=async(req,res,next)=>{
     try{
-        console.log(req.query.id)
+        
         const expiry = await categoryOfferCollection.find({_id:req.query.id});
         for (let i = 0; i < expiry.length; i++) {
             

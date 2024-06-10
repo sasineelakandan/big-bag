@@ -830,15 +830,15 @@
                         const productStock = '<%=productDet.productStock %>';
                         const productPrice = '<%=productDet.productPrice %>';
                         const OfferPrice='<%=productDet.priceBeforeOffer%>'
-                        console.log(OfferPrice)
+                        
                         var bestPrice=0
                         if(productPrice >= OfferPrice){
-                            console.log('hai')
+                            
                              bestPrice=OfferPrice
                         }else{
                              bestPrice=productPrice 
                         }
-                        console.log(bestPrice)
+                        
                         const userId = '<%=userLogged._id%>'
                         const image = '<%=productDet.productImage[0]%>'
                         const productName='<%=productDet.productName%>'
@@ -851,7 +851,7 @@
                         })
                     
                         let result = await response.json()
-                        console.log(result)
+                        
                         if (result.success) {
                             await Swal.fire({
                                 icon: "success",

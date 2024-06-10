@@ -63,19 +63,19 @@
       
 
       submitHandler: async (form, event) => {
-        console.log('hai')
+        
         event.preventDefault()
         let otp = {
           otp: form.otp.value
         }
-        console.log("form submited");
+        
         let response = await fetch('/verifyotp2', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(otp)
         })
         const result = await response.json()
-        console.log(result);
+        
         if (result.otpverified) {
           await Swal.fire({
             icon: "success",
@@ -104,7 +104,7 @@
 
     const dbSec = '<%- JSON.stringify(diffInSeconds) %>'
             const secondsVal = JSON.parse(dbSec)
-            console.log(secondsVal);
+            
             const otpInput = document.getElementById('otpText');
             const otpTimer = document.getElementById('timer');
             const verifyOtpBtn = document.getElementById("verify");
@@ -191,7 +191,7 @@ async function fnResend(event) {
         // Attempt to parse the response as JSON
         const result = await response.json();
 
-        console.log(result);
+      
 
         if (result.otpsend) {
             await Swal.fire({

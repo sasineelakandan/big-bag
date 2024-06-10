@@ -42,13 +42,13 @@ const otppage = async(req, res,next) => {
         } else {
             let diffInSeconds;
             const existingOtp = await otpcollections.findOne({ userId: req.session.loggedNew._id });
-            console.log(existingOtp)
+            
             if (existingOtp) {
               const createdAt = existingOtp.generatedDate;
               const currentDate = new Date();
               const diffInMs = currentDate.getTime() - createdAt.getTime();
               diffInSeconds = Math.floor(diffInMs / 1000);
-              console.log(diffInSeconds)
+              
             } else {
               diffInSeconds = null;
             }
@@ -347,7 +347,7 @@ const filter = async (req, res,next) => {
 
 
         productDetail = productDetail.filter((val) => {
-            console.log(start, end)
+            
             return val.productPrice > start && val.productPrice <= end
         })
         
@@ -395,7 +395,7 @@ const Whishlist = async (req, res,next) => {
     try {
 
 
-        console.log(req.query.action)
+        
 
         if (req.query.action) {
             const whishlist = new whishlistCollection({
@@ -557,13 +557,13 @@ const forgotPassword3=async(req,res,next)=>{
     try{
         let diffInSeconds;
         const existingOtp = await otpcollections.findOne({ userId: req.session.otpuser._id });
-        console.log(existingOtp)
+        
         if (existingOtp) {
           const createdAt = existingOtp.generatedDate;
           const currentDate = new Date();
           const diffInMs = currentDate.getTime() - createdAt.getTime();
           diffInSeconds = Math.floor(diffInMs / 1000);
-          console.log(diffInSeconds)
+        
         } else {
           diffInSeconds = null;
         }
@@ -575,27 +575,27 @@ const forgotPassword3=async(req,res,next)=>{
 }
 const verifyotp2 = async (req, res,next) => {
 
-        console.log(req.body)
+        
   
     try {
         const usersOTP = await otpcollections.findOne({ userId: req.session.otpuser._id });
         
         // Check if usersOTP is found
         if (!usersOTP) {
-            console.log('No OTP found for user');
+            
             return res.status(200).send({ otpinvalid: true });
         }
     
-        console.log('Stored OTP:', usersOTP.otp);
-        console.log('User-provided OTP:', req.body.otp);
+        
+        
     
         // Compare provided OTP with stored hashed OTP
         const otpmatch = await bcrypt.compare(req.body.otp, usersOTP.otp);
-        console.log('OTP Match:', otpmatch);
+        
     
         // Check if OTP is not expired
         const notExpired = usersOTP.expiryDate.toISOString() > new Date().toISOString();
-        console.log('Not Expired:', notExpired);
+        
         await otpcollections.deleteOne({userId:req.session.otpuser._id })
         if (otpmatch && notExpired) {
             await usercollection.updateOne({ _id: req.session.otpuser._id }, { $set: { isVerified: true } });
@@ -634,13 +634,13 @@ const resetPassword=async(req,res,next)=>{
 }
 const resendotp2=async(req,res,next)=>{
     try {
-        console.log('HAI')
+        
         const generatedotp = Math.floor(100000 + Math.random() * 900000).toString()
         
         await sendotp(req.session.otpuser, generatedotp)
         const bycryptotp = bcrypt.hashSync(generatedotp, 10)
      const  user= await otpcollections.updateOne({ userId: req.session.otpuser._id }, { $set: { otp: bycryptotp, generatedDate: new Date().toISOString(), expiryDate: new Date(Date.now() + 60000).toISOString() } })
-      console.log(user)
+      
         res.status(200).send({ otpsend: true })
     } catch (err) {
         next(new AppError('Somthing went Wrong', 500));

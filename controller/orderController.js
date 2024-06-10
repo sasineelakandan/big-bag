@@ -67,14 +67,14 @@ const Cancel = async (req, res,next) => {
             let qty = a[i].productQuantity
             let price=a[i].totalCostPerProduct
             if (order.paymentType == 'Wallet' || order.paymentType == 'Online Payment') {
-                console.log('online')
+                
                 
                 
                 const walletUpdateResult = await userCollection.updateOne(
                     { _id: order.userId },
                     { $inc: { walletBalance: +a[i].totalCostPerProduct } }
                 );
-                console.log(walletUpdateResult);
+                
                 
                 
                 const walletTransaction =new walletCollection({
@@ -86,7 +86,7 @@ const Cancel = async (req, res,next) => {
                 });
                 
                 const saveResult = await walletTransaction.save();
-                console.log('Transaction saved:', saveResult);
+                
             }
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })
 
@@ -176,7 +176,7 @@ catch(error){
 }
 const updateStatus=async(req,res,next)=>{
  try{
-    console.log(req.query.id)
+    
     const order=await orderCollection.findOne({_id:req.query.id})
     const a=order.cartData
    let b=req.query.value
@@ -282,7 +282,7 @@ const updateStatus2=async(req,res,next)=>{
                     { _id: order.userId },
                     { $inc: { walletBalance: +a[i].totalCostPerProduct } }
                 );
-                console.log(walletUpdateResult);
+                
                 
                 
                 const walletTransaction =new walletCollection({
@@ -294,7 +294,7 @@ const updateStatus2=async(req,res,next)=>{
                 });
                 
                 const saveResult = await walletTransaction.save();
-                console.log('Transaction saved:', saveResult);
+                
             
             }
             const update1 = await productCollection.updateOne({ _id: b }, { $inc: { productStock: +qty } })

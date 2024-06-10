@@ -64,7 +64,7 @@
           e.preventDefault();
           let filterOption = document.getElementById('filterOption').value;
           let formData = { filterOption };
-          console.log(formData)
+        
           let response = await fetch('/admin/salesReport/filter', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
@@ -246,8 +246,8 @@
                     
                      const startDate=document.getElementById('startDate').value
                      const endDate=document.getElementById('endDate').value
-                     console.log(startDate)
-                    console.log(endDate)
+                     
+                    
                 try {
                     const response = await fetch(`/admin/salesReport/download/pdf?startDate=${startDate}&endDate=${endDate}`, {
                         method: 'GET'

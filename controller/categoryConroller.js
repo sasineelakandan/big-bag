@@ -30,7 +30,7 @@ const addCategory = async (req, res,next) => {
           
 
         if (catExists) {
-            console.log(catExists)
+            
             res.send({ invalid: true })
         } else {
             newcategory.save()
@@ -59,7 +59,7 @@ const categoryList = async (req, res,next) => {
 const editCategory = async (req, res,next) => {
 
     try {
-        console.log(req.params.id)
+        
         let categorydetail = await categoryCollection.findById({ _id: req.params.id })
         res.render('adminpages/adminedit', { categorydetail })
     }
@@ -83,7 +83,7 @@ const updateCategory = async (req, res,next) => {
             ),
           },
         });
-        console.log(catDetails)
+        
         if (
           /^\s*$/.test(req.body.categoryName) ||
           /^\s*$/.test(req.body.categoryDes)

@@ -78,7 +78,7 @@ const havingBothOffers = async (productId, categoryId, prod) => {
         let productPrice = Math.round(
           prod.priceBeforeOffer * (1 - maxOffer * 0.01)
         );
-       console.log(productPrice)
+       
         result = await productcollection.updateOne(
           { _id: prod._id },
           {
@@ -133,7 +133,7 @@ const havingSingleOffer = async (
           let productPrice = Math.round(
             prod.priceBeforeOffer * (1 - catOffer.offerPercentage * 0.01)
           );
-          console.log(productPrice)
+          
           result = await productcollection.updateOne(
             { _id: prod._id },
             {

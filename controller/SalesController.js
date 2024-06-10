@@ -153,7 +153,7 @@ const salesReportDownloadPDF = async (req, res,next) => {
 };
 
 const filterDates=async(req,res,next)=>{
-  try {console.log(req.body)
+  try {
     let { filterOption } = req.body;
     let startDate, endDate;
 
@@ -217,8 +217,8 @@ const filterDate=async(req,res,next)=>{
       endDate = new Date(req.body.filterDateTo);
       startDate1= startOfDay(new Date(startDate));
       endDate2 = endOfDay(new Date(endDate));
-      console.log(startDate1)
-      console.log(endDate2)
+      
+  
     const salesData = await orderCollection.find({
       orderDate: { $gte: startDate1, $lte: endDate2 },
       orderStatus: "Delivered"

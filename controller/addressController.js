@@ -86,7 +86,7 @@ const editAdd=async(req,res,next)=>{
 }
 const updateAdd=async(req,res,next)=>{
     try{
-        console.log(req.body)
+        
     const updateAdd=await addressCollection.updateOne({_id:req.body.addressId},{$set:{
         firstName: req.body.firstName,
         lastName : req.body.lastName,

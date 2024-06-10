@@ -222,9 +222,9 @@
               previewImage.parentNode.removeChild(previewImage);
               deleteButton.parentNode.removeChild(deleteButton);
               const index = aaaaaaaaaa.indexOf(blob);
-              console.log(index);
+              
               if (index !== -1) {
-                console.log(index);
+                
                 aaaaaaaaaa.splice(index, 1);
               }
             
@@ -276,11 +276,11 @@
 
           // Select the preview images
           var previewImages = document.querySelectorAll(".preview-image");
-          console.log("preview", previewImages);
+          
 
           // Loop through each preview image
           aaaaaaaaaa.forEach(function (previewImage, index) {
-            console.log("imageeeeee", previewImage);
+            
 
             formData.append("croppedImage" + index, previewImage);
           });
@@ -315,7 +315,7 @@
         },
       });
       function dataURItoBlob(dataURI) {
-        console.log("Data URI:", dataURI);
+        
 
         // Check if dataURI is in the correct format
         if (!dataURI.startsWith("data:image/png;base64,")) {

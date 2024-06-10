@@ -115,7 +115,7 @@ const productOfferExpiry = async (req, res,next) => {
         const expiry = await productOfferCollection.find({isAvailable:true});
         for (let i = 0; i < expiry.length; i++) {
             const endDate = new Date(expiry[i].endDate); // Ensure endDate is a Date object
-            console.log(endDate.getTime())
+            
             if (currentDate.getTime() >= endDate.getTime()) { // Compare time in milliseconds
         
                 await productOfferCollection.updateOne({ _id: expiry[i]._id }, { $set: { isAvailable: false } });

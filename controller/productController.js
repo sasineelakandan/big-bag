@@ -10,7 +10,7 @@ const productUpdate=async(req,res,next)=>{
     try {
         const croppedImages = req.files.filter(file => file.fieldname.startsWith('croppedImage'));
         const images = croppedImages.map(file => file.filename); 
-            console.log(images)
+            
             const existingProduct = await productCollection.findOne({ _id: req.params.id });
             var imgFiles = existingProduct.productImage;
         
