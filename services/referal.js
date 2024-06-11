@@ -6,7 +6,7 @@ const walletCollection=require('../model/Walletmodel')
 const Referal= async(referalCode,Newuser)=>{
     try{
       
-     
+     console.log(referalCode)
        
        const referalUser= await usercollection?.findOne({ReferalCode:referalCode})
        if(referalUser){
@@ -14,7 +14,7 @@ const Referal= async(referalCode,Newuser)=>{
          const wallet1= new walletCollection({
             userId:referalUser._id,
             walletBalance :100,
-            PaymentType:'Referal',
+            PaymentType:'Bonus',
             transactionsDate:new Date(),
             transactiontype:'credited'
          })
@@ -28,7 +28,7 @@ const Referal= async(referalCode,Newuser)=>{
          const wallet= new walletCollection({
             userId:user._id,
             walletBalance :user.walletBalance,
-            PaymentType:'Referal',
+            PaymentType:'Bonus',
             transactionsDate:new Date(),
             transactiontype:'credited'
          })
