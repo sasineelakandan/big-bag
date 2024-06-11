@@ -1221,7 +1221,7 @@
                           }
                       }
                       async function removeWishlist(productId) {
-                        console.log(productId)
+                        
                             let response = await fetch(`/removeWishlist?id=${productId}`, {
                               method: 'DELETE'
                             })
@@ -1235,7 +1235,7 @@
                               });
                               window.location.reload()
                             } if (result.userNotLogged) {
-                              window.location.href = 'login'
+                              window.location.href = '/login'
                             }
                           }
     
@@ -1260,7 +1260,7 @@
                    <% if(productDet[i]?.productPrice < productDet[i]?.priceBeforeOffer){%>
                     <h3>
 
-                      <span>$</span><span> <%=productDet[i]?.productPrice%></span> <span><h3 style="color: red;" > <strike>₹ <%=productDet[i]?.priceBeforeOffer%></strike></h3> </span>
+                      <span>$</span><span> <%=productDet[i]?.productPrice%></span> <span><h3 style="color: red;" > <strike>$ <%=productDet[i]?.priceBeforeOffer%></strike></h3> </span>
                      
                     </h3>
                   <% }else{%>
