@@ -177,7 +177,7 @@ try{
             'payment_method': 'paypal'
         },
         'redirect_urls': { // Change made here: redirect_urls instead of redirect_url
-            'return_url': 'http://bigbags.site/Wallet',
+            'return_url': 'http://bigbags.site/Wallet?id2=req.session.paymentId2',
             'cancel_url': 'http://bigbags.site/shop'
         },
            "transactions": [{
@@ -209,14 +209,14 @@ try{
                 
                
               
-            req.session.paymentId2=payment.id
             
+            req.session.paymentId2=payment.id
             for(let i=0;payment.links.length;i++){
                 if(payment.links[i].rel==='approval_url'){
                     
                    
                     
-                  
+                    
                     
                     return res.redirect(payment.links[i].href)
                     
@@ -233,8 +233,9 @@ catch(error){
 
 }
 const Wallet=async(req,res,next)=>{
-    try{
-         if(req.session.paymentId2){
+    try{ 
+        console.log(req.query.id2)
+         if(req.query.id2){
             const  user=await userCollection.updateOne({_id:req.session.logged._id},{$inc:{walletBalance:+req.session.total}})
             const walletTransaction =new walletCollection({
                 userId: req.session.logged._id,
