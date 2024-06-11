@@ -1206,7 +1206,7 @@
                           if (result.list) {
                               await Swal.fire({
                                   icon: "success",
-                                  title: "Add to whishListe",
+                                  title: "Add to whishList",
                               });
                               window.location.reload()
 
@@ -1221,6 +1221,7 @@
                           }
                       }
                       async function removeWishlist(productId) {
+                        console.log(productId)
                             let response = await fetch(`/removeWishlist?id=${productId}`, {
                               method: 'DELETE'
                             })

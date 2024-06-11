@@ -423,7 +423,7 @@ const Whishlist = async (req, res,next) => {
     }
 }
 const WhishlistRemove = async (req, res) => {
-    
+    console.log(req.query.id)
     await whishlistCollection.deleteOne({ productId: req.query.id })
     res.send({ list: true })
 }
@@ -505,7 +505,7 @@ try{
 }
 const removeWish = async (req, res,next) => {
     try {
-        
+        console.log(req.query.id)
         await whishlistCollection.deleteOne({ _id: req.query.id })
         res.send({ success: true })
     } catch {
