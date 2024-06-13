@@ -134,9 +134,27 @@ const Cancelall = async (req, res,next) => {
             { _id: req.query.order }, 
             { $set: { orderStatus: 'cancel', cartData: a } }
         );
-        
+        if (order.paymentType == 'Wallet' || order.paymentType == 'Online Payment') {
+                
+                
+                
+            const walletUpdateResult = await userCollection.updateOne(
+                { _id: order.userId },
+                { $inc: { walletBalance: +orderDet.Total } }
+            );
+            
+            
+            
+            const walletTransaction =new walletCollection({
+                userId: order.userId,
+                walletBalance:orderDet.Total,
+                PaymentType: order.paymentType,
+                transactionsDate: new Date(),
+                transactiontype: 'credited'
+            });
         res.send({ success: true })
     }
+}
     catch (error) {
         next(new AppError(error, 500));
     }
