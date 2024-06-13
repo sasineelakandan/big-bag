@@ -106,7 +106,7 @@ const updateAdd=async(req,res,next)=>{
 const deleteAdd=async(req,res,next)=>{
     try{ 
         await addressCollection.deleteOne({_id:req.session.logged._id})
-         res.redirect('//myaddress')
+         res.redirect('/myaddress')
        
     }
     catch(error){
