@@ -855,9 +855,9 @@ const dbSec = '<%- JSON.stringify(diffInSeconds) %>'
         const currentTime = new Date()
 
 
-        let remainingTime = Math.abs(90 - secondsVal);
+        let remainingTime = Math.abs(60 - secondsVal);
 
-        if (Math.abs(90 - secondsVal) == 0 || secondsVal >= 90) {
+        if (Math.abs(60 - secondsVal) == 0 || secondsVal >= 60) {
             remainingTime = 0
         }
         // Set the remaining time to 1.5 minutes
@@ -896,7 +896,7 @@ const dbSec = '<%- JSON.stringify(diffInSeconds) %>'
 
         // Reset timer on form submission
         function resetTimerOnSubmit() {
-            remainingTime = 90;
+            remainingTime = 60;
             startTimer(remainingTime, otpTimer, verifyOtpBtn, resendOtpBtn);
             return true;
         }
