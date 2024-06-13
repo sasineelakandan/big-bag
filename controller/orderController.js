@@ -152,9 +152,10 @@ const Cancelall = async (req, res,next) => {
                 transactionsDate: new Date(),
                 transactiontype: 'credited'
             });
-        res.send({ success: true })
+       
     }
-}
+    res.send({ success: true })
+}  
     catch (error) {
         next(new AppError(error, 500));
     }
