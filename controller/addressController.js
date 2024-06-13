@@ -25,8 +25,6 @@ try{
         
 
         
-    }else{
-        res.render('userpages/addaddress',{userLogged:null})
     }
 }
 catch(error){

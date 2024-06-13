@@ -230,10 +230,10 @@ const cartbutton=async(req,res)=>{
      const checkOut1=async(req,res,next)=>{
 
       try{
-        const cart= await cartCollection.find({userId:req.query.user}).populate('productId')
+        const cart= await cartCollection.find({userId:req.session.logged._id}).populate('productId')
          
        
-        const address= await addressCollection.find({userId:req.query.user})
+        const address= await addressCollection.find({userId:req.session.logged._id})
         
         res.render('userpages/shippingAddress',{userLogged:req.session.logged,grandTotal:req.session.grandTotal,addressDet:address})
       }
