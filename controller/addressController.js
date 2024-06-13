@@ -105,9 +105,9 @@ const updateAdd=async(req,res,next)=>{
 }
 const deleteAdd=async(req,res,next)=>{
     try{ 
-        await addressCollection.deleteOne({_id:req.query.id})
-        const address=await addressCollection.find()
-        res.render('userpages/myaddress',{userLogged:req.session.logged,addressDet:address})
+        await addressCollection.deleteOne({_id:req.session.logged._id})
+         res.redirect('//myaddress')
+       
     }
     catch(error){
         next(new AppError('Somthing went Wrong', 500));

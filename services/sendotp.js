@@ -14,7 +14,7 @@ const transpoter=  nodemailer.createTransport({
 
 let sendotp = async (user,otp) => {
     try {
-        
+         
           transpoter.sendMail({
             from: process.env.USER_EMAIL,
             to: user.email,
