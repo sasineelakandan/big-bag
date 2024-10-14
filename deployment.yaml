@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-deployment  # Name of the deployment
+spec:
+  replicas: 3  # Number of pod replicas
+  selector:
+    matchLabels:
+      app: node-app  # Label used to select the pods for this deployment
+  template:
+    metadata:
+      labels:
+        app: node-app  # Same label to match the selector
+    spec:
+      containers:
+      - name: big-bags-container  # Updated container name
+        image: sasideva/big-bags:latest  # Docker image
+        ports:
+        - containerPort: 8080  # Port exposed by the container
+        env:
+        - name: NODE_ENV  # Optional: Define any environment variables here
+          value: "production"
