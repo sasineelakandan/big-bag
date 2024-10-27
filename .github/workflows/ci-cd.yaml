@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      
+      - name: Build Docker Image
+        run: docker build -t sasideva/big-bags:latest .
+
+      
+      - name: Push Docker Image
+        run: docker push sasideva/big-bags:latest
+
+      # Setup kubeconfig for kubectl to access the cluster
+      - name: Set up Kubeconfig
+        env:
+          KUBECONFIG_DATA: ${{ secrets.KUBECONFIG_DATA }}
+        run: |
+          echo "$KUBECONFIG_DATA" | base64 --decode > ~/.kube/config
+
+      # Apply the Kubernetes Deployment manifest
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f deployment.yaml
+
+      # Apply the Kubernetes Service manifest
+      - name: Apply Service to Kubernetes
+        run: kubectl apply -f service.yaml
+
+      # Verify the deployment status
+      - name: Verify Deployment
+        run: kubectl rollout status deployment/node-app-deployment
