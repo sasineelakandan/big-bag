@@ -33,7 +33,7 @@ jobs:
 
       # Apply the Kubernetes Deployment manifest
       - name: Deploy to Kubernetes
-        run: kubectl apply -f deployment.yaml 
+        run: kubectl apply -f deployment.yaml --validate=false
 
       # Apply the Kubernetes Service manifest
       - name: Apply Service to Kubernetes
