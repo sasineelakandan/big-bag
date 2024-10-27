@@ -45,6 +45,6 @@ app.get('*', function(req, res){
     res.status(404).render('userpages/404');
   });
 
-app.listen(8001,()=>{
+app.listen(8080,()=>{
     console.log('portstarted')
 })

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: node-app-deployment  
 spec:
-  replicas: 3  
+  replicas: 1 
   selector:
     matchLabels:
       app: node-app  
@@ -16,7 +16,7 @@ spec:
       - name: big-bags-container  
         image: sasideva/big-bags:latest
         ports:
-        - containerPort: 8001
+        - containerPort: 8080
         env:
         - name: NODE_ENV  
           value: "production"
