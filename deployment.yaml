@@ -16,7 +16,7 @@ spec:
       - name: big-bags-container  
         image: sasideva/big-bags:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 192.168.49.2 : 8080
         env:
         - name: NODE_ENV  
           value: "production"
