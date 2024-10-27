@@ -39,6 +39,6 @@ jobs:
       - name: Apply Service to Kubernetes
         run: kubectl apply -f service.yaml    
 
-      # Verify the deployment status
+      # Verify the deployment statussss
       - name: Verify Deployment
         run: kubectl rollout status deployment/node-app-deployment
