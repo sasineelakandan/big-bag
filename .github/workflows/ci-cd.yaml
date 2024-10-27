@@ -35,11 +35,11 @@ jobs:
 
       # Apply the Kubernetes Deployment manifest
       - name: Deploy to Kubernetes
-        run: kubectl apply -f /project\ 1/deployment.yaml
+        run: kubectl apply -f deployment.yaml
 
       # Apply the Kubernetes Service manifest
       - name: Apply Service to Kubernetes
-        run: kubectl apply -f /project\ 1/service.yaml
+        run: kubectl apply -f service.yaml
 
       # Verify the deployment status
       - name: Verify Deployment
